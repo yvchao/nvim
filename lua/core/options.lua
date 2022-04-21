@@ -103,6 +103,12 @@ opt.conceallevel = 2
 -- show hiding character at cursor line
 opt.concealcursor = ""
 
+-- set defaul terminal shell
+opt.shell = "/usr/bin/fish"
+
+-- enable global status line
+opt.laststatus = 3
+
 -- Changed home directory here
 local backup_dir = vim.fn.stdpath("cache") .. "/backup"
 local backup_stat = pcall(os.execute, "mkdir -p " .. backup_dir)
@@ -143,5 +149,6 @@ end
 if vim.g.neovide then
   -- neovide specific settings
   vim.g.neovide_cursor_vfx_mode = "sonicboom"
-  vim.opt.guifont = [[monospace:h11]]
+  vim.opt.guifont = [[monospace:h12]]
+  vim.g.neovide_remember_window_size = true
 end

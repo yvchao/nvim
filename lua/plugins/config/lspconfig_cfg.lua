@@ -42,6 +42,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "gj", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
   buf_set_keymap("n", "gk", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
   buf_set_keymap("n", "gr", "<cmd>Lspsaga rename<CR>", opts)
+  buf_set_keymap("n", "gR", "<cmd>Lspsaga lsp_finder<CR>", opts)
   buf_set_keymap("n", "gx", "<cmd>Lspsaga code_action<CR>", opts)
 
   buf_set_keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)

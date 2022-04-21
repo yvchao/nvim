@@ -4,6 +4,9 @@ if not vim.fn.has("nvim-0.6") then
   -- for filetype.nvim
   -- If using a Neovim version earlier than 0.6.0
   g.did_load_filetypes = 1
+-- else
+  -- g.did_load_filetypes = 1
+  -- g.do_filetype_lua = 1
 end
 
 -- for vsnip
@@ -37,6 +40,7 @@ g.enable_treesitter_ft = {
   "lua",
   "rust",
   "toml",
+  "python",
 }
 
 -- enable lspconfig for what filetype?

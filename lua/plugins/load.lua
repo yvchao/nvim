@@ -203,6 +203,7 @@ local editor_enhance = {
       require("plugins").load_cfg("toggleterm_cfg")
     end,
     cmd = "ToggleTerm",
+    branch = "main",
   },
 
   -- generate color from hex/rgb code

@@ -6,7 +6,7 @@ end
 
 local tree_cb = tree_c.nvim_tree_callback
 
-vim.g.nvim_tree_indent_markers = 0
+-- vim.g.nvim_tree_indent_markers = 0
 vim.g.nvim_tree_git_hl = 1
 vim.g.nvim_tree_highlight_opened_files = 1
 vim.g.nvim_tree_root_folder_modifier = ":t"
@@ -44,6 +44,7 @@ vim.g.nvim_tree_icons = {
 
 -- following options are the default
 require("nvim-tree").setup({
+  indent_markers = false,
   disable_netrw = true,
   hijack_netrw = true,
   open_on_setup = false,
