@@ -125,6 +125,9 @@ if undo_stat and has_persist == 1 then
   opt.undodir = undo_dir
 end
 
+-- set global guifont here
+vim.opt.guifont = [[Iosevka:h12]]
+
 -- nvui specific settings
 if vim.g.nvui then
   vim.opt.guifont = [[Cascadia Code:h12,FiraCode\ Nerd\ Font\ Mono:h12]]
@@ -146,9 +149,9 @@ if vim.g.nvui then
   vim.cmd([[hi Normal guisp=#6899B8]])
 end
 
+vim.g.neovide_no_custom_clipboard = true
 if vim.g.neovide then
   -- neovide specific settings
   vim.g.neovide_cursor_vfx_mode = "sonicboom"
-  vim.opt.guifont = [[monospace:h12]]
   vim.g.neovide_remember_window_size = true
 end
