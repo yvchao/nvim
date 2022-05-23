@@ -89,6 +89,39 @@ local function setup_capabilities()
 end
 
 -- lspInstall + lspconfig stuff
+local texlab_setting = {
+  texlab = {
+    build = {
+      executable = "latexmk",
+      args = {
+        "-pdf",
+        "-interaction=nonstopmode",
+        "-synctex=1",
+        "-outdir=output",
+        "%f",
+      },
+      onSave = true,
+      forwardSearchAfter = false,
+    },
+    auxDirectory = "output",
+    forwardSearch = {
+      executable = "zathura",
+      args = {
+        "--synctex-forward",
+        "%l:1:%f",
+        "%p",
+      },
+    },
+  }
+}
+
+local ltex_setting = {
+  ltex = {
+    ["ltex-ls"] ={
+      logLevel = "warning",
+    },
+  }
+}
 
 local lua_setting = {
   Lua = {
@@ -145,6 +178,10 @@ if installer.settings then
 
     if server.name == "sumneko_lua" then
       opts.settings = lua_setting
+    elseif server.name == "texlab" then
+      opts.settings = texlab_setting
+    elseif server.name == "ltex" then
+      opts.settings = ltex_setting
     end
 
     -- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
