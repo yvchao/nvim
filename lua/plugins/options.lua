@@ -41,6 +41,7 @@ g.enable_treesitter_ft = {
   "rust",
   "toml",
   "python",
+  "latex",
 }
 
 -- enable lspconfig for what filetype?
@@ -56,4 +57,7 @@ g.enable_lspconfig_ft = {
   "python",
   "sh",
   "toml",
+  "tex",
+  "markdown",
+  "gitcommit",
 }
