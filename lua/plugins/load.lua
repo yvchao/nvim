@@ -690,6 +690,14 @@ local coding_enhance = {
         text = {
           spinner = "dots",
         },
+        fmt = {
+          stack_upwards = true,
+        },
+        sources = {
+          ltex = {
+            ignore = true,
+          },
+        },
       })
     end,
   },
