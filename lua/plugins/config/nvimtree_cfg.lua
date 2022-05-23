@@ -44,7 +44,7 @@ vim.g.nvim_tree_icons = {
 
 -- following options are the default
 require("nvim-tree").setup({
-  indent_markers = false,
+  -- indent_markers = false,
   disable_netrw = true,
   hijack_netrw = true,
   open_on_setup = false,
@@ -53,6 +53,20 @@ require("nvim-tree").setup({
   hijack_cursor = true,
   update_cwd = true,
   update_to_buf_dir = { enable = true, auto_open = true },
+  renderer = {
+    indent_markers = {
+      enable = false,
+      icons = {
+        corner = "└ ",
+        edge = "│ ",
+        none = "  ",
+      },
+    },
+    icons = {
+      webdev_colors = true,
+      git_placement = "before",
+    }
+  },
   diagnostics = {
     enable = false,
     icons = { hint = "", info = "", warning = "", error = "" },
