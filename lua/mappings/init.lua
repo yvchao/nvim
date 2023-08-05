@@ -42,7 +42,8 @@ nmap("<C-T>n", ":tabnew<CR>")
 nmap(";w", ":w<CR>")
 
 -- kill buffer with ;q , quit window with :q . This make sense.
-nmap(";q", ":lua require('plugins.bufdel').delete_buffer()<CR>")
+-- nmap(";q", ":lua require('plugins.bufdel').delete_buffer()<CR>")
+nmap(";q", ":BufDel<CR>")
 
 -- do thing like ctrl c and ctrl v
 xmap("<C-y>", [["+y]])

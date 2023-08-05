@@ -89,6 +89,7 @@ opt.signcolumn = "yes:1"
 
 -- enable all the mouse functionality
 opt.mouse = "a"
+opt.mousemodel = "extend"
 
 -- use indent as the fold method
 opt.foldmethod = "indent"
@@ -109,6 +110,12 @@ opt.shell = "/usr/bin/fish"
 -- enable global status line
 opt.laststatus = 3
 
+-- perfer latex ft.
+vim.g.tex_flavor = "latex"
+
+-- skip python provider checking
+vim.g.python3_host_skip_check = 1
+
 -- Changed home directory here
 local backup_dir = vim.fn.stdpath("cache") .. "/backup"
 local backup_stat = pcall(os.execute, "mkdir -p " .. backup_dir)
@@ -125,33 +132,12 @@ if undo_stat and has_persist == 1 then
   opt.undodir = undo_dir
 end
 
--- set global guifont here
-vim.opt.guifont = [[Iosevka:h12]]
-
--- nvui specific settings
-if vim.g.nvui then
-  vim.opt.guifont = [[Cascadia Code:h12,FiraCode\ Nerd\ Font\ Mono:h12]]
-  vim.cmd([[NvuiCmdFontFamily FiraCode Nerd Font Mono]])
-  vim.cmd([[NvuiCmdFontSize 12]])
-  vim.cmd([[NvuiAnimationsEnabled 1]])
-  vim.cmd([[NvuiCmdCenterXPos 0.5]])
-  vim.cmd([[NvuiCmdCenterYPos 0.2]])
-  vim.cmd([[NvuiCmdBorderWidth 3]])
-  vim.cmd([[NvuiCmdBorderColor #6E6C6A]])
-  vim.cmd([[NvuiCmdBigFontScaleFactor 1.3]])
-  vim.cmd([[NvuiCmdPadding 13]])
-  vim.cmd([[NvuiPopupMenuBorderWidth 4]])
-  vim.cmd([[NvuiPopupMenuBorderColor #6E6C6A]])
-  -- nvui g3486971 feature
-  vim.cmd([[autocmd InsertEnter * NvuiIMEEnable]])
-  vim.cmd([[autocmd InsertLeave * NvuiIMEDisable]])
-  -- nvui g87f61c0 feature
-  vim.cmd([[hi Normal guisp=#6899B8]])
-end
-
-vim.g.neovide_no_custom_clipboard = true
 if vim.g.neovide then
   -- neovide specific settings
-  vim.g.neovide_cursor_vfx_mode = "sonicboom"
+  vim.o.guifont = "Iosevka Fixed SS14:h12"
+  vim.g.neovide_cursor_vfx_mode = "railgun"
   vim.g.neovide_remember_window_size = true
+  vim.g.neovide_no_custom_clipboard = true
+  vim.g.neovide_input_ime = true
+  vim.g.neovide_cursor_animation_length = 0
 end

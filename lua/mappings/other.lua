@@ -18,14 +18,11 @@ map("t", ";k", [[<C-\><C-n><C-w>k]])
 map("t", ";h", [[<C-\><C-n><C-w>h]])
 
 -- telescope
-nmap(";f", [[:lua require('telescope.builtin').find_files{}<CR>]])
-nmap("<LEADER>tg", [[:lua require('telescope.builtin').live_grep{}<CR>]])
+nmap("<LEADER>f", [[:lua require('telescope.builtin').find_files{}<CR>]])
+nmap("<LEADER>rg", [[:lua require('telescope.builtin').live_grep{}<CR>]])
 
 -- fugitive
-nmap(";g", [[<CMD>Git<CR>]])
-
--- lazygit
-nmap("<LEADER>l", [[<CMD>LazyGit<CR>]])
+nmap("<LEADER>g", [[<CMD>Git<CR>]])
 
 -- bufferline tab stuff
 nmap("<C-c>", ":BufferLinePickClose<CR>") -- close tab
@@ -42,8 +39,11 @@ nmap("<A-p>", [[<CMD>:BufferLinePick<CR>]])
 -- dispatch
 nmap(";d", ":Dispatch ", { noremap = true, silent = false })
 
+-- neogen
+nmap("<leader>doc", [[:lua require("neogen").generate()<CR>]])
+
 -- rust-tools.nvim
-nmap("<Leader>ra", ':lua require("rust-tools.hover_actions").hover_actions()<CR>')
+-- nmap("<Leader>ra", ':lua require("rust-tools.hover_actions").hover_actions()<CR>')
 
 -- fugitive
 -- keep the same prefix as the git sign

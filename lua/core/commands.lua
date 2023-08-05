@@ -3,7 +3,7 @@
 -- @param repl The actual command or function
 -- @param force force create command? boolean
 local alias = function(cmd, repl, force)
-  local command
+  local command = ""
   if force then
     command = "command! " .. cmd .. " " .. repl
   else
@@ -29,7 +29,7 @@ alias("BufCL", [[BufferLineCloseLeft]])
 alias("BufCR", [[BufferLineCloseRight]])
 
 -- debug ui
-alias("DapUIToggle", [[lua require("dapui").toggle()]])
+-- alias("DapUIToggle", [[lua require("dapui").toggle()]])
 
 -- debug function
 alias("DapBreakpoint", [[lua require("dap").toggle_breakpoint()]])
