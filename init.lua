@@ -17,6 +17,10 @@ local utils = require("core.utils")
 -- Try to call the cache plugin
 pcall(require, "impatient")
 
+if vim.api.nvim_list_uis()~=nil and vim.fn.executable("notify-send") == 1 then
+  vim.notify = utils.notify_send
+end
+
 for _, module_name in
   ipairs({ "core.options", "mappings", "core.commands", "core.autocmd", "plugins.options" })
 do
