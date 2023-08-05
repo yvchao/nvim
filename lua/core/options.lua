@@ -137,7 +137,7 @@ if vim.g.neovide then
   vim.o.guifont = "Iosevka Fixed SS14:h12"
   vim.g.neovide_cursor_vfx_mode = "railgun"
   vim.g.neovide_remember_window_size = true
-  vim.g.neovide_no_custom_clipboard = true
+  -- vim.g.neovide_no_custom_clipboard = true
   vim.g.neovide_input_ime = true
   vim.g.neovide_cursor_animation_length = 0
 end
