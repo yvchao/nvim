@@ -39,49 +39,49 @@ end
 
 -- configure the kanagawa theme
 M.kanagawa_setup = function()
-  local default = require("kanagawa.colors").setup()
   require("kanagawa").setup({
     undercurl = true, -- enable undercurls
-    commentStyle = "italic",
-    functionStyle = "bold",
-    keywordStyle = "italic",
-    statementStyle = "bold",
-    typeStyle = "bold",
-    variablebuiltinStyle = "italic",
+    commentStyle = { italic = true },
+    functionStyle = { bold = true },
+    keywordStyle = { italic = true },
+    statementStyle = { bold = true },
+    typeStyle = { bold = true },
+    variablebuiltinStyle = { italic = true },
     specialReturn = true, -- special highlight for the return keyword
     specialException = true, -- special highlight for exception handling keywords
     transparent = false, -- do not set background color
     dimInactive = true,
-    colors = {},
-    overrides = {
-      htmlH1 = {
-        fg = default.peachRed,
-        style = "bold",
-      },
-      htmlH2 = {
-        fg = default.roninYellow,
-        style = "bold",
-      },
-      htmlH3 = {
-        fg = default.autumnYellow,
-        style = "bold",
-      },
-      htmlH4 = {
-        fg = default.autumnGreen,
-        style = "bold",
-      },
-      Todo = {
-        fg = default.fujiWhite,
-        bg = default.samuraiRed,
-        style = "bold",
-      },
-      Pmenu = {
-        bg = default.sumiInk1,
-      },
-      HighLightLineMatches = {
-        bg = default.winterYellow,
-      },
-    },
+    overrides = function(colors)
+      return {
+        htmlH1 = {
+          fg = colors.palette.peachRed,
+          bold = true,
+        },
+        htmlH2 = {
+          fg = colors.palette.roninYellow,
+          bold = true,
+        },
+        htmlH3 = {
+          fg = colors.palette.autumnYellow,
+          bold = true,
+        },
+        htmlH4 = {
+          fg = colors.palette.autumnGreen,
+          bold = true,
+        },
+        Todo = {
+          fg = colors.palette.fujiWhite,
+          bg = colors.palette.samuraiRed,
+          bold = true,
+        },
+        Pmenu = {
+          bg = colors.palette.sumiInk1,
+        },
+        HighLightLineMatches = {
+          bg = colors.palette.winterYellow,
+        },
+      }
+    end,
   })
   apply()
 end
