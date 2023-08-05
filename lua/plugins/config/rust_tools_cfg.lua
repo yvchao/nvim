@@ -1,13 +1,20 @@
-local ok, error = pcall(require, "rust-tools")
+local ok, rt = pcall(require, "rust-tools")
 if not ok then
-  vim.notify(error)
+  vim.notify(rt, vim.log.levels.ERROR, {
+    title = "rust-tools",
+  })
   return
+end
+
+local function on_attach(client, bufnr)
+  require("plugins.config.lspconfig_cfg").set_lsp_key(client, bufnr)
+  vim.keymap.set("n", "<leader>ra", rt.hover_actions.hover_actions, { buffer = bufnr })
+  vim.keymap.set("n", "<leader>rag", rt.code_action_group.code_action_group, { buffer = bufnr })
 end
 
 local opts = {
   tools = {
     autoSetHints = true,
-    hover_with_actions = true,
     executor = require("rust-tools/executors").termopen,
     runnables = {
       use_telescope = true,
@@ -53,9 +60,9 @@ local opts = {
       auto_focus = true,
     },
   },
-  server = { on_attach = require("plugins.config.lspconfig_cfg").set_lsp_key }, -- rust-analyer options
+  server = { on_attach = on_attach }, -- rust-analyer options
 }
 
-require("rust-tools").setup(opts)
+rt.setup(opts)
 
-vim.g.rustfmt_options = "--edition=2021"
+vim.g.rustfmt_options = "--edition=2022"

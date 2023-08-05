@@ -11,26 +11,26 @@
 
 local autoload = {
   -- speed up neovim!
-  {
-    "nathom/filetype.nvim",
-    config = function()
-      require("filetype").setup({
-        -- overrides the filetype or function for filetype
-        -- See https://github.com/nathom/filetype.nvim#customization
-        overrides = {},
-      })
-    end,
-  },
+  -- {
+  --   "nathom/filetype.nvim",
+  --   config = function()
+  --     require("filetype").setup({
+  --       -- overrides the filetype or function for filetype
+  --       -- See https://github.com/nathom/filetype.nvim#customization
+  --       overrides = {},
+  --     })
+  --   end,
+  -- },
 
-  -- adjust the shiftwidth and expandtab settins
+  -- adjust the shiftwidth and expandtab settings
   {
     "tpope/vim-sleuth",
   },
 
   -- Fix the CursorHold performance bug
-  {
-    "antoinemadec/FixCursorHold.nvim",
-  },
+  -- {
+  --   "antoinemadec/FixCursorHold.nvim",
+  -- },
 
   -- cache everything!
   {
@@ -38,43 +38,44 @@ local autoload = {
   },
 }
 
-local markdown_plugins = {
-  -- markdown toc
-  {
-    "mzlogin/vim-markdown-toc",
-    cmd = {
-      "GenTocGFM",
-    },
-  },
-
-  -- markdown preview
-  {
-    "iamcco/markdown-preview.nvim",
-    run = function()
-      vim.fn["mkdp#util#install"]()
-    end,
-    config = function()
-      require("plugins").load_cfg("markdown_preview_cfg")
-    end,
-    ft = {
-      "markdown",
-    },
-  },
-
-  -- markdown editing enhancement
-  {
-    "plasticboy/vim-markdown",
-    ft = {
-      "markdown",
-    },
-  },
-
-  -- table editing enhancement
-  {
-    "dhruvasagar/vim-table-mode",
-    cmd = "TableModeToggle",
-  },
-}
+-- local markdown_plugins = {
+--   -- markdown toc
+--   {
+--     "mzlogin/vim-markdown-toc",
+--     cmd = {
+--       "GenTocGFM",
+--     },
+--   },
+--
+-- markdown preview
+-- {
+--   "iamcco/markdown-preview.nvim",
+--   run = function()
+--     vim.fn["mkdp#util#install"]()
+--   end,
+--   config = function()
+--     require("plugins").load_cfg("markdown_preview_cfg")
+--   end,
+--   ft = {
+--     "markdown",
+--   },
+-- },
+--
+-- markdown editing enhancement
+--   {
+--     "plasticboy/vim-markdown",
+--     ft = {
+--       "markdown",
+--     },
+--   },
+--
+--   -- table editing enhancement
+--   {
+--     "dhruvasagar/vim-table-mode",
+--     cmd = "TableModeToggle",
+--   },
+-- }
+--
 
 local git_tools = {
   -- A git tool like magit in Emacs
@@ -90,25 +91,25 @@ local git_tools = {
   },
 
   -- Call the lazygit inside neovim, relies on lazygit executable
-  {
-    "kdheepak/lazygit.nvim",
-    setup = function()
-      vim.g.lazygit_floating_window_winblend = 0
-      vim.g.lazygit_floating_window_scaling_factor = 1
-      vim.g.lazygit_floating_window_corner_chars = {
-        "╭",
-        "╮",
-        "╰",
-        "╯",
-      }
-      vim.g.lazygit_floating_window_use_plenary = 0
-      vim.g.lazygit_use_neovim_remote = 1
-      if vim.g.lazygit_use_neovim_remote == 1 and vim.fn.executable("nvr") then
-        vim.env.GIT_EDITOR = "nvr -cc split --remote-wait +'set bufhidden=wipe'"
-      end
-    end,
-    cmd = "LazyGit",
-  },
+  -- {
+  --   "kdheepak/lazygit.nvim",
+  --   setup = function()
+  --     vim.g.lazygit_floating_window_winblend = 0
+  --     vim.g.lazygit_floating_window_scaling_factor = 1
+  --     vim.g.lazygit_floating_window_corner_chars = {
+  --       "╭",
+  --       "╮",
+  --       "╰",
+  --       "╯",
+  --     }
+  --     vim.g.lazygit_floating_window_use_plenary = 0
+  --     vim.g.lazygit_use_neovim_remote = 1
+  --     if vim.g.lazygit_use_neovim_remote == 1 and vim.fn.executable("nvr") then
+  --       vim.env.GIT_EDITOR = "nvr -cc split --remote-wait +'set bufhidden=wipe'"
+  --     end
+  --   end,
+  --   cmd = "LazyGit",
+  -- },
 
   -- Show git information in neovim
   {
@@ -158,6 +159,15 @@ local editor_enhance = {
     config = function()
       require("winshift").setup({})
     end,
+  },
+
+  {
+    "ojroques/nvim-bufdel",
+  },
+
+  {
+    "kevinhwang91/nvim-bqf",
+    ft = "qf",
   },
 
   -- list of nerdfont icons
@@ -217,6 +227,7 @@ local editor_enhance = {
         }, -- Enable parsing rgb(...) functions in css.
       })
     end,
+    event = "BufRead",
     cmd = {
       "ColorizerToggle",
       -- this help generate color for no filetype file
@@ -249,14 +260,21 @@ local editor_enhance = {
   },
 
   -- a dashboard that useless but beautiful
+  -- {
+  --   "glepnir/dashboard-nvim",
+  --   cmd = {
+  --     "Dashboard",
+  --   },
+  --   config = function()
+  --     require("plugins").load_cfg("dashboard_cfg")
+  --   end,
+  -- },
   {
-    "glepnir/dashboard-nvim",
-    cmd = {
-      "Dashboard",
-    },
-    config = function()
-      require("plugins").load_cfg("dashboard_cfg")
+    "goolord/alpha-nvim",
+    config = function ()
+      require("plugins").load_cfg("alpha_cfg")
     end,
+    -- after = "telescope",
   },
 
   -- cd into the root directory
@@ -271,6 +289,7 @@ local editor_enhance = {
   -- telescope: extensible fuzzy file finder
   {
     "nvim-telescope/telescope.nvim",
+    -- event = "BufReadPost",
     requires = {
       "nvim-lua/popup.nvim",
       "nvim-lua/plenary.nvim",
@@ -278,7 +297,7 @@ local editor_enhance = {
     config = function()
       require("plugins").load_cfg("telescope_cfg")
     end,
-    module = "telescope",
+    -- module = "telescope",
   },
 
   -- record and manage your paste history
@@ -292,15 +311,16 @@ local editor_enhance = {
   },
 
   -- Press enter to select text object
-  {
-    "gcmt/wildfire.vim",
-    keys = {
-      {
-        "n",
-        "<Enter>",
-      },
-    },
-  },
+  -- {
+  --   "gcmt/wildfire.vim",
+  --   keys = {
+  --     {
+  --       "n",
+  --       "<Enter>",
+  --     },
+  --   },
+  --   ft = vim.g.enable_treesitter_ft,
+  -- },
 
   -- surrounding select text with given signs
   {
@@ -315,6 +335,19 @@ local editor_enhance = {
       -- and remap it to gs
       map("x", "gs", "<Plug>VSurround", {
         noremap = false,
+      })
+    end,
+  },
+
+  {
+    "folke/which-key.nvim",
+    config = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+      require("which-key").setup({
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
       })
     end,
   },
@@ -362,21 +395,50 @@ local editor_enhance = {
     after = "nvim-cmp",
   },
 
-  -- file manager without any dependency
+  -- Lua
   {
-    "obaland/vfiler.vim",
-    cmd = "VFiler",
-    requires = {
-      "obaland/vfiler-column-devicons",
-    },
+    "abecodes/tabout.nvim",
     config = function()
-      require("vfiler/config").setup({
-        options = {
-          columns = "indent,devicons,name,mode,size,time",
+      require("tabout").setup({
+        tabkey = "<Tab>", -- key to trigger tabout, set to an empty string to disable
+        backwards_tabkey = "<S-Tab>", -- key to trigger backwards tabout, set to an empty string to disable
+        act_as_tab = true, -- shift content if tab out is not possible
+        act_as_shift_tab = false, -- reverse shift content if tab out is not possible (if your keyboard/terminal supports <S-Tab>)
+        default_tab = "<C-t>", -- shift default action (only at the beginning of a line, otherwise <TAB> is used)
+        default_shift_tab = "<C-d>", -- reverse shift default action,
+        enable_backwards = true, -- well ...
+        completion = true, -- if the tabkey is used in a completion pum
+        tabouts = {
+          { open = "'", close = "'" },
+          { open = '"', close = '"' },
+          { open = "`", close = "`" },
+          { open = "(", close = ")" },
+          { open = "[", close = "]" },
+          { open = "{", close = "}" },
         },
+        ignore_beginning = true, --[[ if the cursor is at the beginning of a filled element it will rather tab out than shift the content ]]
+        exclude = {}, -- tabout will ignore these filetypes
       })
     end,
+    wants = { "nvim-treesitter" }, -- or require if not used so far
+    after = { "nvim-cmp" }, -- if a completion plugin is using tabs load it before
   },
+
+  -- file manager without any dependency
+  -- {
+  --   "obaland/vfiler.vim",
+  --   cmd = "VFiler",
+  --   requires = {
+  --     "obaland/vfiler-column-devicons",
+  --   },
+  --   config = function()
+  --     require("vfiler/config").setup({
+  --       options = {
+  --         columns = "indent,devicons,name,mode,size,time",
+  --       },
+  --     })
+  --   end,
+  -- },
 
   -- split single line and join multiple lines, useful for closing bracket
   {
@@ -441,33 +503,47 @@ local editor_enhance = {
     module = "spectre",
   },
 
-  {
-    "beauwilliams/focus.nvim",
-    event = "WinEnter",
-    config = function()
-      require("focus").setup({
-        excluded_filetypes = { "fterm", "term", "toggleterm" },
-        signcolumn = false,
-      })
-    end,
-  },
+  -- {
+  --   "gelguy/wilder.nvim",
+  --   config = function()
+  --     require("wilder").setup({ modes = { ":", "/", "?" } })
+  --   end,
+  -- },
 
-  {
-    "stevearc/dressing.nvim",
-    module = "vim.ui",
-    config = function()
-      require("dressing").setup({})
-    end,
-  },
+  -- {
+  --   "beauwilliams/focus.nvim",
+  --   event = "WinEnter",
+  --   config = function()
+  --     require("focus").setup({
+  --       excluded_filetypes = { "fterm", "term", "toggleterm" },
+  --       signcolumn = false,
+  --     })
+  --   end,
+  -- },
+
+  -- {
+  --   "stevearc/dressing.nvim",
+  --   module = "vim.ui",
+  --   config = function()
+  --     require("dressing").setup({})
+  --   end,
+  -- },
 
   -- add notify window
-  {
-    "rcarriga/nvim-notify",
-    module = "vim",
-    config = function()
-      vim.notify = require("notify")
-    end,
-  },
+  -- {
+  --   "rcarriga/nvim-notify",
+  --   module = "vim",
+  --   config = function()
+  --     require("notify").setup({
+  --       render = "compact",
+  --       stages = "static",
+  --       max_height = 20,
+  --       max_width = 200,
+  --     })
+  --     vim.notify = require("notify")
+  --     require("telescope").load_extension("notify")
+  --   end,
+  -- },
 }
 
 local colorscheme = {
@@ -498,9 +574,12 @@ local colorscheme = {
     "projekt0n/github-nvim-theme",
     cond = function()
       local select = require("core.colors").theme
-      for _, avail in
-        ipairs({ "github_dark", "github_dimmed", "github_light", "github_light_default" })
-      do
+      for _, avail in ipairs({
+        "github_dark",
+        "github_dimmed",
+        "github_light",
+        "github_light_default",
+      }) do
         if select == avail then
           return true
         end
@@ -546,13 +625,36 @@ local coding_enhance = {
     after = "nvim-treesitter",
   },
 
-  -- automatically download and manage lsp server
   {
-    "williamboman/nvim-lsp-installer",
+    "nvim-treesitter/nvim-treesitter-context",
+    after = "nvim-treesitter",
+    config = function()
+      require("treesitter-context").setup()
+    end,
+  },
+
+  {
+    "h-hg/fcitx.nvim",
+  },
+  -- -- automatically download and manage lsp server
+  -- {
+  --   "williamboman/nvim-lsp-installer",
+  --   ft = vim.g.enable_lspconfig_ft,
+  --   config = function()
+  --     require("lspconfig")
+  --   end,
+  -- },
+
+  {
+    "williamboman/mason.nvim",
     ft = vim.g.enable_lspconfig_ft,
     config = function()
       require("lspconfig")
     end,
+  },
+
+  {
+    "williamboman/mason-lspconfig.nvim",
   },
 
   -- manage the lsp server
@@ -562,15 +664,31 @@ local coding_enhance = {
       require("plugins").load_cfg("lspconfig_cfg")
     end,
     module = "lspconfig",
+    after = "vim-rooter",
+  },
+
+  {
+    "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+    config = function()
+      require("lsp_lines").setup()
+    end,
   },
 
   -- enhance the lsp UI
   {
-    "tami5/lspsaga.nvim",
+    "kkharji/lspsaga.nvim",
     after = "nvim-lspconfig",
     config = function()
       require("plugins").load_cfg("lspsaga_cfg")
     end,
+  },
+
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    config = function()
+      require("plugins").load_cfg("nullls_cfg")
+    end,
+    ft = { "python", "tex", "c", "cpp", "lua" },
   },
 
   -- Pre-set for rust lsp
@@ -603,7 +721,11 @@ local coding_enhance = {
     end,
   },
 
-  -- debugger plugin
+  {
+    "barreiroleo/ltex-extra.nvim",
+  },
+
+  -- -- debugger plugin
   {
     "mfussenegger/nvim-dap",
     module = "dap",
@@ -611,12 +733,18 @@ local coding_enhance = {
       require("plugins").load_cfg("dap_cfg")
     end,
   },
-
-  -- UI for nvim-dap
   {
-    "rcarriga/nvim-dap-ui",
-    module = "dapui",
+    "theHamsta/nvim-dap-virtual-text",
+    config = function()
+      require("nvim-dap-virtual-text").setup()
+    end,
   },
+  --
+  -- -- UI for nvim-dap
+  -- {
+  --   "rcarriga/nvim-dap-ui",
+  --   module = "dapui",
+  -- },
 
   -- generate quick jump list in side panel
   {
@@ -628,24 +756,28 @@ local coding_enhance = {
   },
 
   -- go coding enhancement
-  {
-    "fatih/vim-go",
-    config = function()
-      require("plugins").load_cfg("vim_go_cfg")
-    end,
-    ft = { "go" },
-  },
+  -- {
+  --   "fatih/vim-go",
+  --   config = function()
+  --     require("plugins").load_cfg("vim_go_cfg")
+  --   end,
+  --   ft = { "go" },
+  -- },
 
   -- format code use clang-format
-  {
-    "rhysd/vim-clang-format",
-    ft = {
-      "cpp",
-      "c",
-      "h",
-      "hpp",
-    },
-  },
+  -- {
+  --   "mhartington/formatter.nvim",
+  --   config = function ()
+  --     require("plugins").load_cfg("formatter_cfg")
+  --   end,
+  --   ft = {
+  --     "cpp",
+  --     "c",
+  --     "h",
+  --     "hpp",
+  --     "python",
+  --   },
+  -- },
 
   -- use `gcc` `gbc` to comment
   {
@@ -659,6 +791,15 @@ local coding_enhance = {
       { "v", "gc" },
       { "v", "gb" },
     },
+  },
+
+  -- Doc string
+  {
+    "danymat/neogen",
+    config = function()
+      require("plugins").load_cfg("neogen_cfg")
+    end,
+    requires = "nvim-treesitter/nvim-treesitter",
   },
 
   -- find definition, reference
@@ -684,6 +825,7 @@ local coding_enhance = {
   -- add a progress bar for lsp server
   {
     "j-hui/fidget.nvim",
+    tag = "legacy",
     after = "nvim-lspconfig",
     config = function()
       require("fidget").setup({
@@ -770,25 +912,35 @@ local completion = {
     },
   },
 
-  {
-    "uga-rosa/cmp-dictionary",
-    after = "nvim-cmp",
-    config = function()
-      require("cmp_dictionary").setup({
-        dic = {
-          ["*"] = "/usr/share/dict/en.dic",
-        },
-        first_case_insensitive = true,
-        document = true,
-      })
-      require("cmp_dictionary").update() -- THIS
-    end,
-  },
+  -- {
+  --   "ray-x/lsp_signature.nvim",
+  --   config = function ()
+  --     require("plugins").load_cfg("lsp_signature_cfg")
+  --   end,
+  --   ft = vim.g.enable_lspconfig_ft,
+  -- },
+
+  -- {
+  --   "uga-rosa/cmp-dictionary",
+  --   after = "nvim-cmp",
+  --   config = function()
+  --     require("cmp_dictionary").setup({
+  --       exact = 2,
+  --       first_case_insensitive = true,
+  --       document = false,
+  --     })
+  --     require("cmp_dictionary").switcher({
+  --       spelllang = {
+  --         en = "~/.local/share/dict/en.dict",
+  --       },
+  --     })
+  --     -- require("cmp_dictionary").update() -- THIS
+  --   end,
+  -- },
 }
 
 return {
   autoload,
-  markdown_plugins,
   git_tools,
   editor_enhance,
   colorscheme,

@@ -1,24 +1,13 @@
 local g = vim.g
 
-if not vim.fn.has("nvim-0.6") then
-  -- for filetype.nvim
-  -- If using a Neovim version earlier than 0.6.0
-  g.did_load_filetypes = 1
--- else
-  -- g.did_load_filetypes = 1
-  -- g.do_filetype_lua = 1
-end
+g.loaded_netrw = 1
+g.loaded_netrwPlugin = 1
 
 -- for vsnip
 g.vsnip_snippet_dir = vim.fn.expand("~/.config/nvim/vsnip")
 
 -- for wildfire
 g.wildfire_objects = { "i'", 'i"', "i)", "i]", "i}", "ip", "it", "i`" }
-
--- for vim-markdown
-g.vim_markdown_conceal_code_blocks = 0
-g.vim_markdown_strikethrough = 1
-g.vim_markdown_math = 1
 
 g.rooter_manual_only = 1
 g.rooter_change_directory_for_non_project_files = "current"
@@ -46,6 +35,7 @@ g.enable_treesitter_ft = {
 
 -- enable lspconfig for what filetype?
 g.enable_lspconfig_ft = {
+  "text",
   "bash",
   "c",
   "cpp",

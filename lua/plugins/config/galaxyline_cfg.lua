@@ -37,17 +37,17 @@ elseif current_scheme == "dawnfox" then
   colors.black = "#625c5c"
 elseif current_scheme:match("github_light[%l_]*") then
   local custom = {
-    fg = '#24292f',
+    fg = "#24292f",
     bg = "#bbd6ee",
     black = "#9fc5e8",
-    yellow = '#dbab09',
-    cyan = '#0598bc',
-    green = '#28a745',
-    orange = '#d18616',
-    magenta = '#5a32a3',
-    purple = '#5a32a3',
-    blue = '#0366d6',
-    red = '#d73a49',
+    yellow = "#dbab09",
+    cyan = "#0598bc",
+    green = "#28a745",
+    orange = "#d18616",
+    magenta = "#5a32a3",
+    purple = "#5a32a3",
+    blue = "#0366d6",
+    red = "#d73a49",
   }
 
   -- merge custom color to default
@@ -102,14 +102,14 @@ insert_left({
   ViMode = {
     icon = function()
       local icons = {
-        n = " ",
+        n = "󰁁 ",
         i = " ",
-        c = "ﲵ ",
-        V = " ",
-        [""] = " ",
-        v = " ",
-        C = "ﲵ ",
-        R = "﯒ ",
+        c = " ",
+        V = " ",
+        [""] = " ",
+        v = " ",
+        C = " ",
+        R = "󱚗 ",
         t = " ",
       }
       return icons[vim.fn.mode()]
@@ -281,7 +281,7 @@ insert_left({
     provider = DiagnosticHint,
     condition = checkwidth,
     highlight = { colors.white, colors.bg },
-    icon = "  ",
+    icon = " 󰌶 ",
   },
 })
 
@@ -424,9 +424,9 @@ local BufferTypeMap = {
   ["NvimTree"] = " Tree",
   ["fugitive"] = " Fugitive",
   ["fugitiveblame"] = " Fugitive Blame",
-  ["help"] = " Help",
+  ["help"] = "󰞋 Help",
   ["minimap"] = "Minimap",
-  ["qf"] = " Quick Fix",
+  ["qf"] = "󰁨 Quick Fix",
   ["tabman"] = "Tab Manager",
   ["tagbar"] = "Tagbar",
   ["FTerm"] = "Terminal",
@@ -435,14 +435,15 @@ local BufferTypeMap = {
   ["git"] = " Git",
   ["NeogitStatus"] = " Neogit Status",
   ["NeogitPopup"] = " Neogit Popup",
-  ["NeogitCommitMessage"] = " Neogit Commit",
+  ["NeogitCommitMessage"] = " Neogit Commit",
   ["DiffviewFiles"] = " Diff View",
   ["dapui_scopes"] = "כֿ Dap Scope",
   ["dapui_breakpoints"] = " Dap Breakpoints",
+  ["DapBreakpoint"] = " Dap Breakpoints",
   ["dapui_stacks"] = " Dap Stacks",
   ["dapui_watches"] = "ﭓ Dap Watch",
   ["dap-repl"] = " Dap REPL",
-  ["Outline"] = " SymbolOutline",
+  ["Outline"] = " SymbolOutline",
   ["fern"] = " Fern FM",
 }
 
