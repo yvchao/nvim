@@ -88,30 +88,7 @@ end
 
 -- configure the nightfox theme
 M.nightfox_setup = function()
-  require("nightfox").setup({
-    options = {
-      -- Compiled file's destination location
-      compile_path = vim.fn.stdpath("cache") .. "/nightfox",
-      compile_file_suffix = "_compiled", -- Compiled file suffix
-      transparent = false, -- Disable setting background
-      terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
-      dim_inactive = true, -- Non focused panes set to alternative background
-      styles = { -- Style to be applied to different syntax groups
-        comments = "italic", -- Value is any valid attr-list value `:help attr-list`
-        functions = "bold",
-        keywords = "italic",
-        numbers = "NONE",
-        strings = "NONE",
-        types = "italic,bold",
-        variables = "NONE",
-      },
-    },
-    groups = {
-      HighLightLineMatches = {
-        bg = "#FFDE83",
-      },
-    },
-  })
+  require("nightfox").setup()
   apply()
 end
 
@@ -119,25 +96,9 @@ end
 M.github_setup = function()
   -- trim the prefix text
   local theme = M.theme:gsub("github_", "")
-  require("github-theme").setup({
-    theme_style = theme,
-    function_style = "bold",
-    comment_style = "italic",
-    keyword_style = "italic",
-    variable_style = "NONE",
-    sidebars = { "qf", "vista_kind", "terminal", "packer", "NvimTree" },
-
-    -- Overwrite the highlight groups
-    overrides = function(_)
-      return {
-        HighLightLineMatches = {
-          bg = "#FFDE83",
-        },
-      }
-    end,
-  })
+  require("github-theme").setup({})
   -- this plugin will setup colorscheme for us
-  -- apply()
+  apply()
 end
 
 -- return the configuration for load condition
