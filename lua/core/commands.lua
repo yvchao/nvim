@@ -50,7 +50,7 @@ alias("CrateReload", [[lua require("crates").reload()]])
 -- alias("SpectreOpen", "lua require('spectre').open()")
 
 -- lsp_lines
-alias("LspLineToffle", [[lua require("lsp_lines").toggle()]])
+alias("LspLineToggle", [[lua require("lsp_lines").toggle()]])
 
 alias("HiCurLine", [[call matchadd('HighlightLineMatches', '\%'.line('.').'l')]])
 alias("HiCurLineOff", [[call clearmatches()]])
