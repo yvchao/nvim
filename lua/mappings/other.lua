@@ -34,7 +34,7 @@ nmap(";p", [[<Cmd>BufferLineCyclePrev<CR>]])
 -- move tabs
 nmap("<A->>", [[<CMD>BufferLineMoveNext<CR>]])
 nmap("<A-<>", [[<CMD>BufferLineMovePrev<CR>]])
-nmap("<A-p>", [[<CMD>:BufferLinePick<CR>]])
+nmap("<A-p>", [[<CMD>BufferLinePick<CR>]])
 
 -- dispatch
 nmap(";d", ":Dispatch ", { noremap = true, silent = false })

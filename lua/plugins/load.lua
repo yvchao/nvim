@@ -189,6 +189,11 @@ local editor_enhance = {
     "mg979/vim-visual-multi",
     event = "InsertEnter",
     branch = "master",
+    config = function()
+      vim.g.VM_maps = {
+        ["I BS"] = "", -- disable backspace mapping to avoid conflit with autopair
+      }
+    end,
   },
 
   -- Linux coreutil in vim
@@ -288,20 +293,15 @@ local editor_enhance = {
 
   -- Move cursor by text search
   {
-    "ggandor/lightspeed.nvim",
+    "ggandor/leap.nvim",
+    config = function ()
+      require('leap').add_default_mappings()
+    end,
     keys = {
       { "n", "s" },
       { "v", "s" },
       { "n", "S" },
       { "v", "S" },
-      { "n", "f" },
-      { "n", "F" },
-      { "n", "t" },
-      { "n", "T" },
-      { "v", "f" },
-      { "v", "F" },
-      { "v", "t" },
-      { "v", "T" },
     },
   },
 
@@ -351,22 +351,6 @@ local editor_enhance = {
     wants = { "nvim-treesitter" }, -- or require if not used so far
     after = { "nvim-cmp" }, -- if a completion plugin is using tabs load it before
   },
-
-  -- file manager without any dependency
-  -- {
-  --   "obaland/vfiler.vim",
-  --   cmd = "VFiler",
-  --   requires = {
-  --     "obaland/vfiler-column-devicons",
-  --   },
-  --   config = function()
-  --     require("vfiler/config").setup({
-  --       options = {
-  --         columns = "indent,devicons,name,mode,size,time",
-  --       },
-  --     })
-  --   end,
-  -- },
 
   -- split single line and join multiple lines, useful for closing bracket
   {
