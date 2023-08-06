@@ -7,6 +7,7 @@ vim.g.galaxyline_loaded = 1
 local gl = require("galaxyline")
 local gls = gl.section
 local diagnostic = require("galaxyline.provider_diagnostic")
+local lspclient = require("galaxyline.provider_lsp")
 
 -- VistaPlugin = extension.vista_nearest
 
@@ -91,6 +92,10 @@ end
 local function insert_right(element)
   table.insert(gls.right, element)
 end
+
+-- local function insert_middle(element)
+--   table.insert(gls.mid, element)
+-- end
 
 -----------------------------------------------------
 ----------------- start insert ----------------------
@@ -341,11 +346,29 @@ insert_right({
   },
 })
 
+-- insert_right({
+--   LspStatus = {
+--     provider = function()
+--       local status = require("lsp-status").status_progress()
+--       return status
+--     end,
+--     condition = checkwidth,
+--     highlight = { colors.fg, colors.bg },
+--   },
+-- })
+
 insert_right({
-  LineInfo = {
-    provider = "LineColumn",
-    separator = "  ",
-    separator_highlight = { colors.green, colors.bg },
+  LspStatus = {
+    provider = function()
+      local status = require("lsp-status").status_progress()
+      if status:gsub("%s","") ==  "" then
+        status = lspclient.get_lsp_client()
+      end
+      return status
+    end,
+    separator = " LSP: ",
+    separator_highlight = { colors.blue, colors.bg },
+    condition = checkwidth,
     highlight = { colors.fg, colors.bg },
   },
 })
@@ -360,11 +383,10 @@ insert_right({
 })
 
 insert_right({
-  GetLspClient = {
-    provider = "GetLspClient",
-    separator = " LSP: ",
-    separator_highlight = { colors.blue, colors.black },
-    condition = checkwidth,
+  LineInfo = {
+    provider = "LineColumn",
+    separator = "  ",
+    separator_highlight = { colors.green, colors.black },
     highlight = { colors.fg, colors.black },
   },
 })

@@ -271,7 +271,7 @@ local editor_enhance = {
   -- },
   {
     "goolord/alpha-nvim",
-    config = function ()
+    config = function()
       require("plugins").load_cfg("alpha_cfg")
     end,
     -- after = "telescope",
@@ -645,18 +645,6 @@ local coding_enhance = {
   --   end,
   -- },
 
-  {
-    "williamboman/mason.nvim",
-    ft = vim.g.enable_lspconfig_ft,
-    config = function()
-      require("lspconfig")
-    end,
-  },
-
-  {
-    "williamboman/mason-lspconfig.nvim",
-  },
-
   -- manage the lsp server
   {
     "neovim/nvim-lspconfig",
@@ -664,7 +652,23 @@ local coding_enhance = {
       require("plugins").load_cfg("lspconfig_cfg")
     end,
     module = "lspconfig",
-    after = "vim-rooter",
+    after = { "vim-rooter", "mason.nvim" },
+  },
+
+  {
+    "williamboman/mason.nvim",
+    ft = vim.g.enable_lspconfig_ft,
+    config = function()
+      require("mason").setup()
+    end,
+  },
+
+  {
+    "williamboman/mason-lspconfig.nvim",
+    config = function()
+      require("mason-lspconfig").setup()
+    end,
+    after = "mason.nvim",
   },
 
   {
@@ -675,13 +679,13 @@ local coding_enhance = {
   },
 
   -- enhance the lsp UI
-  {
-    "kkharji/lspsaga.nvim",
-    after = "nvim-lspconfig",
-    config = function()
-      require("plugins").load_cfg("lspsaga_cfg")
-    end,
-  },
+  -- {
+  --   "kkharji/lspsaga.nvim",
+  --   after = "nvim-lspconfig",
+  --   config = function()
+  --     require("plugins").load_cfg("lspsaga_cfg")
+  --   end,
+  -- },
 
   {
     "jose-elias-alvarez/null-ls.nvim",
@@ -824,25 +828,28 @@ local coding_enhance = {
 
   -- add a progress bar for lsp server
   {
-    "j-hui/fidget.nvim",
-    tag = "legacy",
-    after = "nvim-lspconfig",
-    config = function()
-      require("fidget").setup({
-        text = {
-          spinner = "dots",
-        },
-        fmt = {
-          stack_upwards = true,
-        },
-        sources = {
-          ltex = {
-            ignore = true,
-          },
-        },
-      })
-    end,
+    "nvim-lua/lsp-status.nvim",
   },
+  -- {
+  --   "j-hui/fidget.nvim",
+  --   tag = "legacy",
+  --   after = "nvim-lspconfig",
+  --   config = function()
+  --     require("fidget").setup({
+  --       text = {
+  --         spinner = "dots",
+  --       },
+  --       fmt = {
+  --         stack_upwards = true,
+  --       },
+  --       sources = {
+  --         ltex = {
+  --           ignore = true,
+  --         },
+  --       },
+  --     })
+  --   end,
+  -- },
 }
 
 local completion = {

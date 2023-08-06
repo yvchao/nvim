@@ -1,13 +1,36 @@
-local present1, lspconfig = pcall(require, "lspconfig")
-local present2, installer = pcall(require, "mason-lspconfig")
-if not (present1 or present2) then
+local ok, lspconfig = pcall(require, "lspconfig")
+if not ok then
   vim.notify("Fail to setup LSP", vim.log.levels.ERROR, {
     title = "plugins",
   })
   return
 end
 
+local lsp_status = require("lsp-status")
+lsp_status.config({
+  kind_labels = {},
+  current_function = false,
+  show_filename = false,
+  diagnostics = false,
+  indicator_separator = ' ',
+  component_separator = ' ',
+  indicator_errors = '',
+  indicator_warnings = '',
+  indicator_info = '🛈',
+  indicator_hint = '',
+  indicator_ok = '',
+  spinner_frames = {'⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷'},
+  status_symbol = '',
+  select_symbol = nil,
+  update_interval = 10,
+})
+-- Register the progress handler
+lsp_status.register_progress()
+
 local on_attach = function(client, bufnr)
+  -- Register client for messages and set up buffer autocommands to update
+  lsp_status.on_attach(client)
+
   local function buf_set_option(...)
     vim.api.nvim_buf_set_option(bufnr, ...)
   end
@@ -21,7 +44,7 @@ local on_attach = function(client, bufnr)
     silent = true,
     buffer = bufnr,
   }
-  vim.keymap.set("n", "gd", "<Cmd>Lspsaga preview_definition<CR>", opts)
+  -- vim.keymap.set("n", "gd", "<Cmd>Lspsaga preview_definition<CR>", opts)
   vim.keymap.set("n", "gh", ":lua vim.lsp.buf.hover()<CR>", opts)
   -- buf_set_keymap(
   --   "n",
@@ -36,7 +59,7 @@ local on_attach = function(client, bufnr)
   --   opts
   -- )
   vim.keymap.set("n", "gs", ":lua vim.lsp.buf.signature_help()<CR>", opts)
-  vim.keymap.set("n", "go", "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
+  -- vim.keymap.set("n", "go", "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
   -- vim.keymap.set("n", "gj", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
   vim.keymap.set("n", "gj", function()
     vim.diagnostic.goto_next()
@@ -53,7 +76,7 @@ local on_attach = function(client, bufnr)
   -- vim.keymap.set("n", "gx", "<cmd>Lspsaga code_action<CR>", opts)
   vim.keymap.set("n", "gx", ":lua vim.lsp.buf.code_action()<CR>", opts)
 
-  vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+  vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
   vim.keymap.set("n", "gm", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
   vim.keymap.set("n", "gt", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
   vim.keymap.set("n", "gq", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
@@ -104,17 +127,14 @@ local function setup_capabilities()
   return capabilities
 end
 
-require("mason").setup()
-require("mason-lspconfig").setup()
+-- setup lsp servers
+-- Set default client capabilities plus window/workDoneProgress
+local default_capabilities =
+  vim.tbl_extend("keep", setup_capabilities() or {}, lsp_status.capabilities)
+local configured_lsp_list = { "lua_ls", "texlab", "pyright", "ltex", "ruff_lsp", "clangd" }
+local settings = {}
 
--- setup installed lsp servers
-
-local opts = {
-  on_attach = on_attach,
-  capabilities = setup_capabilities(),
-}
-
-local texlab_setting = {
+settings["texlab"] = {
   texlab = {
     build = {
       executable = "latexmk",
@@ -141,7 +161,7 @@ local texlab_setting = {
   },
 }
 
-local ltex_setting = {
+settings["ltex"] = {
   ltex = {
     ["ltex-ls"] = {
       logLevel = "severe",
@@ -155,7 +175,7 @@ local ltex_setting = {
   },
 }
 
-local lua_setting = {
+settings["lua_ls"] = {
   Lua = {
     runtime = {
       -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
@@ -180,7 +200,7 @@ local lua_setting = {
   },
 }
 
-local pyright_setting = {
+settings["pyright"] = {
   pyright = {
     disableLanguageServices = false,
     disableOrganizeImports = true,
@@ -202,75 +222,27 @@ local pyright_setting = {
   },
 }
 
--- local pylsp_config = {
---   pylsp = {
---     plugins = {
---       pyflakes = { enabled = false },
---       pylint = { enabled = false },
---       yapf = { enabled = false },
---       autopep8 = { enabled = false },
---       pycodestyle = { enabled = false },
---     },
---   },
--- }
-
-installer.setup_handlers({
-  -- The first entry (without a key) will be the default handler
-  -- and will be called for each installed server that doesn't have
-  -- a dedicated handler.
-  function(server_name) -- default handler (optional)
-    lspconfig[server_name].setup({})
-  end,
-  -- Next, you can provide targeted overrides for specific servers.
-  ["lua_ls"] = function()
-    opts.settings = lua_setting
-    lspconfig["lua_ls"].setup(opts)
-  end,
-  ["texlab"] = function()
-    opts.settings = texlab_setting
-    lspconfig["texlab"].setup(opts)
-  end,
-  ["pyright"] = function()
-    opts.settings = pyright_setting
-    opts.on_attach = on_attach
-    -- function(client, bufnr)
-    --   -- client.server_capabilities.hoverProvider = true
-    --   -- client.server_capabilities.codeActionProvider = {}
-    --   on_attach(client, bufnr)
-    -- end
-    lspconfig["pyright"].setup(opts)
-  end,
-  ["ltex"] = function()
+for _, server_name in pairs(configured_lsp_list) do
+  local server_setting = settings[server_name]
+  local opts = {
+    on_attach = on_attach,
+    capabilities = default_capabilities,
+    settings = server_setting,
+  }
+  if server_name == "clangd" then
+    opts.cmd = { "clangd", "--offset-encoding=utf-16" }
+    opts.handlers = lsp_status.extensions.clangd.setup()
+    opts.init_options = { clangdFileStatus = true }
+  elseif server_name == "ltex" then
     opts.on_attach = function(client, bufnr)
       on_attach(client, bufnr)
       require("ltex_extra").setup()
     end
-    opts.settings = ltex_setting
-    lspconfig["ltex"].setup(opts)
-  end,
-})
-
-opts.settings = pyright_setting
-opts.on_attach = on_attach
-lspconfig["pyright"].setup(opts)
-
-opts.on_attach = on_attach
-opts.settings = nil
-opts.cmd = nil
-lspconfig["ruff_lsp"].setup(opts)
-
-opts.on_attach = on_attach
-opts.settings = nil
-opts.cmd = { "clangd", "--offset-encoding=utf-16" }
-lspconfig["clangd"].setup(opts)
-
--- opts.on_attach = on_attach
--- opts.settings = nil
--- lspconfig["julials"].setup{}
---
--- opts.on_attach = on_attach
--- opts.settings = pylsp_config
--- lspconfig["pylsp"].setup(opts)
+  else
+    opts = opts
+  end
+  lspconfig[server_name].setup(opts)
+end
 
 local signs = {
   Error = "󰅙 ",
@@ -288,15 +260,15 @@ for type, icon in pairs(signs) do
   })
 end
 
-local lsp_publish_diagnostics_options = {
-  virtual_text = {
-    prefix = "󰎟",
-    spacing = 4,
-  },
-  signs = true,
-  underline = true,
-  update_in_insert = false, -- update diagnostics insert mode
-}
+-- local lsp_publish_diagnostics_options = {
+--   virtual_text = {
+--     prefix = "󰎟",
+--     spacing = 4,
+--   },
+--   signs = true,
+--   underline = true,
+--   update_in_insert = false, -- update diagnostics insert mode
+-- }
 
 -- vim.lsp.handlers["textDocument/publishDiagnostics"] =
 --   vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, lsp_publish_diagnostics_options)
@@ -317,7 +289,6 @@ vim.lsp.handlers["textDocument/hover"] = function(_, result, ctx, config)
     return
   end
   return vim.lsp.with(vim.lsp.handlers.hover(_, result, ctx, config), { border = "single" })
-  -- return vim.lsp.util.open_floating_preview(markdown_lines, "markdown", config)
 end
 
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
@@ -325,5 +296,5 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
 })
 
 return {
-  set_lsp_key = on_attach,
+  on_attach = on_attach,
 }
