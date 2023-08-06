@@ -106,11 +106,11 @@ opt.concealcursor = ""
 
 -- set defaul terminal shell
 if vim.fn.executable("fish") == 1 then
-  opt.shell = "/usr/bin/fish"
+	opt.shell = "/usr/bin/fish"
 elseif vim.fn.executable("zsh") == 1 then
-  opt.shell = "/usr/bin/zsh"
+	opt.shell = "/usr/bin/zsh"
 else
-  opt.shell = "usr/bin/bash"
+	opt.shell = "usr/bin/bash"
 end
 
 -- enable global status line
@@ -126,24 +126,24 @@ vim.g.python3_host_skip_check = 1
 local backup_dir = vim.fn.stdpath("cache") .. "/backup"
 local backup_stat = pcall(os.execute, "mkdir -p " .. backup_dir)
 if backup_stat then
-  opt.backupdir = backup_dir
-  opt.directory = backup_dir
+	opt.backupdir = backup_dir
+	opt.directory = backup_dir
 end
 
 local undo_dir = vim.fn.stdpath("cache") .. "/undo"
 local undo_stat = pcall(os.execute, "mkdir -p " .. undo_dir)
 local has_persist = vim.fn.has("persistent_undo")
 if undo_stat and has_persist == 1 then
-  opt.undofile = true
-  opt.undodir = undo_dir
+	opt.undofile = true
+	opt.undodir = undo_dir
 end
 
 if vim.g.neovide then
-  -- neovide specific settings
-  vim.o.guifont = "Iosevka Fixed SS14:h12"
-  vim.g.neovide_cursor_vfx_mode = "railgun"
-  vim.g.neovide_remember_window_size = true
-  -- vim.g.neovide_no_custom_clipboard = true
-  vim.g.neovide_input_ime = true
-  vim.g.neovide_cursor_animation_length = 0
+	-- neovide specific settings
+	vim.o.guifont = "Iosevka Fixed SS14:h12"
+	vim.g.neovide_cursor_vfx_mode = "railgun"
+	vim.g.neovide_remember_window_size = true
+	-- vim.g.neovide_no_custom_clipboard = true
+	vim.g.neovide_input_ime = true
+	vim.g.neovide_cursor_animation_length = 0
 end
