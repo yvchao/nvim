@@ -52,4 +52,14 @@ M.notify_send = function(msg, log_level, opts)
   vim.fn.system(command)
 end
 
+M.notify_message =  function(msg, level, opts) -- luacheck: no unused args
+  if level == vim.log.levels.ERROR then
+    vim.api.nvim_err_writeln(msg)
+  elseif level == vim.log.levels.WARN then
+    vim.api.nvim_echo({ { msg, 'WarningMsg' } }, true, {})
+  else
+    vim.api.nvim_echo({ { msg } }, true, {})
+  end
+end
+
 return M
