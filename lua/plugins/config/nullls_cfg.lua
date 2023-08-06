@@ -1,7 +1,7 @@
 local null_ls = require("null-ls")
 
 local function on_attach(client, bufnr)
-  require("plugins.config.lspconfig_cfg").set_lsp_key(client, bufnr)
+  require("plugins.config.lspconfig_cfg").on_attach(client, bufnr)
 end
 
 null_ls.setup({

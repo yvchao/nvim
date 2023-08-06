@@ -7,7 +7,7 @@ if not ok then
 end
 
 local function on_attach(client, bufnr)
-  require("plugins.config.lspconfig_cfg").set_lsp_key(client, bufnr)
+  require("plugins.config.lspconfig_cfg").on_attach(client, bufnr)
   vim.keymap.set("n", "<leader>ra", rt.hover_actions.hover_actions, { buffer = bufnr })
   vim.keymap.set("n", "<leader>rag", rt.code_action_group.code_action_group, { buffer = bufnr })
 end
@@ -65,4 +65,4 @@ local opts = {
 
 rt.setup(opts)
 
-vim.g.rustfmt_options = "--edition=2022"
+vim.g.rustfmt_options = "--edition=2023"
