@@ -10,27 +10,12 @@
 -- ]]
 
 local autoload = {
-  -- speed up neovim!
-  -- {
-  --   "nathom/filetype.nvim",
-  --   config = function()
-  --     require("filetype").setup({
-  --       -- overrides the filetype or function for filetype
-  --       -- See https://github.com/nathom/filetype.nvim#customization
-  --       overrides = {},
-  --     })
-  --   end,
-  -- },
 
   -- adjust the shiftwidth and expandtab settings
   {
     "tpope/vim-sleuth",
   },
 
-  -- Fix the CursorHold performance bug
-  -- {
-  --   "antoinemadec/FixCursorHold.nvim",
-  -- },
 
   -- cache everything!
   {
@@ -46,20 +31,6 @@ local autoload = {
 --       "GenTocGFM",
 --     },
 --   },
---
--- markdown preview
--- {
---   "iamcco/markdown-preview.nvim",
---   run = function()
---     vim.fn["mkdp#util#install"]()
---   end,
---   config = function()
---     require("plugins").load_cfg("markdown_preview_cfg")
---   end,
---   ft = {
---     "markdown",
---   },
--- },
 --
 -- markdown editing enhancement
 --   {
@@ -90,26 +61,6 @@ local git_tools = {
     },
   },
 
-  -- Call the lazygit inside neovim, relies on lazygit executable
-  -- {
-  --   "kdheepak/lazygit.nvim",
-  --   setup = function()
-  --     vim.g.lazygit_floating_window_winblend = 0
-  --     vim.g.lazygit_floating_window_scaling_factor = 1
-  --     vim.g.lazygit_floating_window_corner_chars = {
-  --       "╭",
-  --       "╮",
-  --       "╰",
-  --       "╯",
-  --     }
-  --     vim.g.lazygit_floating_window_use_plenary = 0
-  --     vim.g.lazygit_use_neovim_remote = 1
-  --     if vim.g.lazygit_use_neovim_remote == 1 and vim.fn.executable("nvr") then
-  --       vim.env.GIT_EDITOR = "nvr -cc split --remote-wait +'set bufhidden=wipe'"
-  --     end
-  --   end,
-  --   cmd = "LazyGit",
-  -- },
 
   -- Show git information in neovim
   {
@@ -260,15 +211,6 @@ local editor_enhance = {
   },
 
   -- a dashboard that useless but beautiful
-  -- {
-  --   "glepnir/dashboard-nvim",
-  --   cmd = {
-  --     "Dashboard",
-  --   },
-  --   config = function()
-  --     require("plugins").load_cfg("dashboard_cfg")
-  --   end,
-  -- },
   {
     "goolord/alpha-nvim",
     config = function()
@@ -310,17 +252,6 @@ local editor_enhance = {
     end,
   },
 
-  -- Press enter to select text object
-  -- {
-  --   "gcmt/wildfire.vim",
-  --   keys = {
-  --     {
-  --       "n",
-  --       "<Enter>",
-  --     },
-  --   },
-  --   ft = vim.g.enable_treesitter_ft,
-  -- },
 
   -- surrounding select text with given signs
   {
@@ -497,52 +428,10 @@ local editor_enhance = {
   },
 
   -- search and replace with a panel
-  {
-    "windwp/nvim-spectre",
-    requires = { "nvim-lua/plenary.nvim" },
-    module = "spectre",
-  },
-
   -- {
-  --   "gelguy/wilder.nvim",
-  --   config = function()
-  --     require("wilder").setup({ modes = { ":", "/", "?" } })
-  --   end,
-  -- },
-
-  -- {
-  --   "beauwilliams/focus.nvim",
-  --   event = "WinEnter",
-  --   config = function()
-  --     require("focus").setup({
-  --       excluded_filetypes = { "fterm", "term", "toggleterm" },
-  --       signcolumn = false,
-  --     })
-  --   end,
-  -- },
-
-  -- {
-  --   "stevearc/dressing.nvim",
-  --   module = "vim.ui",
-  --   config = function()
-  --     require("dressing").setup({})
-  --   end,
-  -- },
-
-  -- add notify window
-  -- {
-  --   "rcarriga/nvim-notify",
-  --   module = "vim",
-  --   config = function()
-  --     require("notify").setup({
-  --       render = "compact",
-  --       stages = "static",
-  --       max_height = 20,
-  --       max_width = 200,
-  --     })
-  --     vim.notify = require("notify")
-  --     require("telescope").load_extension("notify")
-  --   end,
+  --   "windwp/nvim-spectre",
+  --   requires = { "nvim-lua/plenary.nvim" },
+  --   module = "spectre",
   -- },
 }
 
@@ -743,12 +632,6 @@ local coding_enhance = {
       require("nvim-dap-virtual-text").setup()
     end,
   },
-  --
-  -- -- UI for nvim-dap
-  -- {
-  --   "rcarriga/nvim-dap-ui",
-  --   module = "dapui",
-  -- },
 
   -- generate quick jump list in side panel
   {
@@ -759,29 +642,6 @@ local coding_enhance = {
     cmd = "SymbolsOutline",
   },
 
-  -- go coding enhancement
-  -- {
-  --   "fatih/vim-go",
-  --   config = function()
-  --     require("plugins").load_cfg("vim_go_cfg")
-  --   end,
-  --   ft = { "go" },
-  -- },
-
-  -- format code use clang-format
-  -- {
-  --   "mhartington/formatter.nvim",
-  --   config = function ()
-  --     require("plugins").load_cfg("formatter_cfg")
-  --   end,
-  --   ft = {
-  --     "cpp",
-  --     "c",
-  --     "h",
-  --     "hpp",
-  --     "python",
-  --   },
-  -- },
 
   -- use `gcc` `gbc` to comment
   {
@@ -830,26 +690,6 @@ local coding_enhance = {
   {
     "nvim-lua/lsp-status.nvim",
   },
-  -- {
-  --   "j-hui/fidget.nvim",
-  --   tag = "legacy",
-  --   after = "nvim-lspconfig",
-  --   config = function()
-  --     require("fidget").setup({
-  --       text = {
-  --         spinner = "dots",
-  --       },
-  --       fmt = {
-  --         stack_upwards = true,
-  --       },
-  --       sources = {
-  --         ltex = {
-  --           ignore = true,
-  --         },
-  --       },
-  --     })
-  --   end,
-  -- },
 }
 
 local completion = {
@@ -920,30 +760,9 @@ local completion = {
   },
 
   -- {
-  --   "ray-x/lsp_signature.nvim",
-  --   config = function ()
-  --     require("plugins").load_cfg("lsp_signature_cfg")
-  --   end,
-  --   ft = vim.g.enable_lspconfig_ft,
-  -- },
-
-  -- {
-  --   "uga-rosa/cmp-dictionary",
-  --   after = "nvim-cmp",
-  --   config = function()
-  --     require("cmp_dictionary").setup({
-  --       exact = 2,
-  --       first_case_insensitive = true,
-  --       document = false,
-  --     })
-  --     require("cmp_dictionary").switcher({
-  --       spelllang = {
-  --         en = "~/.local/share/dict/en.dict",
-  --       },
-  --     })
-  --     -- require("cmp_dictionary").update() -- THIS
-  --   end,
-  -- },
+  --   "hrsh7th/cmp-nvim-lsp-signature-help",
+  --   after = {"nvim-cmp" },
+  -- }
 }
 
 return {

@@ -9,7 +9,7 @@ g.vsnip_snippet_dir = vim.fn.expand("~/.config/nvim/vsnip")
 -- for wildfire
 g.wildfire_objects = { "i'", 'i"', "i)", "i]", "i}", "ip", "it", "i`" }
 
-g.rooter_manual_only = 1
+g.rooter_manual_only = 0
 g.rooter_change_directory_for_non_project_files = "current"
 g.rooter_patterns = {
   ".git",

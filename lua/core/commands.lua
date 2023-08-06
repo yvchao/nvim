@@ -47,7 +47,10 @@ alias("CrateMenu", [[lua require("crates").show_popup()]])
 alias("CrateReload", [[lua require("crates").reload()]])
 
 -- nvim-spectre
-alias("SpectreOpen", "lua require('spectre').open()")
+-- alias("SpectreOpen", "lua require('spectre').open()")
+
+-- lsp_lines
+alias("LspLineToffle", [[lua require("lsp_lines").toggle()]])
 
 alias("HiCurLine", [[call matchadd('HighlightLineMatches', '\%'.line('.').'l')]])
 alias("HiCurLineOff", [[call clearmatches()]])

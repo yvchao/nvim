@@ -9,8 +9,7 @@ end
 local has_trigger_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0
-    and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('[."]')
-      ~= nil
+    and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('[."]') ~= nil
 end
 
 local feedkey = function(key, mode)
@@ -127,16 +126,16 @@ cmp.setup({
         return require("cmp").lsp.CompletionItemKind.Text ~= entry:get_kind()
       end,
     },
-    { name = "vsnip", group_index = 1, priority = 3},
-    { name = "buffer", group_index = 4, priority = 1},
+    { name = "vsnip", group_index = 1, priority = 3 },
+    { name = "buffer", group_index = 4, priority = 1 },
     { name = "path", group_index = 3, priority = 2 },
+    -- { name = "nvim_lsp_signature_help", group_index = 1 },
     -- { name = "dictionary", keyword_length = 2, priority = 0},
   }),
   experimental = {
     ghost_text = { hl_group = "NonText" },
   },
 })
-
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline("/", {

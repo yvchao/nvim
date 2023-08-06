@@ -18,8 +18,8 @@ map("t", ";k", [[<C-\><C-n><C-w>k]])
 map("t", ";h", [[<C-\><C-n><C-w>h]])
 
 -- telescope
-nmap("<LEADER>f", [[:lua require('telescope.builtin').find_files{}<CR>]])
-nmap("<LEADER>rg", [[:lua require('telescope.builtin').live_grep{}<CR>]])
+nmap("<LEADER>ff", [[:lua require('telescope.builtin').find_files{}<CR>]])
+nmap("<LEADER>fg", [[:lua require('telescope.builtin').live_grep{}<CR>]])
 
 -- fugitive
 nmap("<LEADER>g", [[<CMD>Git<CR>]])
