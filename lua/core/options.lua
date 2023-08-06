@@ -105,7 +105,13 @@ opt.conceallevel = 2
 opt.concealcursor = ""
 
 -- set defaul terminal shell
-opt.shell = "/usr/bin/fish"
+if vim.fn.executable("fish") == 1 then
+  opt.shell = "/usr/bin/fish"
+elseif vim.fn.executable("zsh") == 1 then
+  opt.shell = "/usr/bin/zsh"
+else
+  opt.shell = "usr/bin/bash"
+end
 
 -- enable global status line
 opt.laststatus = 3
