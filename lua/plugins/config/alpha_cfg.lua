@@ -202,7 +202,7 @@ local buttons = {
     ),
     button("<leader> f g", "󰊄  Live grep", "<cmd>Telescope live_grep<CR>"),
     button("c", "  Configuration", "<cmd>cd ~/.config/nvim/ | e init.lua<CR>"),
-    button("u", "󰄿  Update plugins", "<cmd>PackerSync<CR>"),
+    button("u", "󰄿  Update plugins", "<cmd>Lazy sync<CR>"),
     button("q", "  Quit", "<cmd>qa<CR>"),
     {
       type = "text",

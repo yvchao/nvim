@@ -6,30 +6,30 @@ if not ok then
   return
 end
 
-local lsp_status = require("lsp-status")
-lsp_status.config({
-  kind_labels = {},
-  current_function = false,
-  show_filename = false,
-  diagnostics = false,
-  indicator_separator = " ",
-  component_separator = " ",
-  indicator_errors = "",
-  indicator_warnings = "",
-  indicator_info = "🛈",
-  indicator_hint = "",
-  indicator_ok = "",
-  spinner_frames = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" },
-  status_symbol = "",
-  select_symbol = nil,
-  update_interval = 10,
-})
--- Register the progress handler
-lsp_status.register_progress()
+-- local lsp_status = require("lsp-status")
+-- lsp_status.config({
+--   kind_labels = {},
+--   current_function = false,
+--   show_filename = false,
+--   diagnostics = false,
+--   indicator_separator = " ",
+--   component_separator = " ",
+--   indicator_errors = "",
+--   indicator_warnings = "",
+--   indicator_info = "🛈",
+--   indicator_hint = "",
+--   indicator_ok = "",
+--   spinner_frames = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" },
+--   status_symbol = "",
+--   select_symbol = nil,
+--   update_interval = 10,
+-- })
+-- -- Register the progress handler
+-- lsp_status.register_progress()
 
 local on_attach = function(client, bufnr)
   -- Register client for messages and set up buffer autocommands to update
-  lsp_status.on_attach(client)
+  -- lsp_status.on_attach(client)
 
   local function buf_set_option(...)
     vim.api.nvim_buf_set_option(bufnr, ...)
@@ -130,7 +130,7 @@ end
 -- setup lsp servers
 -- Set default client capabilities plus window/workDoneProgress
 local default_capabilities =
-  vim.tbl_extend("keep", setup_capabilities() or {}, lsp_status.capabilities)
+  vim.tbl_extend("keep", setup_capabilities() or {}, {})
 local configured_lsp_list = { "lua_ls", "texlab", "pyright", "ltex", "ruff_lsp", "clangd" }
 local settings = {}
 
@@ -231,8 +231,8 @@ for _, server_name in pairs(configured_lsp_list) do
   }
   if server_name == "clangd" then
     opts.cmd = { "clangd", "--offset-encoding=utf-16" }
-    opts.handlers = lsp_status.extensions.clangd.setup()
-    opts.init_options = { clangdFileStatus = true }
+    -- opts.handlers = lsp_status.extensions.clangd.setup()
+    -- opts.init_options = { clangdFileStatus = true }
   elseif server_name == "ltex" then
     opts.on_attach = function(client, bufnr)
       on_attach(client, bufnr)

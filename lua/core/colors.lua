@@ -31,11 +31,6 @@ local function apply()
   vim.cmd("colorscheme " .. M.theme)
 end
 
--- configure the deus theme
-M.deus_setup = function()
-  vim.g.deus_background = "hard"
-  apply()
-end
 
 -- configure the kanagawa theme
 M.kanagawa_setup = function()
@@ -52,6 +47,7 @@ M.kanagawa_setup = function()
     transparent = false, -- do not set background color
     dimInactive = true,
     overrides = function(colors)
+      local theme = colors.theme
       return {
         htmlH1 = {
           fg = colors.palette.peachRed,
@@ -80,6 +76,10 @@ M.kanagawa_setup = function()
         HighLightLineMatches = {
           bg = colors.palette.winterYellow,
         },
+        -- TelescopeTitle = { fg = theme.ui.special, bold = true },
+        TelescopePreviewTitle = { fg = colors.palette.sumiInk0, bg = colors.palette.waveAqua2 },
+        TelescopePromptTitle = { fg = colors.palette.sumiInk0, bg = colors.palette.waveAqua2 },
+        TelescopeResultsTitle = { fg = colors.palette.sumiInk0, bg = colors.palette.waveAqua2 },
       }
     end,
   })

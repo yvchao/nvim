@@ -15,7 +15,7 @@ License: MIT License
 local utils = require("core.utils")
 
 -- Try to call the cache plugin
-pcall(require, "impatient")
+-- pcall(require, "impatient")
 
 if vim.fn.executable("notify-send") == 1 then
 	vim.notify = utils.notify_send
@@ -30,6 +30,7 @@ for _, module_name in ipairs({ "core.options", "mappings", "core.commands", "cor
 end
 
 -- since we have packer compiled, we don't need to load this immediately
-vim.defer_fn(function()
-	require("plugins").load()
-end, 0)
+-- vim.defer_fn(function()
+	-- require("plugins").load()
+-- end, 0)
+require("plugins").load()

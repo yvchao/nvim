@@ -5,7 +5,7 @@ local nmap = require("mappings.utils").nmap
 map("v", "<leader>e", ":EasyAlign<CR>")
 
 -- nvim-tree
-nmap(";t", ":NvimTreeToggle<CR>")
+nmap(";t", ":Oil %:p:h<CR>")
 
 -- fterm
 nmap("<C-\\>", [[:ToggleTerm direction=float<CR>]])

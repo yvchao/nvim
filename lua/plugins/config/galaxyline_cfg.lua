@@ -7,7 +7,7 @@ vim.g.galaxyline_loaded = 1
 local gl = require("galaxyline")
 local gls = gl.section
 local diagnostic = require("galaxyline.provider_diagnostic")
-local lspclient = require("galaxyline.provider_lsp")
+-- local lspclient = require("galaxyline.provider_lsp")
 
 -- VistaPlugin = extension.vista_nearest
 
@@ -346,29 +346,50 @@ insert_right({
   },
 })
 
--- insert_right({
---   LspStatus = {
---     provider = function()
---       local status = require("lsp-status").status_progress()
---       return status
---     end,
---     condition = checkwidth,
---     highlight = { colors.fg, colors.bg },
---   },
--- })
+vim.api.nvim_create_augroup("galaxyline", { clear = false })
+vim.api.nvim_create_autocmd("User LspProgressStatusUpdated", {
+    group = "galaxyline",
+    callback = require("galaxyline").load_galaxyline,
+})
 
 insert_right({
   LspStatus = {
     provider = function()
-      local status = require("lsp-status").status_progress()
-      if status:gsub("%s", "") == "" then
-        status = lspclient.get_lsp_client()
-      end
+      local status = require("lsp-progress").progress({
+        format = function(messages)
+          local active_clients = vim.lsp.get_active_clients()
+          local client_count = #active_clients
+          if #messages > 0 then
+            return "LSP:"
+                .. client_count
+                .. " "
+                .. table.concat(messages, " ")
+          else
+            -- local client_names = {}
+            -- for _, client in ipairs(active_clients) do
+            --   if client and client.name ~= "" then
+            --     table.insert(client_names, "[" .. client.name .. "]")
+            --     -- print(
+            --     --   "client[" .. i .. "]:" .. vim.inspect(client.name)
+            --     -- )
+            --   end
+            -- end
+            return "LSP:"
+                .. client_count
+                -- .. " "
+                -- .. table.concat(client_names, " ")
+          end
+        end,
+        max_size = 80,
+      })
       return status
     end,
-    separator = " LSP: ",
+    separator = " ",
     separator_highlight = { colors.blue, colors.bg },
-    condition = checkwidth,
+    condition = function()
+          local active_clients = vim.lsp.get_active_clients()
+          return #active_clients>=1
+    end,
     highlight = { colors.fg, colors.bg },
   },
 })

@@ -1,71 +1,20 @@
-local utils = require("core.utils")
+-- local utils = require("core.utils")
 
-local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/opt/packer.nvim"
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
--- has_packer return the packer install status
-local function has_packer()
-  return vim.fn.empty(vim.fn.glob(install_path)) == 0
+local function has_lazy()
+  return vim.loop.fs_stat(lazypath)~=nil
 end
 
--- install_packer will use git to install packer to the install_path
-local function install_packer()
-  -- detecting plugin manager
-  local fn = vim.fn
-
-  utils.infoL("Installing packer to " .. install_path)
-  fn.system({
+local function install_lazy()
+  vim.fn.system({
     "git",
     "clone",
-    "--depth",
-    "1",
-    "https://github.com/wbthomason/packer.nvim",
-    install_path,
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
   })
-end
-
--- add_packer will add packer into the optional plugin directory
-local function add_packer()
-  local packer_call, error_msg = pcall(vim.cmd, [[packadd packer.nvim]])
-  if not packer_call then
-    utils.errorL(error_msg, "load plugin")
-    return
-  end
-end
-
--- init_packer will setup the packer style
-local function init_packer()
-  require("packer").init({
-    display = {
-      open_fn = function()
-        return require("packer.util").float({
-          border = "single",
-        })
-      end,
-    },
-    git = {
-      clone_timeout = 60, -- Timeout, in seconds, for git clones
-    },
-    auto_clean = true,
-    compile_on_sync = true,
-    profile = {
-      enable = true,
-    },
-  })
-end
-
--- setup_plugins will get list of plugins definition and use them
-local function setup_plugins()
-  require("packer").startup(function(use)
-    -- Packer can manage itself
-    use({
-      "wbthomason/packer.nvim",
-      event = "VimEnter",
-    })
-
-    for _, plugin in ipairs(require("plugins.load")) do
-      use(plugin)
-    end
-  end)
 end
 
 -- ======================================================
@@ -77,24 +26,12 @@ local M = {}
 -- It will automatically install packer to the install_path.
 -- Then it will called the setup script to setup all the plugins.
 M.load = function()
-  if not has_packer() then
-    install_packer()
-    add_packer()
-    setup_plugins()
-    -- vim.cmd(
-    --   "au User PackerComplete echom 'Plugins are installed successfully, please use :qa to restart the neovim'"
-    -- )
-    vim.api.nvim_create_autocmd("PackerComplete", {
-      group = "User",
-      command = [[echom 'Plugins are installed successfully, please use :qa to exit and restart neovim.']],
-    })
-    require("packer").sync()
-    return
+  if not has_lazy() then
+    install_lazy()
   end
 
-  add_packer()
-  init_packer()
-  setup_plugins()
+  vim.opt.rtp:prepend(lazypath)
+  require("lazy").setup("plugins.specs")
 end
 
 M.load_cfg = function(file)
