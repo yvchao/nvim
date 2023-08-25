@@ -6,7 +6,7 @@ return {
       return require("core.colors").theme == "kanagawa"
     end,
     lazy = false,
-    priority=1000,
+    priority = 1000,
     config = function()
       require("core.colors").kanagawa_setup()
     end,
@@ -29,7 +29,7 @@ return {
       end
       return false
     end,
-    priority=1000,
+    priority = 1000,
     config = function()
       require("core.colors").github_setup()
     end,
@@ -47,7 +47,7 @@ return {
       end
       return false
     end,
-    priority=1000,
+    priority = 1000,
     config = function()
       require("core.colors").nightfox_setup()
     end,

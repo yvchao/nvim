@@ -4,8 +4,11 @@ local nmap = require("mappings.utils").nmap
 -- EasyAlign
 map("v", "<leader>e", ":EasyAlign<CR>")
 
--- nvim-tree
+-- oil file management
 nmap(";t", ":Oil %:p:h<CR>")
+
+-- formatter
+-- map({ "n", "x" }, "gf", ":Format<CR>")
 
 -- fterm
 nmap("<C-\\>", [[:ToggleTerm direction=float<CR>]])

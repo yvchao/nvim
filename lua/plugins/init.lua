@@ -3,7 +3,7 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 local function has_lazy()
-  return vim.loop.fs_stat(lazypath)~=nil
+  return vim.loop.fs_stat(lazypath) ~= nil
 end
 
 local function install_lazy()
@@ -31,7 +31,12 @@ M.load = function()
   end
 
   vim.opt.rtp:prepend(lazypath)
-  require("lazy").setup("plugins.specs")
+  require("lazy").setup("plugins.specs", {
+    change_detection = {
+      enabled = true,
+      notify = false,
+    },
+  })
 end
 
 M.load_cfg = function(file)

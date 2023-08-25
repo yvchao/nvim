@@ -57,7 +57,7 @@ end
 
 local function has_file_type()
   local f_type = vim.bo.filetype
-  if not f_type or f_type == "" then
+  if not f_type then
     return false
   end
   return true
@@ -200,7 +200,7 @@ insert_left({
     provider = function()
       return "  "
     end,
-    condition = require("galaxyline.provider_vcs").check_git_workspace,
+    condition = require("galaxyline.condition").check_git_workspace,
     highlight = { colors.orange, colors.bg },
   },
 })
@@ -208,7 +208,7 @@ insert_left({
 insert_left({
   GitBranch = {
     provider = "GitBranch",
-    condition = require("galaxyline.provider_vcs").check_git_workspace,
+    condition = require("galaxyline.condition").check_git_workspace,
     highlight = { colors.fg, colors.bg },
   },
 })
@@ -348,8 +348,8 @@ insert_right({
 
 vim.api.nvim_create_augroup("galaxyline", { clear = false })
 vim.api.nvim_create_autocmd("User LspProgressStatusUpdated", {
-    group = "galaxyline",
-    callback = require("galaxyline").load_galaxyline,
+  group = "galaxyline",
+  callback = require("galaxyline").load_galaxyline,
 })
 
 insert_right({
@@ -359,36 +359,26 @@ insert_right({
         format = function(messages)
           local active_clients = vim.lsp.get_active_clients()
           local client_count = #active_clients
+          local status = " LSP[" .. client_count .. "]"
           if #messages > 0 then
-            return "LSP:"
-                .. client_count
-                .. " "
-                .. table.concat(messages, " ")
+            local progress = table.concat(messages, ";")
+            if #progress > 47 then
+              progress = progress:sub(1, 47) .. "..."
+            end
+            return progress .. " " .. status
           else
-            -- local client_names = {}
-            -- for _, client in ipairs(active_clients) do
-            --   if client and client.name ~= "" then
-            --     table.insert(client_names, "[" .. client.name .. "]")
-            --     -- print(
-            --     --   "client[" .. i .. "]:" .. vim.inspect(client.name)
-            --     -- )
-            --   end
-            -- end
-            return "LSP:"
-                .. client_count
-                -- .. " "
-                -- .. table.concat(client_names, " ")
+            return status
           end
         end,
-        max_size = 80,
+        -- max_size = 80,
       })
       return status
     end,
-    separator = " ",
+    -- separator = "",
     separator_highlight = { colors.blue, colors.bg },
     condition = function()
-          local active_clients = vim.lsp.get_active_clients()
-          return #active_clients>=1
+      local active_clients = vim.lsp.get_active_clients()
+      return #active_clients >= 1 and checkwidth()
     end,
     highlight = { colors.fg, colors.bg },
   },

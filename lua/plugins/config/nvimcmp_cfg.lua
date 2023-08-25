@@ -122,9 +122,9 @@ cmp.setup({
       name = "nvim_lsp",
       group_index = 1,
       priority = 10,
-      entry_filter = function(entry, ctx)
-        return require("cmp").lsp.CompletionItemKind.Text ~= entry:get_kind()
-      end,
+      -- entry_filter = function(entry, ctx)
+      --   return require("cmp").lsp.CompletionItemKind.Text ~= entry:get_kind()
+      -- end,
     },
     { name = "vsnip", group_index = 1, priority = 3 },
     { name = "buffer", group_index = 4, priority = 1 },

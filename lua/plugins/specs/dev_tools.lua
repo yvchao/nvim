@@ -16,7 +16,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter-context",
     config = function()
-      require("treesitter-context").setup({enable = false,})
+      require("treesitter-context").setup({ enable = false })
     end,
     ft = vim.g.enable_treesitter_ft,
   },
@@ -58,12 +58,19 @@ return {
     end,
   },
 
+  -- {
+  --   "jose-elias-alvarez/null-ls.nvim",
+  --   config = function()
+  --     require("plugins").load_cfg("nullls_cfg")
+  --   end,
+  --   ft = { "python", "tex", "c", "cpp", "lua" },
+  -- },
+
   {
-    "jose-elias-alvarez/null-ls.nvim",
+    "mhartington/formatter.nvim",
     config = function()
-      require("plugins").load_cfg("nullls_cfg")
+      require("plugins").load_cfg("formatter_cfg")
     end,
-    ft = { "python", "tex", "c", "cpp", "lua" },
   },
 
   -- Pre-set for rust lsp
@@ -103,20 +110,12 @@ return {
       require("plugins").load_cfg("dap_cfg")
     end,
   },
+
   {
     "theHamsta/nvim-dap-virtual-text",
     config = function()
       require("nvim-dap-virtual-text").setup()
     end,
-  },
-
-  -- generate quick jump list in side panel
-  {
-    "simrat39/symbols-outline.nvim",
-    config = function()
-      require("plugins").load_cfg("symboloutline_cfg")
-    end,
-    cmd = "SymbolsOutline",
   },
 
   -- use `gcc` `gbc` to comment
@@ -165,10 +164,10 @@ return {
   -- add a progress bar for lsp server
   {
     "linrongbin16/lsp-progress.nvim",
-    dependencies = {"nvim-tree/nvim-web-devicons"},
-    config = function ()
-      require('lsp-progress').setup()
-    end
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("lsp-progress").setup()
+    end,
   },
 
   -- lot's of pre-set snippets

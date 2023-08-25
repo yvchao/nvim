@@ -3,7 +3,6 @@
 -- vim.cmd([[ au InsertLeave * set relativenumber ]])
 vim.api.nvim_create_autocmd("InsertEnter", { pattern = "*", command = [[set norelativenumber]] })
 vim.api.nvim_create_autocmd("InsertLeave", { pattern = "*", command = [[set relativenumber]] })
-
 -- auto compile when editing the load.lua file
 -- vim.cmd([[autocmd BufWritePost load.lua source <afile> | PackerCompile]])
 -- vim.api.nvim_create_autocmd(

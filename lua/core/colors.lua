@@ -80,6 +80,7 @@ M.kanagawa_setup = function()
         TelescopePreviewTitle = { fg = colors.palette.sumiInk0, bg = colors.palette.waveAqua2 },
         TelescopePromptTitle = { fg = colors.palette.sumiInk0, bg = colors.palette.waveAqua2 },
         TelescopeResultsTitle = { fg = colors.palette.sumiInk0, bg = colors.palette.waveAqua2 },
+        WinSeparator = { fg = colors.palette.lightBlue },
       }
     end,
   })
