@@ -69,7 +69,7 @@ opt.wildmenu = true
 opt.ignorecase = true
 opt.smartcase = true
 
-vim.cmd("set shortmess+=cwm")
+vim.opt.shortmess:append({ c = true, w = true, m = true })
 opt.inccommand = "split"
 opt.completeopt = { "menuone", "noselect", "menu" }
 opt.ttyfast = true

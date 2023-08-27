@@ -21,11 +21,10 @@ vim.api.nvim_create_autocmd("UIEnter", {
     if vim.v.event.chan > 1 then
       vim.o.guifont = "Iosevka Fixed SS14:h12"
       vim.notify = utils.notify_message
-      -- if vim.g.loaded_clipboard_provider then
-      --   vim.g.neovide_no_custom_clipboard = false
-      --   vim.g.loaded_clipboard_provider = nil
-      --   vim.api.nvim_cmd( { cmd = 'runtime', args = { 'autoload/provider/clipboard.vim' } }, {} )
-      -- end
+      if vim.g.loaded_clipboard_provider then
+        vim.g.loaded_clipboard_provider = nil
+        vim.api.nvim_cmd({ cmd = "runtime", args = { "autoload/provider/clipboard.vim" } }, {})
+      end
     end
   end,
 })

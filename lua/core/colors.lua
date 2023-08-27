@@ -31,7 +31,6 @@ local function apply()
   vim.cmd("colorscheme " .. M.theme)
 end
 
-
 -- configure the kanagawa theme
 M.kanagawa_setup = function()
   require("kanagawa").setup({
@@ -47,40 +46,42 @@ M.kanagawa_setup = function()
     transparent = false, -- do not set background color
     dimInactive = true,
     overrides = function(colors)
-      local theme = colors.theme
+      local palette = colors.palette
       return {
         htmlH1 = {
-          fg = colors.palette.peachRed,
+          fg = palette.peachRed,
           bold = true,
         },
         htmlH2 = {
-          fg = colors.palette.roninYellow,
+          fg = palette.roninYellow,
           bold = true,
         },
         htmlH3 = {
-          fg = colors.palette.autumnYellow,
+          fg = palette.autumnYellow,
           bold = true,
         },
         htmlH4 = {
-          fg = colors.palette.autumnGreen,
+          fg = palette.autumnGreen,
           bold = true,
         },
         Todo = {
-          fg = colors.palette.fujiWhite,
-          bg = colors.palette.samuraiRed,
+          fg = palette.fujiWhite,
+          bg = palette.samuraiRed,
           bold = true,
         },
         Pmenu = {
-          bg = colors.palette.sumiInk1,
+          bg = palette.sumiInk1,
         },
         HighLightLineMatches = {
-          bg = colors.palette.winterYellow,
+          bg = palette.winterYellow,
         },
         -- TelescopeTitle = { fg = theme.ui.special, bold = true },
-        TelescopePreviewTitle = { fg = colors.palette.sumiInk0, bg = colors.palette.waveAqua2 },
-        TelescopePromptTitle = { fg = colors.palette.sumiInk0, bg = colors.palette.waveAqua2 },
-        TelescopeResultsTitle = { fg = colors.palette.sumiInk0, bg = colors.palette.waveAqua2 },
-        WinSeparator = { fg = colors.palette.lightBlue },
+        TelescopePreviewTitle = { fg = palette.sumiInk0, bg = palette.waveAqua2 },
+        TelescopePromptTitle = { fg = palette.sumiInk0, bg = palette.waveAqua2 },
+        TelescopeResultsTitle = { fg = palette.sumiInk0, bg = palette.waveAqua2 },
+        WinSeparator = { fg = palette.lightBlue },
+        InclineNormal = { fg = palette.sumiInk1, bg = palette.waveRed },
+        InclineNormalNC = { fg = palette.winterBlue, bg = palette.sakuraPink },
       }
     end,
   })
