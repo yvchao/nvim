@@ -53,6 +53,16 @@ return {
     end,
   },
 
+  -- lua line
+  {
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons", "linrongbin16/lsp-progress.nvim" },
+    config = function()
+      require("plugins").load_cfg("lualine_cfg")
+    end,
+    enabled = false,
+  },
+
   -- buffer manager
   {
     "akinsho/nvim-bufferline.lua",
@@ -60,6 +70,20 @@ return {
       require("plugins").load_cfg("bufferline_cfg")
     end,
     event = "BufRead",
+  },
+
+  -- float statusline
+  {
+    "b0o/incline.nvim",
+    config = function()
+      require("incline").setup({
+        hide = {
+          focused_win = false,
+          only_win = true,
+        },
+      })
+    end,
+    -- enabled = false,
   },
 
   -- tree style file manager
@@ -194,7 +218,7 @@ return {
     "folke/which-key.nvim",
     config = function()
       vim.o.timeout = true
-      vim.o.timeoutlen = 300
+      vim.o.timeoutlen = 1000
       require("which-key").setup({
         -- your configuration comes here
         -- or leave it empty to use the default settings
@@ -308,6 +332,7 @@ return {
     "h-hg/fcitx.nvim",
   },
 
+  -- file manager in buffer
   {
     "stevearc/oil.nvim",
     config = function()
@@ -317,6 +342,21 @@ return {
           "size",
         },
       })
+    end,
+  },
+
+  -- session manager
+  {
+    "rmagatti/auto-session",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+    },
+    config = function()
+      require("auto-session").setup({
+        log_level = "error",
+        auto_session_suppress_dirs = { "~", "~/Projects", "~/Downloads", "/" },
+      })
+      require("telescope").load_extension("session-lens")
     end,
   },
 }

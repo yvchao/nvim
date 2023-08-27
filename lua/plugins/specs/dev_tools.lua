@@ -58,6 +58,14 @@ return {
     end,
   },
 
+  {
+    "VidocqH/lsp-lens.nvim",
+    dependencies = { "neovim/nvim-lspconfig" },
+    config = function()
+      require("lsp-lens").setup()
+    end,
+  },
+
   -- {
   --   "jose-elias-alvarez/null-ls.nvim",
   --   config = function()
