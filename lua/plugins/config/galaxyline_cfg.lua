@@ -362,8 +362,8 @@ insert_right({
           local status = " LSP[" .. client_count .. "]"
           if #messages > 0 then
             local progress = table.concat(messages, ";")
-            if #progress > 47 then
-              progress = progress:sub(1, 47) .. "..."
+            if #progress > 46 then
+              progress = progress:sub(1, 46) .. "..."
             end
             return progress .. " " .. status
           else
@@ -372,7 +372,7 @@ insert_right({
         end,
         -- max_size = 80,
       })
-      return status
+      return status .. " "
     end,
     -- separator = "",
     separator_highlight = { colors.blue, colors.bg },

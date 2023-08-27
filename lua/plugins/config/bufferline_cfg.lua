@@ -1,7 +1,7 @@
 require("bufferline").setup({
   options = {
     offsets = { { filetype = "NvimTree", text = " Explorer", padding = 1 } },
-    buffer_close_icon = "",
+    buffer_close_icon = "",
     modified_icon = "",
     close_icon = "",
     left_trunc_marker = "",
