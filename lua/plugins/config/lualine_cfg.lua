@@ -2,9 +2,10 @@ local lualine = require("lualine")
 
 local current_scheme = vim.g.colors_name
 local colors = {
-  bg = "#2F3445",
-  fg = "#8FBCBB",
-  black = "#1F253A",
+  bg_alt = "#592147",
+  bg = "#2f3445",
+  fg = "#F5DBDB",
+  black = "#16161D",
   grey = "#303030",
   yellow = "#E5C07B",
   cyan = "#70C0BA",
@@ -80,7 +81,7 @@ local conditions = {
       current_dir = vim.fn.expand("%:p:h")
     end
     local gitdir = vim.fn.finddir(".git", current_dir .. ";")
-    return gitdir and #gitdir > 0 and #gitdir < #current_dir
+    return gitdir and #gitdir > 0
   end,
 }
 
@@ -91,13 +92,12 @@ local config = {
     component_separators = "",
     section_separators = "",
     theme = {
-      -- We are going to use lualine_c an lualine_x as left and
-      -- right section. Both are highlighted by c theme .  So we
-      -- are just setting default looks o statusline
-      normal = { c = { fg = colors.fg, bg = colors.black } },
-      inactive = {
+      normal = {
+        a = { fg = colors.fg, bg = colors.bg },
+        b = { fg = colors.fg, bg = colors.bg },
         c = { fg = colors.black, bg = colors.black },
       },
+      inactive = {},
     },
   },
   sections = {
@@ -119,16 +119,54 @@ local config = {
     lualine_c = {},
     lualine_x = {},
   },
+  winbar = {
+    lualine_a = {
+      {
+        "buffers",
+        filetype_names = {
+          TelescopePrompt = "Telescope",
+          lazy = "Lazy",
+          oil = "Oil",
+          alpha = "Alpha",
+        },
+        symbols = {
+          modified = " ", -- Text to show when the buffer is modified
+          alternate_file = "󱝴 ", -- Text to show to identify the alternate file
+          directory = " ", -- Text to show when the buffer is a directory
+        },
+      },
+    },
+    lualine_z = { "tabs" },
+  },
+  inactive_winbar = {
+    lualine_a = {
+      {
+        "buffers",
+        symbols = {
+          modified = " ", -- Text to show when the buffer is modified
+          alternate_file = "# ", -- Text to show to identify the alternate file
+          directory = " ", -- Text to show when the buffer is a directory
+        },
+      },
+    },
+    lualine_z = { "tabs" },
+  },
 }
 
 -- Inserts a component in lualine_c at left section
 local function insert_left(component)
-  table.insert(config.sections.lualine_c, component)
+  if component.padding == nil then
+    component.padding = 0
+  end
+  table.insert(config.sections.lualine_b, component)
 end
 
 -- Inserts a component in lualine_x at right section
 local function insert_right(component)
-  table.insert(config.sections.lualine_x, component)
+  if component.padding == nil then
+    component.padding = 0
+  end
+  table.insert(config.sections.lualine_y, component)
 end
 
 -----------------------------------------------------
@@ -141,8 +179,34 @@ insert_left({
     return " "
   end,
   color = { fg = colors.fg, bg = colors.bg },
-  padding = 0,
 })
+
+local function get_mode_color()
+  local mode_color = {
+    n = colors.yellow,
+    i = colors.green,
+    v = colors.blue,
+    [""] = colors.blue,
+    V = colors.blue,
+    c = colors.magenta,
+    no = colors.red,
+    s = colors.orange,
+    S = colors.orange,
+    [""] = colors.orange,
+    ic = colors.yellow,
+    R = colors.purple,
+    Rv = colors.purple,
+    cv = colors.red,
+    ce = colors.red,
+    r = colors.cyan,
+    rm = colors.cyan,
+    ["r?"] = colors.cyan,
+    ["!"] = colors.red,
+    t = colors.red,
+  }
+  local vim_mode = vim.fn.mode()
+  return { fg = mode_color[vim_mode] }
+end
 
 insert_left({
   function()
@@ -159,35 +223,7 @@ insert_left({
     }
     return icons[vim.fn.mode()]
   end,
-  color = {
-    fg = function()
-      local mode_color = {
-        n = colors.yellow,
-        i = colors.green,
-        v = colors.blue,
-        [""] = colors.blue,
-        V = colors.blue,
-        c = colors.magenta,
-        no = colors.red,
-        s = colors.orange,
-        S = colors.orange,
-        [""] = colors.orange,
-        ic = colors.yellow,
-        R = colors.purple,
-        Rv = colors.purple,
-        cv = colors.red,
-        ce = colors.red,
-        r = colors.cyan,
-        rm = colors.cyan,
-        ["r?"] = colors.cyan,
-        ["!"] = colors.red,
-        t = colors.red,
-      }
-      local vim_mode = vim.fn.mode()
-      return mode_color[vim_mode]
-    end,
-  },
-  padding = { right = 0, left = 1 },
+  color = get_mode_color,
 })
 
 insert_left({
@@ -216,7 +252,8 @@ insert_left({
     -- vim.api.nvim_command("hi GalaxyViMode guifg=" .. mode_color[vim_mode])
     return alias[vim_mode]
   end,
-  padding = 0,
+  color = get_mode_color,
+  padding = { left = 0, right = 1 },
 })
 
 insert_left({
@@ -224,7 +261,6 @@ insert_left({
     return " "
   end,
   color = { fg = colors.bg, bg = colors.black },
-  padding = 0,
 })
 
 -- mode panel end}
@@ -235,20 +271,11 @@ insert_left({
     return " "
   end,
   color = { fg = colors.bg, bg = colors.black },
-  padding = 0,
-})
-
-insert_left({
-  function()
-    return " "
-  end,
-  cond = conditions.check_git_workspace,
-  color = { fg = colors.orange, bg = colors.bg },
-  padding = 0,
 })
 
 insert_left({
   "branch",
+  icon = { "", color = { fg = colors.orange, bg = colors.bg } },
   cond = conditions.check_git_workspace,
   color = { colors.fg, colors.bg },
   padding = { left = 0, right = 1 },
@@ -256,20 +283,32 @@ insert_left({
 
 insert_left({
   "diff",
-  symbols = { added = "  ", modified = "  ", removed = "  " },
+  symbols = { added = " ", modified = " ", removed = " " },
   diff_color = {
     added = { fg = colors.green },
     modified = { fg = colors.orange },
     removed = { fg = colors.red },
   },
-  cond = conditions.check_git_workspace,
-  padding = 0,
+  cond = function()
+    return conditions.checkwidth() and conditions.check_git_workspace()
+  end,
+  padding = { left = 0, right = 1 },
 })
---
+
+insert_left({
+  function()
+    return "|"
+  end,
+  cond = function()
+    local presence = vim.diagnostic.get_next() ~= nil
+    return presence and conditions.check_git_workspace()
+  end,
+})
+
 insert_left({
   "diagnostics",
   sources = { "nvim_diagnostic" },
-  symbols = { error = "  ", warn = "  ", info = "  ", hint = " 󰌶 " },
+  symbols = { error = " ", warn = " ", info = " ", hint = "󰌶 " },
   diagnostics_color = {
     color_error = { fg = colors.red },
     color_warn = { fg = colors.yellow },
@@ -277,23 +316,21 @@ insert_left({
     color_hint = { fg = colors.white },
   },
   cond = conditions.checkwidth,
-  padding = 0,
+  padding = { left = 1, right = 1 },
 })
 
 insert_left({
   function()
     return ""
   end,
-  color = { fg = colors.bg, bg = colors.black },
-  padding = 0,
+  color = { fg = colors.bg, bg = colors.bg_alt },
 })
 
 insert_left({
   function()
     return " "
   end,
-  color = { fg = colors.black, bg = colors.black },
-  padding = 0,
+  color = { fg = colors.bg_alt, bg = colors.bg_alt },
 })
 
 local icon_colors = {
@@ -410,24 +447,21 @@ insert_left({
   cond = conditions.buffer_not_empty,
   color = {
     fg = get_file_icon_color(),
-    bg = colors.black,
+    bg = colors.bg_alt,
   },
-  padding = 0,
 })
 
 insert_left({
   "filename",
   cond = conditions.has_file_type,
-  color = { fg = colors.fg, bg = colors.black },
-  padding = 0,
+  color = { fg = colors.fg, bg = colors.bg_alt },
 })
 
 insert_left({
   function()
     return ""
   end,
-  color = { fg = colors.black },
-  padding = 0,
+  color = { fg = colors.bg_alt, bg = colors.black },
 })
 -- left information panel end}
 
@@ -435,8 +469,7 @@ insert_right({
   function()
     return " "
   end,
-  color = { fg = colors.grey },
-  padding = 0,
+  color = { fg = colors.bg_alt, bg = colors.black },
 })
 
 vim.api.nvim_create_augroup("lualine_augroup", { clear = false })
@@ -447,30 +480,30 @@ vim.api.nvim_create_autocmd("User LspProgressStatusUpdated", {
 
 insert_right({
   function()
+    local max_size = 48
     local status = require("lsp-progress").progress({
       format = function(messages)
-        local active_clients = vim.lsp.get_active_clients()
+        local active_clients = vim.lsp.buf_get_clients()
         local client_count = #active_clients
-        local status = " LSP[" .. client_count .. "]"
+        local status = " LSP [" .. client_count .. "]"
         if #messages > 0 then
           local progress = table.concat(messages, ";")
-          if #progress > 47 then
-            progress = progress:sub(1, 47) .. "..."
+          if #progress > max_size then
+            progress = progress:sub(1, max_size) .. "⋯"
           end
           return progress .. " " .. status
         else
           return status
         end
       end,
-      -- max_size = 80,
     })
     return status
   end,
   cond = function()
-    local active_clients = vim.lsp.get_active_clients()
+    local active_clients = vim.lsp.buf_get_clients()
     return #active_clients >= 1 and conditions.checkwidth()
   end,
-  color = { fg = colors.fg, bg = colors.grey },
+  color = { fg = colors.fg, bg = colors.bg_alt },
   padding = { left = 0, right = 1 },
 })
 
@@ -478,7 +511,7 @@ insert_right({
   function()
     return ""
   end,
-  color = { fg = colors.grey, bg = colors.black },
+  color = { fg = colors.bg_alt, bg = colors.bg },
   padding = 0,
 })
 
@@ -490,8 +523,7 @@ insert_right({
   end,
   icon = " ",
   -- separator_highlight = { colors.green, colors.black },
-  color = { fg = colors.green, bg = colors.black },
-  cond = conditions.checkwidth,
+  color = { fg = colors.green, bg = colors.bg },
   padding = 0,
 })
 
@@ -509,8 +541,7 @@ insert_right({
   end,
   icon = "",
   cond = conditions.checkwidth,
-  color = { fg = colors.cyan, bg = colors.black },
-  padding = 0,
+  color = { fg = colors.cyan, bg = colors.bg },
 })
 
 insert_right({
@@ -519,17 +550,15 @@ insert_right({
   end,
   icon = "",
   cond = conditions.checkwidth,
-  color = { fg = colors.blue, bg = colors.black },
-  padding = 0,
+  color = { fg = colors.blue, bg = colors.bg },
 })
 
 insert_right({
   function()
     return " "
   end,
-  color = { fg = colors.fg, bg = colors.black },
-  padding = 0,
+  color = { fg = colors.fg, bg = colors.bg },
 })
---
+
 -- Now don't forget to initialize lualine
 lualine.setup(config)

@@ -51,6 +51,7 @@ return {
     config = function()
       require("plugins").load_cfg("galaxyline_cfg")
     end,
+    enabled = false,
   },
 
   -- lua line
@@ -60,7 +61,6 @@ return {
     config = function()
       require("plugins").load_cfg("lualine_cfg")
     end,
-    enabled = false,
   },
 
   -- buffer manager
@@ -70,6 +70,7 @@ return {
       require("plugins").load_cfg("bufferline_cfg")
     end,
     event = "BufRead",
+    enabled = false,
   },
 
   -- float statusline
@@ -337,10 +338,10 @@ return {
     "stevearc/oil.nvim",
     config = function()
       require("oil").setup({
-        columns = {
-          "icon",
-          "size",
-        },
+        -- columns = {
+        -- "icon",
+        -- "size",
+        -- },
       })
     end,
   },

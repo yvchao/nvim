@@ -31,13 +31,16 @@ nmap("<LEADER>g", [[<CMD>Git<CR>]])
 nmap("<C-c>", ":BufferLinePickClose<CR>") -- close tab
 
 -- move between tabs
-nmap(";n", [[<Cmd>BufferLineCycleNext<CR>]])
-nmap(";p", [[<Cmd>BufferLineCyclePrev<CR>]])
+-- nmap(";n", [[<Cmd>BufferLineCycleNext<CR>]])
+-- nmap(";p", [[<Cmd>BufferLineCyclePrev<CR>]])
+nmap(";n", [[<Cmd>bnext<CR>]])
+nmap(";p", [[<Cmd>bprevious<CR>]])
 
 -- move tabs
-nmap("<A->>", [[<CMD>BufferLineMoveNext<CR>]])
-nmap("<A-<>", [[<CMD>BufferLineMovePrev<CR>]])
-nmap("<A-p>", [[<CMD>BufferLinePick<CR>]])
+-- nmap("<A->>", [[<CMD>BufferLineMoveNext<CR>]])
+-- nmap("<A-<>", [[<CMD>BufferLineMovePrev<CR>]])
+-- nmap("<A-p>", [[<CMD>BufferLinePick<CR>]])
+nmap("<A-p>", [[<CMD>Telescope buffers<CR>]])
 
 -- dispatch
 nmap(";d", ":Dispatch ", { noremap = true, silent = false })

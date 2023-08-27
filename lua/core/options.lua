@@ -116,6 +116,9 @@ end
 -- enable global status line
 opt.laststatus = 3
 
+-- disable tabline
+opt.showtabline = 0
+
 -- perfer latex ft.
 vim.g.tex_flavor = "latex"
 

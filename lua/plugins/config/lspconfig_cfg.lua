@@ -129,8 +129,7 @@ end
 
 -- setup lsp servers
 -- Set default client capabilities plus window/workDoneProgress
-local default_capabilities =
-  vim.tbl_extend("keep", setup_capabilities() or {}, {})
+local default_capabilities = vim.tbl_extend("keep", setup_capabilities() or {}, {})
 local configured_lsp_list = { "lua_ls", "texlab", "pyright", "ltex", "ruff_lsp", "clangd" }
 local settings = {}
 
