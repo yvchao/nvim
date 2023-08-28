@@ -198,7 +198,7 @@ local buttons = {
     button(
       "<leader> f f",
       "󰈞  Find file",
-      "<cmd>Telescope find_files hidden=true no_ignore=true<CR>"
+      "<cmd>Telescope find_files hidden=true no_ignore=true previewer=false<CR>"
     ),
     button("<leader> f g", "󰊄  Live grep", "<cmd>Telescope live_grep<CR>"),
     button("c", "  Configuration", "<cmd>cd ~/.config/nvim/ | e init.lua<CR>"),

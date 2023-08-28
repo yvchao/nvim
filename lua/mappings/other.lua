@@ -21,8 +21,9 @@ map("t", ";k", [[<C-\><C-n><C-w>k]])
 map("t", ";h", [[<C-\><C-n><C-w>h]])
 
 -- telescope
-nmap("<LEADER>ff", [[:lua require('telescope.builtin').find_files{}<CR>]])
+nmap("<LEADER>ff", [[:lua require('telescope.builtin').find_files{previewer = false}<CR>]])
 nmap("<LEADER>fg", [[:lua require('telescope.builtin').live_grep{}<CR>]])
+nmap("<A-p>", [[<CMD>lua require("telescope.builtin").buffers({previewer = false})<CR>]])
 
 -- fugitive
 nmap("<LEADER>g", [[<CMD>Git<CR>]])
@@ -43,7 +44,6 @@ nmap(";c", [[<Cmd>close<CR>]])
 -- nmap("<A->>", [[<CMD>BufferLineMoveNext<CR>]])
 -- nmap("<A-<>", [[<CMD>BufferLineMovePrev<CR>]])
 -- nmap("<A-p>", [[<CMD>BufferLinePick<CR>]])
-nmap("<A-p>", [[<CMD>Telescope buffers<CR>]])
 
 -- dispatch
 nmap(";d", ":Dispatch ", { noremap = true, silent = false })
