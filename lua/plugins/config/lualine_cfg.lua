@@ -58,10 +58,13 @@ local short_line_list = {
   "qf",
   "help",
   "toggleterm",
+  "alpha",
+  "man",
 }
 
 local BufferTypeMap = {
   ["oil"] = " File Management",
+  ["alpha"] = "󰡃 Dashboard",
   ["fugitive"] = " Fugitive",
   ["fugitiveblame"] = " Fugitive Blame",
   ["minimap"] = "Minimap",
@@ -73,6 +76,7 @@ local BufferTypeMap = {
   ["DiffviewFiles"] = " Diff View",
   ["DapBreakpoint"] = " Dap Breakpoints",
   ["dap-repl"] = " Dap REPL",
+  ["man"] = "󱁯 Manual",
 }
 
 local conditions = {
@@ -121,6 +125,16 @@ local conditions = {
     end
     return false
   end,
+  check_multiple_win = function()
+    local wins = vim.api.nvim_list_wins()
+    local winnr = 0
+    for _, id in ipairs(wins) do
+      if vim.api.nvim_win_get_config(id).relative == "" then
+        winnr = winnr + 1
+      end
+    end
+    return winnr > 1
+  end,
 }
 
 local function treesitter_context(width)
@@ -149,6 +163,9 @@ local function treesitter_context(width)
     "defx",
     "help",
     "qf",
+    "alpha",
+    "man",
+    "",
   }
   if vim.tbl_contains(disable_ft, vim.o.ft) then
     return ""
@@ -230,20 +247,6 @@ local config = {
   },
   winbar = {
     lualine_a = {
-      -- {
-      --   "buffers",
-      --   filetype_names = {
-      --     TelescopePrompt = "Telescope",
-      --     lazy = "Lazy",
-      --     oil = "Oil",
-      --     alpha = "Alpha",
-      --   },
-      --   symbols = {
-      --     modified = " ", -- Text to show when the buffer is modified
-      --     alternate_file = "󱝴 ", -- Text to show to identify the alternate file
-      --     directory = " ", -- Text to show when the buffer is a directory
-      --   },
-      -- },
       {
         "filename",
         symbols = {
@@ -253,22 +256,22 @@ local config = {
           newfile = "[New]", -- Text to show for newly created file before first write
         },
         cond = function()
-          return not conditions.check_special_buffer()
+          return conditions.check_multiple_win() and not conditions.check_special_buffer()
         end,
       },
-      {
-        function()
-          local max_width = vim.fn.winwidth(0) / 2
-          local context = treesitter_context(max_width)
-          return context
-        end,
-        icon = "󰄄",
-        -- separator_highlight = { colors.green, colors.black },
-        color = { fg = colors.dimblue },
-        cond = function()
-          return vim.fn.winwidth(0) > 80
-        end,
-      },
+      -- {
+      --   function()
+      --     local max_width = vim.fn.winwidth(0) / 2
+      --     local context = treesitter_context(max_width)
+      --     return context
+      --   end,
+      --   icon = "󰄄",
+      --   -- separator_highlight = { colors.green, colors.black },
+      --   color = { fg = colors.dimblue },
+      --   cond = function()
+      --     return vim.fn.winwidth(0) > 80
+      --   end,
+      -- },
     },
     lualine_z = {
       {
@@ -281,14 +284,6 @@ local config = {
   },
   inactive_winbar = {
     lualine_a = {
-      -- {
-      --   "buffers",
-      --   symbols = {
-      --     modified = " ", -- Text to show when the buffer is modified
-      --     alternate_file = "󱝴 ", -- Text to show to identify the alternate file
-      --     directory = " ", -- Text to show when the buffer is a directory
-      --   },
-      -- },
       {
         "filename",
         symbols = {
@@ -298,7 +293,7 @@ local config = {
           newfile = "[New]", -- Text to show for newly created file before first write
         },
         cond = function()
-          return not conditions.check_special_buffer()
+          return conditions.check_multiple_win() and not conditions.check_special_buffer()
         end,
       },
     },
@@ -333,6 +328,8 @@ end
 ----------------- start insert ----------------------
 -----------------------------------------------------
 -- { mode panel start
+local separator_left = "░▒▓"
+local separator_right = "▓▒░"
 
 insert_left({
   function()
@@ -418,7 +415,7 @@ insert_left({
 
 insert_left({
   function()
-    return " "
+    return separator_right .. " "
   end,
   color = { fg = colors.bg, bg = colors.black },
 })
@@ -428,9 +425,16 @@ insert_left({
 -- {information panel start
 insert_left({
   function()
-    return " "
+    return " " .. separator_left
   end,
   color = { fg = colors.bg, bg = colors.black },
+})
+
+insert_left({
+  function()
+    return "▓"
+  end,
+  color = { fg = colors.bg, bg = colors.bg },
 })
 
 insert_left({
@@ -663,7 +667,7 @@ insert_left({
 
 insert_left({
   function()
-    return ""
+    return separator_right .. " "
   end,
   color = { fg = colors.bg_alt, bg = colors.black },
 })
@@ -671,9 +675,16 @@ insert_left({
 
 insert_right({
   function()
-    return " "
+    return " " .. separator_left
   end,
   color = { fg = colors.bg_alt, bg = colors.black },
+})
+
+insert_right({
+  function()
+    return "▓"
+  end,
+  color = { fg = colors.bg_alt, bg = colors.bg_alt },
 })
 
 vim.api.nvim_create_augroup("lualine_augroup", { clear = false })
@@ -693,9 +704,8 @@ insert_right({
         if #messages > 0 then
           local progress = table.concat(messages, ";")
           if #progress > max_size then
-            local _, r = progress:find("%%%%%%%%", max_size)
-
-            progress = progress:sub(1, r or max_size) .. "…"
+            local pos = progress:sub(max_size, max_size + 10):match("^.*()%%")
+            progress = progress:sub(1, pos and max_size + pos or max_size) .. "…"
             -- if progress:sub(-3, -1) == "%%%" then
             --   progress = progress .. "%…"
             -- elseif progress:sub(-1, -1) == "%" and progress:sub(-2, -2) ~= "%" then

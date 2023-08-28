@@ -32,6 +32,8 @@ require("indent_blankline").setup({
     "lsp-installer",
     "oil",
     "oil_preview",
+    "qf",
+    "bqfpreview",
     "",
   },
   buftype_exclude = { "terminal" },
