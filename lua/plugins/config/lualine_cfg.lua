@@ -459,7 +459,7 @@ local function get_file_icon()
   if icon == nil then
     icon = ""
   end
-  return icon .. " "
+  return icon
 end
 
 local function get_file_icon_color()
@@ -576,7 +576,14 @@ insert_right({
         if #messages > 0 then
           local progress = table.concat(messages, ";")
           if #progress > max_size then
-            progress = progress:sub(1, max_size):gsub("[%c]", "") .. "⋯"
+            progress = progress:sub(1, max_size)
+            if progress:sub(-3, -1) == "%%%" then
+              progress = progress .. "%…"
+            elseif progress:sub(-1, -1) == "%" and progress:sub(-2, -2) ~= "%" then
+              progress = progress .. "%…"
+            else
+              progress = progress .. "…"
+            end
           end
           return progress .. " " .. status
         else
