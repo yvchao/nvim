@@ -3,7 +3,9 @@ local lualine = require("lualine")
 local current_scheme = vim.g.colors_name
 local colors = {
   bg_alt = "#592147",
-  bg = "#2f3445",
+  bg = "#2F3445",
+  active_buffer = "#EE6876",
+  inactive_buffer = "#AA7788",
   fg = "#F5DBDB",
   black = "#16161D",
   grey = "#303030",
@@ -46,6 +48,33 @@ elseif current_scheme:match("github_light[%l_]*") then
   colors = vim.tbl_deep_extend("force", {}, colors, custom)
 end
 
+local short_line_list = {
+  "oil",
+  "term",
+  "nerdtree",
+  "fugitive",
+  "fugitiveblame",
+  "DiffviewFiles",
+  "qf",
+  "help",
+  "toggleterm",
+}
+
+local BufferTypeMap = {
+  ["oil"] = " File Management",
+  ["fugitive"] = " Fugitive",
+  ["fugitiveblame"] = " Fugitive Blame",
+  ["minimap"] = "Minimap",
+  ["qf"] = "󰁨 Quick Fix",
+  ["neoterm"] = " NeoTerm",
+  ["toggleterm"] = " ToggleTerm",
+  ["help"] = "󰞋 Help",
+  ["git"] = " Git",
+  ["DiffviewFiles"] = " Diff View",
+  ["DapBreakpoint"] = " Dap Breakpoints",
+  ["dap-repl"] = " Dap REPL",
+}
+
 local conditions = {
   has_file_type = function()
     local f_type = vim.bo.filetype
@@ -61,7 +90,8 @@ local conditions = {
     return false
   end,
   checkwidth = function()
-    local squeeze_width = vim.fn.winwidth(0) / 2
+    -- local squeeze_width = vim.fn.winwidth(0) / 2
+    local squeeze_width = vim.o.columns / 2
     if squeeze_width > 50 then
       return true
     end
@@ -83,6 +113,14 @@ local conditions = {
     local gitdir = vim.fn.finddir(".git", current_dir .. ";")
     return gitdir and #gitdir > 0
   end,
+  check_special_buffer = function()
+    for _, v in ipairs(short_line_list) do
+      if v == vim.bo.filetype then
+        return true
+      end
+    end
+    return false
+  end,
 }
 
 -- Config
@@ -93,12 +131,17 @@ local config = {
     section_separators = "",
     theme = {
       normal = {
-        a = { fg = colors.fg, bg = colors.bg },
+        a = { fg = colors.active_buffer, bg = colors.grey },
         b = { fg = colors.fg, bg = colors.bg },
         c = { fg = colors.black, bg = colors.black },
       },
-      inactive = {},
+      inactive = {
+        a = { fg = colors.inactive_buffer, bg = colors.grey },
+        b = { fg = colors.fg, bg = colors.bg },
+        c = { fg = colors.black, bg = colors.black },
+      },
     },
+    globalstatus = true,
   },
   sections = {
     -- these are to remove the defaults
@@ -144,7 +187,7 @@ local config = {
         "buffers",
         symbols = {
           modified = " ", -- Text to show when the buffer is modified
-          alternate_file = "# ", -- Text to show to identify the alternate file
+          alternate_file = "󱝴 ", -- Text to show to identify the alternate file
           directory = " ", -- Text to show when the buffer is a directory
         },
       },
@@ -276,7 +319,9 @@ insert_left({
 insert_left({
   "branch",
   icon = { "", color = { fg = colors.orange, bg = colors.bg } },
-  cond = conditions.check_git_workspace,
+  cond = function()
+    return not conditions.check_special_buffer() and conditions.check_git_workspace()
+  end,
   color = { colors.fg, colors.bg },
   padding = { left = 0, right = 1 },
 })
@@ -290,7 +335,9 @@ insert_left({
     removed = { fg = colors.red },
   },
   cond = function()
-    return conditions.checkwidth() and conditions.check_git_workspace()
+    return conditions.checkwidth()
+      and not conditions.check_special_buffer()
+      and conditions.check_git_workspace()
   end,
   padding = { left = 0, right = 1 },
 })
@@ -300,8 +347,8 @@ insert_left({
     return "|"
   end,
   cond = function()
-    local presence = vim.diagnostic.get_next() ~= nil
-    return presence and conditions.check_git_workspace()
+    local presence = vim.diagnostic.get_next_pos()
+    return presence and conditions.checkwidth() and conditions.check_git_workspace()
   end,
 })
 
@@ -315,6 +362,7 @@ insert_left({
     color_info = { fg = colors.cyan },
     color_hint = { fg = colors.white },
   },
+  update_in_insert = true,
   cond = conditions.checkwidth,
   padding = { left = 1, right = 1 },
 })
@@ -442,9 +490,48 @@ local function get_file_icon_color()
   end
 end
 
+local function buffer_is_readonly()
+  if vim.bo.filetype == "help" then
+    return false
+  end
+  return vim.bo.readonly
+end
+
+local function file_with_icons(file, modified_icon, readonly_icon)
+  if vim.fn.empty(file) == 1 then
+    return ""
+  end
+
+  modified_icon = modified_icon or ""
+  readonly_icon = readonly_icon or ""
+
+  if buffer_is_readonly() then
+    file = readonly_icon .. " " .. file
+  end
+
+  if vim.bo.modifiable and vim.bo.modified then
+    file = file .. " " .. modified_icon
+  end
+
+  return " " .. file .. " "
+end
+
+local function get_file_name()
+  local file = vim.fn.expand("%:t")
+  local fname = file_with_icons(file)
+  for _, v in ipairs(short_line_list) do
+    if v == vim.bo.filetype then
+      return BufferTypeMap[v]
+    end
+  end
+  return fname
+end
+
 insert_left({
   get_file_icon,
-  cond = conditions.buffer_not_empty,
+  cond = function()
+    return not conditions.check_special_buffer() and conditions.buffer_not_empty()
+  end,
   color = {
     fg = get_file_icon_color(),
     bg = colors.bg_alt,
@@ -452,7 +539,7 @@ insert_left({
 })
 
 insert_left({
-  "filename",
+  get_file_name,
   cond = conditions.has_file_type,
   color = { fg = colors.fg, bg = colors.bg_alt },
 })
@@ -489,7 +576,7 @@ insert_right({
         if #messages > 0 then
           local progress = table.concat(messages, ";")
           if #progress > max_size then
-            progress = progress:sub(1, max_size) .. "⋯"
+            progress = progress:sub(1, max_size):gsub("[%c]", "") .. "⋯"
           end
           return progress .. " " .. status
         else
