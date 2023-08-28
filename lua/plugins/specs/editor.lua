@@ -338,10 +338,11 @@ return {
     "stevearc/oil.nvim",
     config = function()
       require("oil").setup({
-        -- columns = {
-        -- "icon",
-        -- "size",
-        -- },
+        columns = {
+          "icon",
+          "size",
+        },
+        delete_to_trash = true,
       })
     end,
   },
