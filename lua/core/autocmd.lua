@@ -1,14 +1,8 @@
 -- use relativenumber when editing
--- vim.cmd([[ au InsertEnter * set norelativenumber ]])
--- vim.cmd([[ au InsertLeave * set relativenumber ]])
 vim.api.nvim_create_autocmd("InsertEnter", { pattern = "*", command = [[set norelativenumber]] })
 vim.api.nvim_create_autocmd("InsertLeave", { pattern = "*", command = [[set relativenumber]] })
--- auto compile when editing the load.lua file
--- vim.cmd([[autocmd BufWritePost load.lua source <afile> | PackerCompile]])
--- vim.api.nvim_create_autocmd(
---   "BufWritePost",
---   { pattern = "load.lua", command = [[source <afile> | PackerCompile]] }
--- )
+-- vim.api.nvim_create_autocmd("RecordingEnter", { pattern = "*", command = [[set cmdheight=1]] })
+-- vim.api.nvim_create_autocmd("RecordingLeave", { pattern = "*", command = [[set cmdheight=0]] })
 
 -- start insert when enter the terminal
 -- vim.cmd("autocmd TermOpen term://* startinsert")

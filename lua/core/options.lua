@@ -116,6 +116,9 @@ end
 -- enable global status line
 opt.laststatus = 3
 
+-- hide cmdline when not used
+-- opt.cmdheight = 0
+
 -- disable tabline
 opt.showtabline = 0
 
