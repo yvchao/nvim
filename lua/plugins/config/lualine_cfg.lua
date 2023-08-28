@@ -148,6 +148,7 @@ local function treesitter_context(width)
     "txt",
     "defx",
     "help",
+    "qf",
   }
   if vim.tbl_contains(disable_ft, vim.o.ft) then
     return ""
