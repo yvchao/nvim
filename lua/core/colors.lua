@@ -97,7 +97,6 @@ end
 -- configure the nightfox theme
 M.github_setup = function()
   -- trim the prefix text
-  local theme = M.theme:gsub("github_", "")
   require("github-theme").setup({})
   -- this plugin will setup colorscheme for us
   apply()
