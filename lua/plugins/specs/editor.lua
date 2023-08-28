@@ -84,7 +84,7 @@ return {
         },
       })
     end,
-    -- enabled = false,
+    enabled = false,
   },
 
   -- tree style file manager

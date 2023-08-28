@@ -36,6 +36,9 @@ nmap("<C-c>", ":BufferLinePickClose<CR>") -- close tab
 nmap(";n", [[<Cmd>bnext<CR>]])
 nmap(";p", [[<Cmd>bprevious<CR>]])
 
+-- close window
+nmap(";c", [[<Cmd>close<CR>]])
+
 -- move tabs
 -- nmap("<A->>", [[<CMD>BufferLineMoveNext<CR>]])
 -- nmap("<A-<>", [[<CMD>BufferLineMovePrev<CR>]])

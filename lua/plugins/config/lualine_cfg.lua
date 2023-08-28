@@ -123,6 +123,71 @@ local conditions = {
   end,
 }
 
+local function treesitter_context(width)
+  local ok, ts = pcall(require, "nvim-treesitter")
+  if not ok or not ts then
+    return ""
+  end
+  local en_context = true
+
+  if vim.fn.line("$") > 5000 then -- skip for large file
+    -- lprint('skip treesitter')
+    return ""
+  end
+  local disable_ft = {
+    "NvimTree",
+    "neo-tree",
+    "oil",
+    "guihua",
+    "packer",
+    "guihua_rust",
+    "clap_input",
+    "clap_spinner",
+    "TelescopePrompt",
+    "csv",
+    "txt",
+    "defx",
+    "help",
+  }
+  if vim.tbl_contains(disable_ft, vim.o.ft) then
+    return ""
+  end
+  local type_patterns = {
+    "class",
+    "function",
+    "method",
+    "interface",
+    "type_spec",
+    "table",
+    -- "if_statement",
+    -- "for_statement",
+    -- "for_in_statement",
+    "call_expression",
+    -- "comment",
+  }
+
+  if vim.o.ft == "json" then
+    type_patterns = { "object", "pair" }
+  end
+  if not en_context then
+    return ""
+  end
+
+  local f = require("nvim-treesitter").statusline({
+    indicator_size = width,
+    type_patterns = type_patterns,
+    separator = " > ",
+  })
+  local context = string.format("%s", f) -- convert to string, it may be a empty ts node
+
+  -- lprint(context)
+  if context == "vim.NIL" then
+    return ""
+  end
+
+  return context
+end
+
 -- Config
 local config = {
   options = {
@@ -131,12 +196,12 @@ local config = {
     section_separators = "",
     theme = {
       normal = {
-        a = { fg = colors.active_buffer, bg = colors.grey },
+        a = { fg = colors.active_buffer, bg = colors.bg },
         b = { fg = colors.fg, bg = colors.bg },
         c = { fg = colors.black, bg = colors.black },
       },
       inactive = {
-        a = { fg = colors.inactive_buffer, bg = colors.grey },
+        a = { fg = colors.inactive_buffer, bg = colors.bg },
         b = { fg = colors.fg, bg = colors.bg },
         c = { fg = colors.black, bg = colors.black },
       },
@@ -164,35 +229,86 @@ local config = {
   },
   winbar = {
     lualine_a = {
+      -- {
+      --   "buffers",
+      --   filetype_names = {
+      --     TelescopePrompt = "Telescope",
+      --     lazy = "Lazy",
+      --     oil = "Oil",
+      --     alpha = "Alpha",
+      --   },
+      --   symbols = {
+      --     modified = " ", -- Text to show when the buffer is modified
+      --     alternate_file = "󱝴 ", -- Text to show to identify the alternate file
+      --     directory = " ", -- Text to show when the buffer is a directory
+      --   },
+      -- },
       {
-        "buffers",
-        filetype_names = {
-          TelescopePrompt = "Telescope",
-          lazy = "Lazy",
-          oil = "Oil",
-          alpha = "Alpha",
-        },
+        "filename",
         symbols = {
-          modified = " ", -- Text to show when the buffer is modified
-          alternate_file = "󱝴 ", -- Text to show to identify the alternate file
-          directory = " ", -- Text to show when the buffer is a directory
+          modified = "", -- Text to show when the file is modified.
+          readonly = "", -- Text to show when the file is non-modifiable or readonly.
+          unnamed = "[No Name]", -- Text to show for unnamed buffers.
+          newfile = "[New]", -- Text to show for newly created file before first write
         },
+        cond = function()
+          return not conditions.check_special_buffer()
+        end,
+      },
+      {
+        function()
+          local max_width = vim.fn.winwidth(0) / 2
+          local context = treesitter_context(max_width)
+          return context
+        end,
+        icon = "󰄄",
+        -- separator_highlight = { colors.green, colors.black },
+        color = { fg = colors.dimblue },
+        cond = function()
+          return vim.fn.winwidth(0) > 80
+        end,
       },
     },
-    lualine_z = { "tabs" },
+    lualine_z = {
+      {
+        "tabs",
+        cond = function()
+          return vim.fn.tabpagenr("$") > 1
+        end,
+      },
+    },
   },
   inactive_winbar = {
     lualine_a = {
+      -- {
+      --   "buffers",
+      --   symbols = {
+      --     modified = " ", -- Text to show when the buffer is modified
+      --     alternate_file = "󱝴 ", -- Text to show to identify the alternate file
+      --     directory = " ", -- Text to show when the buffer is a directory
+      --   },
+      -- },
       {
-        "buffers",
+        "filename",
         symbols = {
-          modified = " ", -- Text to show when the buffer is modified
-          alternate_file = "󱝴 ", -- Text to show to identify the alternate file
-          directory = " ", -- Text to show when the buffer is a directory
+          modified = "", -- Text to show when the file is modified.
+          readonly = "", -- Text to show when the file is non-modifiable or readonly.
+          unnamed = "[No Name]", -- Text to show for unnamed buffers.
+          newfile = "[New]", -- Text to show for newly created file before first write
         },
+        cond = function()
+          return not conditions.check_special_buffer()
+        end,
       },
     },
-    lualine_z = { "tabs" },
+    lualine_z = {
+      {
+        "tabs",
+        cond = function()
+          return vim.fn.tabpagenr("$") > 1
+        end,
+      },
+    },
   },
 }
 
@@ -347,8 +463,8 @@ insert_left({
     return "|"
   end,
   cond = function()
-    local presence = vim.diagnostic.get_next_pos()
-    return presence and conditions.checkwidth() and conditions.check_git_workspace()
+    local show = vim.diagnostic.get_next_pos()
+    return show and conditions.checkwidth() and conditions.check_git_workspace()
   end,
 })
 
@@ -362,7 +478,7 @@ insert_left({
     color_info = { fg = colors.cyan },
     color_hint = { fg = colors.white },
   },
-  update_in_insert = true,
+  update_in_insert = false,
   cond = conditions.checkwidth,
   padding = { left = 1, right = 1 },
 })
@@ -576,14 +692,16 @@ insert_right({
         if #messages > 0 then
           local progress = table.concat(messages, ";")
           if #progress > max_size then
-            progress = progress:sub(1, max_size)
-            if progress:sub(-3, -1) == "%%%" then
-              progress = progress .. "%…"
-            elseif progress:sub(-1, -1) == "%" and progress:sub(-2, -2) ~= "%" then
-              progress = progress .. "%…"
-            else
-              progress = progress .. "…"
-            end
+            local _, r = progress:find("%%%%%%%%", max_size)
+
+            progress = progress:sub(1, r or max_size) .. "…"
+            -- if progress:sub(-3, -1) == "%%%" then
+            --   progress = progress .. "%…"
+            -- elseif progress:sub(-1, -1) == "%" and progress:sub(-2, -2) ~= "%" then
+            --   progress = progress .. "%…"
+            -- else
+            -- progress = progress .. "…"
+            -- end
           end
           return progress .. " " .. status
         else
