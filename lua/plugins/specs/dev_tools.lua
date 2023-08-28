@@ -19,6 +19,7 @@ return {
       require("treesitter-context").setup({ enable = false })
     end,
     ft = vim.g.enable_treesitter_ft,
+    enabled = false,
   },
 
   {
