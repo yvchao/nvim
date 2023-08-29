@@ -217,15 +217,16 @@ return {
 
   {
     "folke/which-key.nvim",
-    config = function()
+    init = function()
       vim.o.timeout = true
-      vim.o.timeoutlen = 1000
-      require("which-key").setup({
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      })
+      vim.o.timeoutlen = 300
     end,
+    opts = {
+      triggers_blacklist = {
+        n = { ">", "<" },
+        v = { ">", "<" },
+      },
+    },
   },
 
   -- a swiss knife for aligning text
