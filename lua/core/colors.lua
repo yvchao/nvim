@@ -29,6 +29,8 @@ end
 -- This functions finally apply the colorscheme
 local function apply()
   vim.cmd("colorscheme " .. M.theme)
+  vim.api.nvim_set_hl(0, "NormalFloat", { link = "Normal" })
+  vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
 end
 
 -- configure the kanagawa theme
@@ -47,6 +49,7 @@ M.kanagawa_setup = function()
     dimInactive = true,
     overrides = function(colors)
       local palette = colors.palette
+      local theme = colors.theme
       return {
         htmlH1 = {
           fg = palette.peachRed,
@@ -69,9 +72,10 @@ M.kanagawa_setup = function()
           bg = palette.samuraiRed,
           bold = true,
         },
-        Pmenu = {
-          bg = palette.sumiInk1,
-        },
+        Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1, blend = vim.o.pumblend }, -- add `blend = vim.o.pumblend` to enable transparency
+        PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
+        PmenuSbar = { bg = theme.ui.bg_m1 },
+        PmenuThumb = { bg = theme.ui.bg_p2 },
         HighLightLineMatches = {
           bg = palette.winterYellow,
         },
@@ -82,6 +86,8 @@ M.kanagawa_setup = function()
         WinSeparator = { fg = palette.lightBlue },
         InclineNormal = { fg = palette.sumiInk1, bg = palette.waveRed },
         InclineNormalNC = { fg = palette.winterBlue, bg = palette.sakuraPink },
+        NormalFloat = { bg = "none" },
+        FloatBorder = { bg = "none" },
       }
     end,
   })

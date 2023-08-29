@@ -456,20 +456,19 @@ insert_left({
     removed = { fg = colors.red },
   },
   cond = function()
-    return conditions.checkwidth()
-      and not conditions.check_special_buffer()
-      and conditions.check_git_workspace()
+    return not conditions.check_special_buffer() and conditions.check_git_workspace()
   end,
   padding = { left = 0, right = 1 },
 })
 
 insert_left({
   function()
-    return "|"
+    return ""
   end,
+  color = { fg = colors.active_buffer },
   cond = function()
     local show = vim.diagnostic.get_next_pos()
-    return show and conditions.checkwidth() and conditions.check_git_workspace()
+    return show and conditions.checkwidth()
   end,
 })
 

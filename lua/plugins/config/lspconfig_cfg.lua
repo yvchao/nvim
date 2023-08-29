@@ -237,21 +237,19 @@ vim.diagnostic.config({
   virtual_text = false,
 })
 
--- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
---   border = "single",
--- })
-
+local border = "rounded"
+local custom_hover = vim.lsp.with(vim.lsp.handlers.hover, { border = border })
 vim.lsp.handlers["textDocument/hover"] = function(_, result, ctx, config)
   config = config or {}
   config.focus_id = ctx.method
   if not (result and result.contents) then
     return
   end
-  return vim.lsp.with(vim.lsp.handlers.hover(_, result, ctx, config), { border = "single" })
+  return custom_hover(_, result, ctx, config)
 end
 
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-  border = "single",
+  border = border,
 })
 
 return {

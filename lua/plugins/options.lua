@@ -48,5 +48,5 @@ g.enable_lspconfig_ft = {
   "toml",
   "tex",
   "markdown",
-  "gitcommit",
+  -- "gitcommit",
 }
