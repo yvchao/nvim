@@ -199,6 +199,7 @@ return {
       "hrsh7th/cmp-vsnip",
       "hrsh7th/vim-vsnip",
       "hrsh7th/cmp-cmdline",
+      "kdheepak/cmp-latex-symbols",
     },
     lazy = false,
     config = function()
