@@ -344,6 +344,9 @@ return {
           "size",
         },
         delete_to_trash = true,
+        win_options = {
+          concealcursor = "nvci",
+        },
       })
     end,
   },

@@ -1,4 +1,5 @@
 local cmp = require("cmp")
+local compare = require("cmp.config.compare")
 
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -96,7 +97,7 @@ cmp.setup({
       { "i", "c" }
     ),
     ["<CR>"] = cmp.mapping.confirm({
-      behavior = cmp.ConfirmBehavior.Replace,
+      behavior = cmp.ConfirmBehavior.Insert, -- Replace will remove chars on the right
       select = true,
     }),
     ["<Tab>"] = cmp.mapping(function(fallback)
@@ -132,6 +133,21 @@ cmp.setup({
     { name = "path", group_index = 3, priority = 2, trigger_characters = { "/" } },
     { name = "latex_symbols", group_index = 1, trigger_characters = { "\\" } },
   }),
+  sorting = {
+    priority_weight = 2,
+    comparators = {
+      compare.offset,
+      compare.exact,
+      -- compare.scopes, -- what?
+      compare.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
+      compare.recently_used,
+      compare.locality,
+      compare.kind,
+      -- compare.sort_text,
+      compare.length, -- useless
+      compare.order,
+    },
+  },
   experimental = {
     ghost_text = { hl_group = "NonText" },
   },
