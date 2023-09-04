@@ -1,5 +1,9 @@
 local cmp = require("cmp")
 local compare = require("cmp.config.compare")
+local luasnip = require("luasnip")
+local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+
+cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -49,6 +53,7 @@ local kind_icons = {
 
 local source_menu = {
   buffer = "[ Buf]",
+  otter = "[󰻀 Otter]",
   nvim_lsp = "[ LSP]",
   luasnip = "[󰅩 LSnip]",
   snippet = "[󰅩 VSnip]",
@@ -63,8 +68,7 @@ cmp.setup({
   },
   snippet = {
     expand = function(args)
-      -- For `vsnip` user.
-      vim.fn["vsnip#anonymous"](args.body)
+      luasnip.lsp_expand(args.body)
     end,
   },
   formatting = {
@@ -100,13 +104,22 @@ cmp.setup({
       behavior = cmp.ConfirmBehavior.Insert, -- Replace will remove chars on the right
       select = true,
     }),
+    ["<Space>"] = cmp.mapping(
+      cmp.mapping.confirm({
+        behavior = cmp.ConfirmBehavior.Insert,
+        select = true,
+      }),
+      { "i", "c" }
+    ),
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
       elseif has_trigger_before() then
         cmp.complete()
-      elseif vim.fn["vsnip#jumpable"](1) == 1 then
-        feedkey("<Plug>(vsnip-jump-next)", "")
+      -- elseif vim.fn["vsnip#jumpable"](1) == 1 then
+      --   feedkey("<Plug>(vsnip-jump-next)", "")
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
       else
         fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
       end
@@ -114,8 +127,10 @@ cmp.setup({
     ["<S-Tab>"] = cmp.mapping(function()
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-        feedkey("<Plug>(vsnip-jump-prev)", "")
+      -- elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+      --   feedkey("<Plug>(vsnip-jump-prev)", "")
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
       end
     end, { "i", "s" }),
   }),
@@ -128,7 +143,8 @@ cmp.setup({
         return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
       end,
     },
-    { name = "vsnip", group_index = 1, priority = 3 },
+    -- { name = "vsnip", group_index = 1, priority = 3 },
+    { name = "luasnip", group_index = 1, priority = 3 },
     { name = "buffer", group_index = 4, priority = 1, max_item_count = 3 },
     { name = "path", group_index = 3, priority = 2, trigger_characters = { "/" } },
     { name = "latex_symbols", group_index = 1, trigger_characters = { "\\" } },
@@ -166,8 +182,11 @@ cmp.setup.cmdline("/", {
 cmp.setup.cmdline(":", {
   mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
-    { name = "path" },
+    { name = "path", trigger_characters = { "/" } },
   }, {
     { name = "cmdline" },
   }),
 })
+
+-- for friendly snippets
+require("luasnip.loaders.from_vscode").lazy_load()

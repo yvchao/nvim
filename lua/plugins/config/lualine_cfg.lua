@@ -114,7 +114,8 @@ local conditions = {
     else
       current_dir = vim.fn.expand("%:p:h")
     end
-    local gitdir = vim.fn.finddir(".git", current_dir .. ";")
+    -- search for .git folder until home dir
+    local gitdir = vim.fn.finddir(".git", current_dir .. ";" .. vim.env.HOME)
     return gitdir and #gitdir > 0
   end,
   check_special_buffer = function()
@@ -136,75 +137,6 @@ local conditions = {
     return winnr > 1
   end,
 }
-
-local function treesitter_context(width)
-  local ok, ts = pcall(require, "nvim-treesitter")
-  if not ok or not ts then
-    return ""
-  end
-  local en_context = true
-
-  if vim.fn.line("$") > 5000 then -- skip for large file
-    -- lprint('skip treesitter')
-    return ""
-  end
-  local disable_ft = {
-    "NvimTree",
-    "neo-tree",
-    "oil",
-    "guihua",
-    "packer",
-    "guihua_rust",
-    "clap_input",
-    "clap_spinner",
-    "TelescopePrompt",
-    "csv",
-    "txt",
-    "defx",
-    "help",
-    "qf",
-    "alpha",
-    "man",
-    "",
-  }
-  if vim.tbl_contains(disable_ft, vim.o.ft) then
-    return ""
-  end
-  local type_patterns = {
-    "class",
-    "function",
-    "method",
-    "interface",
-    "type_spec",
-    "table",
-    -- "if_statement",
-    -- "for_statement",
-    -- "for_in_statement",
-    "call_expression",
-    -- "comment",
-  }
-
-  if vim.o.ft == "json" then
-    type_patterns = { "object", "pair" }
-  end
-  if not en_context then
-    return ""
-  end
-
-  local f = require("nvim-treesitter").statusline({
-    indicator_size = width,
-    type_patterns = type_patterns,
-    separator = " > ",
-  })
-  local context = string.format("%s", f) -- convert to string, it may be a empty ts node
-
-  -- lprint(context)
-  if context == "vim.NIL" then
-    return ""
-  end
-
-  return context
-end
 
 -- Config
 local config = {
@@ -246,65 +178,52 @@ local config = {
     lualine_x = {},
   },
   winbar = {
-    lualine_a = {
-      {
-        "filename",
-        symbols = {
-          modified = "", -- Text to show when the file is modified.
-          readonly = "", -- Text to show when the file is non-modifiable or readonly.
-          unnamed = "[No Name]", -- Text to show for unnamed buffers.
-          newfile = "[New]", -- Text to show for newly created file before first write
-        },
-        cond = function()
-          return conditions.check_multiple_win() and not conditions.check_special_buffer()
-        end,
-      },
-      -- {
-      --   function()
-      --     local max_width = vim.fn.winwidth(0) / 2
-      --     local context = treesitter_context(max_width)
-      --     return context
-      --   end,
-      --   icon = "󰄄",
-      --   -- separator_highlight = { colors.green, colors.black },
-      --   color = { fg = colors.dimblue },
-      --   cond = function()
-      --     return vim.fn.winwidth(0) > 80
-      --   end,
-      -- },
-    },
-    lualine_z = {
-      {
-        "tabs",
-        cond = function()
-          return vim.fn.tabpagenr("$") > 1
-        end,
-      },
-    },
-  },
-  inactive_winbar = {
-    lualine_a = {
-      {
-        "filename",
-        symbols = {
-          modified = "", -- Text to show when the file is modified.
-          readonly = "", -- Text to show when the file is non-modifiable or readonly.
-          unnamed = "[No Name]", -- Text to show for unnamed buffers.
-          newfile = "[New]", -- Text to show for newly created file before first write
-        },
-        cond = function()
-          return conditions.check_multiple_win() and not conditions.check_special_buffer()
-        end,
-      },
-    },
-    lualine_z = {
-      {
-        "tabs",
-        cond = function()
-          return vim.fn.tabpagenr("$") > 1
-        end,
-      },
-    },
+    --   lualine_a = {
+    --     {
+    --       "filename",
+    --       symbols = {
+    --         modified = "", -- Text to show when the file is modified.
+    --         readonly = "", -- Text to show when the file is non-modifiable or readonly.
+    --         unnamed = "[No Name]", -- Text to show for unnamed buffers.
+    --         newfile = "[New]", -- Text to show for newly created file before first write
+    --       },
+    --       cond = function()
+    --         return conditions.check_multiple_win() and not conditions.check_special_buffer()
+    --       end,
+    --     },
+    --   },
+    --   lualine_z = {
+    --     {
+    --       "tabs",
+    --       cond = function()
+    --         return vim.fn.tabpagenr("$") > 1
+    --       end,
+    --     },
+    --   },
+    -- },
+    -- inactive_winbar = {
+    --   lualine_a = {
+    --     {
+    --       "filename",
+    --       symbols = {
+    --         modified = "", -- Text to show when the file is modified.
+    --         readonly = "", -- Text to show when the file is non-modifiable or readonly.
+    --         unnamed = "[No Name]", -- Text to show for unnamed buffers.
+    --         newfile = "[New]", -- Text to show for newly created file before first write
+    --       },
+    --       cond = function()
+    --         return conditions.check_multiple_win() and not conditions.check_special_buffer()
+    --       end,
+    --     },
+    --   },
+    --   lualine_z = {
+    --     {
+    --       "tabs",
+    --       cond = function()
+    --         return vim.fn.tabpagenr("$") > 1
+    --       end,
+    --     },
+    --   },
   },
 }
 
@@ -447,8 +366,20 @@ insert_left({
   padding = { left = 0, right = 1 },
 })
 
+local function diff_source()
+  local gitsigns = vim.b.gitsigns_status_dict
+  if gitsigns then
+    return {
+      added = gitsigns.added,
+      modified = gitsigns.changed,
+      removed = gitsigns.removed,
+    }
+  end
+end
+
 insert_left({
   "diff",
+  source = diff_source,
   symbols = { added = " ", modified = " ", removed = " " },
   diff_color = {
     added = { fg = colors.green },
@@ -462,18 +393,8 @@ insert_left({
 })
 
 insert_left({
-  function()
-    return ""
-  end,
-  color = { fg = colors.active_buffer },
-  cond = function()
-    local show = vim.diagnostic.get_next_pos()
-    return show and conditions.checkwidth()
-  end,
-})
-
-insert_left({
   "diagnostics",
+  icon = { "", color = { fg = colors.yellow, gui = "bold" } },
   sources = { "nvim_diagnostic" },
   symbols = { error = " ", warn = " ", info = " ", hint = "󰌶 " },
   diagnostics_color = {
@@ -484,7 +405,7 @@ insert_left({
   },
   update_in_insert = false,
   cond = conditions.checkwidth,
-  padding = { left = 1, right = 1 },
+  padding = { left = 0, right = 1 },
 })
 
 insert_left({
@@ -619,7 +540,7 @@ end
 
 local function file_with_icons(file, modified_icon, readonly_icon)
   if vim.fn.empty(file) == 1 then
-    return ""
+    file = "No Name"
   end
 
   modified_icon = modified_icon or ""
@@ -633,17 +554,18 @@ local function file_with_icons(file, modified_icon, readonly_icon)
     file = file .. " " .. modified_icon
   end
 
-  return " " .. file .. " "
+  return file
 end
 
 local function get_file_name()
-  local file = vim.fn.expand("%:t")
-  local fname = file_with_icons(file)
   for _, v in ipairs(short_line_list) do
     if v == vim.bo.filetype then
       return BufferTypeMap[v]
     end
   end
+
+  local file = vim.fn.expand("%:t")
+  local fname = file_with_icons(file)
   return fname
 end
 
@@ -660,8 +582,9 @@ insert_left({
 
 insert_left({
   get_file_name,
-  cond = conditions.has_file_type,
+  -- cond = conditions.has_file_type,
   color = { fg = colors.fg, bg = colors.bg_alt },
+  padding = { left = 1, right = 1 },
 })
 
 insert_left({
@@ -739,14 +662,39 @@ insert_right({
 
 insert_right({
   function()
+    local tabpagenr = vim.fn.tabpagenr("$")
+    if tabpagenr > 1 then
+      local curr_tab = vim.api.nvim_tabpage_get_number(0)
+      return "Tab " .. curr_tab .. "/" .. tabpagenr
+    else
+      return ""
+    end
+  end,
+  icon = { "󰠵", color = { fg = colors.purple, bg = colors.bg } },
+  color = { fg = colors.fg, bg = colors.bg },
+  padding = { left = 1, right = 0 },
+  cond = function()
+    return vim.fn.tabpagenr("$") > 1
+  end,
+  on_click = function(clicknr, button, modifier)
+    if button == "l" then
+      vim.cmd("tabnext")
+    elseif button == "r" then
+      vim.cmd("tabprevious")
+    end
+  end,
+})
+
+insert_right({
+  function()
     local line = vim.fn.line(".")
     local column = vim.fn.col(".")
-    return string.format("%3d:%2d ", line, column)
+    return string.format("%3d:%2d", line, column)
   end,
-  icon = " ",
+  icon = "",
   -- separator_highlight = { colors.green, colors.black },
   color = { fg = colors.green, bg = colors.bg },
-  padding = 0,
+  padding = { left = 1, right = 1 },
 })
 
 insert_right({
@@ -754,16 +702,17 @@ insert_right({
     local current_line = vim.fn.line(".")
     local total_line = vim.fn.line("$")
     if current_line == 1 then
-      return "Top "
+      return "Top"
     elseif current_line == vim.fn.line("$") then
-      return "Bot "
+      return "Bot"
     end
-    local result, _ = math.modf((current_line / total_line) * 100)
-    return "" .. result .. "%% "
+    local ratio, _ = math.modf((current_line / total_line) * 100)
+    return string.format("%2d", ratio) .. "%%"
   end,
   icon = "",
   cond = conditions.checkwidth,
   color = { fg = colors.cyan, bg = colors.bg },
+  padding = { left = 0, right = 1 },
 })
 
 insert_right({

@@ -6,48 +6,97 @@ if not ok then
   return
 end
 
-local on_attach = function(client, bufnr)
+--- set keymaps for lsp-enabled buffer
+---@param client any
+---@param bufnr integer
+---@param minimal boolean|nil
+local set_keymap = function(client, bufnr, minimal)
+  -- whether to use the minimal keymap
+  minimal = minimal or false
+
   local function buf_set_option(...)
     vim.api.nvim_buf_set_option(bufnr, ...)
+  end
+
+  local map = function(mode, lhs, rhs, opts)
+    opts = vim.tbl_extend("keep", opts, { noremap = true, silent = true, buffer = bufnr })
+    vim.keymap.set(mode, lhs, rhs, opts)
   end
 
   -- Enable completion triggered by <c-x><c-o>
   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 
   -- Mappings.
-  local opts = {
-    noremap = true,
-    silent = true,
-    buffer = bufnr,
-  }
-  -- vim.keymap.set("n", "gd", "<Cmd>Lspsaga preview_definition<CR>", opts)
-  vim.keymap.set("n", "gh", ":lua vim.lsp.buf.hover()<CR>", opts)
-  vim.keymap.set("n", "gs", ":lua vim.lsp.buf.signature_help()<CR>", opts)
-  vim.keymap.set("n", "gj", function()
-    vim.diagnostic.goto_next()
-    vim.diagnostic.open_float()
-  end, opts)
-  vim.keymap.set("n", "gk", function()
-    vim.diagnostic.goto_prev()
-    vim.diagnostic.open_float()
-  end, opts)
-  vim.keymap.set("n", "gr", ":lua vim.lsp.buf.rename()<CR>", opts)
-  vim.keymap.set("n", "gR", ":lua vim.lsp.buf.references()<CR>", opts)
-  vim.keymap.set("n", "gx", ":lua vim.lsp.buf.code_action()<CR>", opts)
 
-  vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-  vim.keymap.set("n", "gm", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-  vim.keymap.set("n", "gt", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
-  vim.keymap.set("n", "gq", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
+  if not minimal then
+    map("n", "gh", ":lua vim.lsp.buf.hover()<CR>", { desc = "hover information [LSP]" })
+    map("n", "gr", ":lua vim.lsp.buf.rename()<CR>", { desc = "rename [LSP]" })
+    map("n", "gR", ":lua vim.lsp.buf.references()<CR>", { desc = "find references [LSP]" })
+    map("n", "gd", "<cmd>lua vim.lsp.buf.declaration()<CR>", { desc = "goto declaration [LSP]" })
+    map(
+      "n",
+      "gm",
+      "<cmd>lua vim.lsp.buf.implementation()<CR>",
+      { desc = "goto implementation [LSP]" }
+    )
+    map(
+      "n",
+      "gt",
+      "<cmd>lua vim.lsp.buf.type_definition()<CR>",
+      { desc = "goto type definition [LSP]" }
+    )
+    map(
+      "n",
+      "<leader>ls",
+      "<cmd>Telescope lsp_document_symbols<CR>",
+      { desc = "view symbols in document [LSP]" }
+    )
 
-  vim.keymap.set("n", "gS", "<cmd>Telescope lsp_document_symbols<CR>", opts)
-
-  -- Set some keybinds conditional on server capabilities
-  if client.server_capabilities.documentFormattingProvider then
-    vim.keymap.set("n", "gf", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
-  elseif client.server_capabilities.documentRangeFormattingProvider then
-    vim.keymap.set("x", "gf", "<cmd>lua vim.lsp.buf.range_format({async=true})<CR>", opts)
+    if client.server_capabilities.signatureHelpProvider then
+      map(
+        "n",
+        "gs",
+        ":lua vim.lsp.buf.signature_help()<CR>",
+        { desc = "show signature help [LSP]" }
+      )
+    else
+      -- local signature_setup = {
+      --   hint_enable = false,
+      --   hint_prefix = "󰷼",
+      -- }
+      -- require("lsp_signature").on_attach(signature_setup, bufnr)
+      -- map(
+      --   "n",
+      --   "gs",
+      --   ":lua vim.lsp.buf.signature_help()<CR>",
+      --   { desc = "show signature help [LSP]" }
+      -- )
+    end
+    -- Set some keybinds conditional on server capabilities
+    if client.server_capabilities.documentFormattingProvider then
+      map(
+        "n",
+        "gf",
+        "<cmd>lua vim.lsp.buf.format({async=true})<CR>",
+        { desc = "format code [LSP]" }
+      )
+    elseif client.server_capabilities.documentRangeFormattingProvider then
+      map(
+        "x",
+        "gf",
+        "<cmd>lua vim.lsp.buf.range_format({async=true})<CR>",
+        { desc = "range format code [LSP]" }
+      )
+    end
   end
+  map("n", "gq", "<cmd>lua vim.diagnostic.setloclist()<CR>", { desc = "open diagnostic list" })
+  map("n", "gj", vim.diagnostic.goto_next, { desc = "goto next diagnostic" })
+  map("n", "gk", vim.diagnostic.goto_prev, { desc = "goto previous diagnostic" })
+  map("n", "gx", ":lua vim.lsp.buf.code_action()<CR>", { desc = "code action [LSP]" })
+end
+
+local on_attach = function(client, bufnr)
+  set_keymap(client, bufnr, false)
 end
 
 -- Gets a new ClientCapabilities object describing the LSP client
@@ -87,6 +136,12 @@ local configured_lsp_list =
   { "lua_ls", "texlab", "pyright", "ltex", "ruff_lsp", "clangd", "marksman" }
 local settings = {}
 
+local ok, custom = pcall(require, "custom")
+local custom_options = {}
+if ok then
+  custom_options = custom.lsp or {}
+end
+
 settings["texlab"] = {
   texlab = {
     build = {
@@ -114,6 +169,8 @@ settings["texlab"] = {
   },
 }
 
+local ltex_options = custom_options.ltex
+local modelPath = ltex_options and ltex_options.modelPath or nil
 settings["ltex"] = {
   ltex = {
     ["ltex-ls"] = {
@@ -123,7 +180,7 @@ settings["ltex"] = {
     disabledRules = {},
     hiddenFalsePositives = {},
     additionalRules = {
-      word2VecModel = "~/.config/LanguageTool/spell/en",
+      word2VecModel = modelPath,
     },
   },
 }
@@ -153,18 +210,24 @@ settings["lua_ls"] = {
   },
 }
 
+local python_options = custom_options.python
+local stubPath = python_options and python_options.stubPath or nil
+local pythonPath = python_options and python_options.pythonPath or nil
+
 settings["pyright"] = {
   pyright = {
     disableLanguageServices = false,
     disableOrganizeImports = true,
   },
   python = {
+    pythonPath = pythonPath,
     analysis = {
       logLevel = "Error",
       autoSearchPath = false,
       autoImportCompletion = true,
       diagnosticMode = "openFilesOnly",
       useLibraryCodeForTypes = true,
+      stubPath = stubPath,
       diagnosticSeverityOverrides = {
         reportGeneralTypeIssues = "none",
         reportOptionalMemberAccess = "none",
@@ -183,6 +246,14 @@ custom_opts["clangd"] = {
 
 custom_opts["marksman"] = {
   filetypes = { "markdown", "quarto" },
+  on_attach = function(client, bufnr)
+    local ft = vim.fn.getbufvar(bufnr, "&filetype")
+    if ft == "quarto" then
+      set_keymap(client, bufnr, true)
+    else
+      set_keymap(client, bufnr, false)
+    end
+  end,
 }
 
 custom_opts["ltex"] = {

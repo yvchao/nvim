@@ -15,6 +15,9 @@ return {
 
   {
     "nvim-treesitter/nvim-treesitter-context",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+    },
     config = function()
       require("treesitter-context").setup({ enable = false })
     end,
@@ -33,7 +36,14 @@ return {
       require("plugins").load_cfg("lspconfig_cfg")
     end,
     -- module = "lspconfig",
-    dependencies = { "airblade/vim-rooter", "williamboman/mason.nvim" },
+    dependencies = {
+      "airblade/vim-rooter",
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      -- "ray-x/lsp_signature.nvim",
+      "lsp_lines.nvim",
+    },
+    ft = vim.g.enable_lspconfig_ft,
   },
 
   {
@@ -56,6 +66,7 @@ return {
     url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
     config = function()
       require("lsp_lines").setup()
+      vim.diagnostic.config({ virtual_lines = { only_current_line = true } })
     end,
   },
 
@@ -63,8 +74,18 @@ return {
     "VidocqH/lsp-lens.nvim",
     dependencies = { "neovim/nvim-lspconfig" },
     config = function()
-      require("lsp-lens").setup()
+      require("lsp-lens").setup({
+        enable = false,
+      })
     end,
+    enabled = false,
+  },
+
+  -- alternative signature help
+  {
+    "ray-x/lsp_signature.nvim",
+    event = "VeryLazy",
+    enabled = false,
   },
 
   -- {
@@ -196,8 +217,10 @@ return {
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-vsnip",
-      "hrsh7th/vim-vsnip",
+      -- "hrsh7th/cmp-vsnip",
+      -- "hrsh7th/vim-vsnip",
+      "L3MON4D3/LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-cmdline",
       "kdheepak/cmp-latex-symbols",
     },
@@ -206,11 +229,84 @@ return {
       require("plugins").load_cfg("nvimcmp_cfg")
     end,
   },
+  {
+    "L3MON4D3/LuaSnip",
+    -- follow latest release.
+    version = "2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+    -- install jsregexp (optional!).
+    build = "make install_jsregexp",
+    dependencies = {
+      "rafamadriz/friendly-snippets",
+    },
+  },
 
   {
     "abecodes/tabout.nvim",
     config = function()
       require("tabout").setup()
     end,
+  },
+
+  {
+    "jpalardy/vim-slime",
+    init = function()
+      vim.g.slime_target = "neovim"
+      vim.g.slime_no_mappings = 1
+      vim.g.slime_python_ipython = 1
+      vim.g.slime_paste_file = vim.env.HOME .. "/.cache/slime_paste"
+      vim.b["quarto_is_" .. "python" .. "_chunk"] = false
+      Quarto_is_in_python_chunk = function()
+        require("otter.tools.functions").is_otter_language_context("python")
+      end
+
+      vim.cmd([[
+      let g:slime_dispatch_ipython_pause = 100
+      function SlimeOverride_EscapeText_quarto(text)
+      call v:lua.Quarto_is_in_python_chunk()
+      if exists('g:slime_python_ipython') && len(split(a:text,"\n")) > 1 && b:quarto_is_python_chunk
+      return ["%cpaste -q\n", g:slime_dispatch_ipython_pause, a:text, "--", "\n"]
+      else
+      return a:text
+      end
+      endfunction
+      ]])
+    end,
+    ft = { "python", "quarto", "julia" },
+  },
+
+  {
+    "quarto-dev/quarto-nvim",
+    dev = false,
+    ft = "quarto",
+    dependencies = {
+      {
+        "jmbuhr/otter.nvim",
+        dev = false,
+        dependencies = {
+          { "neovim/nvim-lspconfig" },
+        },
+        opts = {},
+        ft = "quarto",
+      },
+    },
+    opts = {
+      lspFeatures = {
+        enabled = true,
+        languages = { "python", "bash", "html" },
+        diagnostics = {
+          enabled = true,
+          triggers = { "InsertLeave" },
+        },
+      },
+      keymap = {
+        hover = "gh",
+        definition = "gd",
+        type_definition = "gt",
+        rename = "gr",
+        format = "gf",
+        references = "gR",
+        document_symbols = "<leader>ls",
+      },
+    },
   },
 }

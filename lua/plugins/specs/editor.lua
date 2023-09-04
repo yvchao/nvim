@@ -80,11 +80,40 @@ return {
       require("incline").setup({
         hide = {
           focused_win = false,
-          only_win = true,
+          only_win = false,
+        },
+        ignore = {
+          filetypes = {
+            "alpha",
+            "oil",
+            "qf",
+            "help",
+            "man",
+            "term",
+          },
+        },
+        render = function(props)
+          local bufname = vim.api.nvim_buf_get_name(props.buf)
+          local res = bufname ~= "" and vim.fn.fnamemodify(bufname, ":t") or "[No Name]"
+          if vim.api.nvim_buf_get_option(props.buf, "modified") then
+            res = res .. " [+]"
+          end
+          res = "▒░ " .. res .. " ░▒"
+          return res
+        end,
+        window = {
+          padding = {
+            left = 0,
+            right = 0,
+          },
+          margin = {
+            horizontal = 0,
+            vertical = 1,
+          },
         },
       })
     end,
-    enabled = false,
+    enabled = true,
   },
 
   -- tree style file manager
@@ -169,9 +198,6 @@ return {
   {
     "airblade/vim-rooter",
     event = "BufReadPost",
-    -- config = function()
-    --   vim.cmd("Rooter")
-    -- end,
   },
 
   -- telescope: extensible fuzzy file finder
@@ -181,9 +207,11 @@ return {
     dependencies = {
       "nvim-lua/popup.nvim",
       "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope-ui-select.nvim",
     },
     config = function()
       require("plugins").load_cfg("telescope_cfg")
+      require("telescope").load_extension("ui-select")
     end,
     -- module = "telescope",
   },
@@ -203,7 +231,7 @@ return {
     "tpope/vim-surround",
     event = "BufRead",
     config = function()
-      local map = require("mappings.utils").map
+      local map = require("lib.keymap").map
       -- release the S key to the lightspeed
       map("x", "S", "<Plug>Lightspeed_S", {
         noremap = false,
