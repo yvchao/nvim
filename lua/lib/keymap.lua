@@ -1,9 +1,15 @@
+local M = {}
+
+M.feedkeys = function(key, mode)
+  vim.fn.feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode)
+end
+
 -- map create a new mapping
 -- @param mode specify vim mode
 -- @param lhs specify the new keymap
 -- @param rhs specify the keymap or commands
 -- @param opts setting options. Default: { noremap = true, silent = true, expr = false }
-local function map(mode, lhs, rhs, opts)
+M.map = function(mode, lhs, rhs, opts)
   local options = {
     noremap = true,
     silent = true,
@@ -24,20 +30,16 @@ end
 -- @param lhs specify the new keymap
 -- @param rhs specify the keymap or commands
 -- @param opts setting options. Default: { noremap = true, silent = true, eval = false }
-local function nmap(lhs, rhs, opts)
-  map("n", lhs, rhs, opts)
+M.nmap = function(lhs, rhs, opts)
+  M.map("n", lhs, rhs, opts)
 end
 
 -- xmap create a new mapping in selection mode
 -- @param lhs specify the new keymap
 -- @param rhs specify the keymap or commands
 -- @param opts setting options. Default: { noremap = true, silent = true, eval = false }
-local function xmap(lhs, rhs, opts)
-  map("x", lhs, rhs, opts)
+M.xmap = function(lhs, rhs, opts)
+  M.map("x", lhs, rhs, opts)
 end
 
-return {
-  map = map,
-  nmap = nmap,
-  xmap = xmap,
-}
+return M

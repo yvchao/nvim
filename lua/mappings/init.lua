@@ -1,12 +1,7 @@
-local utils = require("mappings.utils")
-local map = utils.map
-local nmap = utils.nmap
-local xmap = utils.xmap
-
-vim.g.mapleader = " "
-
--- load plugin's keymapping
-require("mappings.other")
+local keymap = require("lib.keymap")
+local map = keymap.map
+local nmap = keymap.nmap
+local xmap = keymap.xmap
 
 -- quicker motion
 nmap("J", "5j")
@@ -41,10 +36,6 @@ nmap("<C-T>n", ":tabnew<CR>")
 -- save quickly
 nmap(";w", ":w<CR>")
 
--- kill buffer with ;q , quit window with :q . This make sense.
--- nmap(";q", ":lua require('plugins.bufdel').delete_buffer()<CR>")
-nmap(";q", ":BufDel<CR>")
-
 -- do thing like ctrl c and ctrl v
 xmap("<C-y>", [["+y]])
 nmap("<C-p>", [["+p]])
@@ -64,8 +55,14 @@ nmap(";h", "<C-w>h")
 -- resize the window
 nmap("<C-S-up>", ":res +5<CR>")
 nmap("<C-S-down>", ":res -5<CR>")
-nmap("<C-S-right>", ":vertical resize-5<CR>")
-nmap("<C-S-left>", ":vertical resize+5<CR>")
+nmap("<C-S-right>", ":vertical resize+5<CR>")
+nmap("<C-S-left>", ":vertical resize-5<CR>")
 
 -- center editing line
 map("i", "<C-c>", "<ESC>zzi")
+
+-- load plugin's keymapping
+require("mappings.plugins")
+
+-- load plugin's command mapping
+require("mappings.commands")

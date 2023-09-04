@@ -18,10 +18,6 @@ M.infoL = function(msg, title)
   })
 end
 
-M.fek = function(key, mode)
-  vim.fn.feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode)
-end
-
 --Collection of notification system implementations.
 local log_level_to_urgency = {
   [vim.log.levels.TRACE] = "low",
@@ -52,7 +48,7 @@ M.notify_send = function(msg, log_level, opts)
   vim.fn.system(command)
 end
 
-M.notify_message = function(msg, level, opts) -- luacheck: no unused args
+M.notify_message = function(msg, level) -- luacheck: no unused args
   if level == vim.log.levels.ERROR then
     vim.api.nvim_err_writeln(msg)
   elseif level == vim.log.levels.WARN then

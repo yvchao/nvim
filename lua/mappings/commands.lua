@@ -1,22 +1,4 @@
--- alias can help create new vim command.
--- @param cmd The user command
--- @param repl The actual command or function
--- @param force force create command? boolean
-local alias = function(cmd, repl, force)
-  vim.api.nvim_create_user_command(cmd, repl, { bang = force })
-  -- local command = ""
-  -- if force then
-  --   command = "command! " .. cmd .. " " .. repl
-  -- else
-  --   command = "command " .. cmd .. " " .. repl
-  -- end
-  -- local ok, err = pcall(vim.cmd, command)
-  -- if not ok then
-  --   vim.notify("setting cmd: " .. cmd .. " " .. err, vim.log.levels.ERROR, {
-  --     title = "command",
-  --   })
-  -- end
-end
+local alias = require("lib.misc").alias
 
 -- plugin neoclip
 alias("ClipRec", [[lua require('neoclip').start()]])
@@ -55,3 +37,20 @@ alias("LspLineToggle", [[lua require("lsp_lines").toggle()]])
 
 alias("HiCurLine", [[call matchadd('HighlightLineMatches', '\%'.line('.').'l')]])
 alias("HiCurLineOff", [[call clearmatches()]])
+
+-- repl
+alias("REPLLaunch", function()
+  require("lib.repl").launch()
+end)
+
+alias("REPLToggle", function()
+  require("lib.repl").toggle()
+end)
+
+alias("REPLKill", function()
+  require("lib.repl").shutdown()
+end)
+
+alias("REPLKillAll", function()
+  require("lib.repl").kill_all()
+end)

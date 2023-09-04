@@ -69,6 +69,10 @@ opt.wildmenu = true
 opt.ignorecase = true
 opt.smartcase = true
 
+-- set space as the leader key
+vim.keymap.set("n", " ", "<Nop>", { silent = true, remap = false })
+vim.g.mapleader = " "
+
 vim.opt.shortmess:append({ c = true, w = true, m = true })
 opt.inccommand = "split"
 opt.completeopt = { "menuone", "noselect", "menu" }

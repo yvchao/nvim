@@ -1,5 +1,6 @@
-local map = require("mappings.utils").map
-local nmap = require("mappings.utils").nmap
+local map = require("lib.keymap").map
+local nmap = require("lib.keymap").nmap
+local is_cmdline = require("lib.misc").is_cmdline
 
 -- EasyAlign
 map("v", "<leader>e", ":EasyAlign<CR>")
@@ -28,31 +29,43 @@ nmap("<A-p>", [[<CMD>lua require("telescope.builtin").buffers({previewer = false
 -- fugitive
 nmap("<LEADER>g", [[<CMD>Git<CR>]])
 
--- bufferline tab stuff
-nmap("<C-c>", ":BufferLinePickClose<CR>") -- close tab
-
--- move between tabs
--- nmap(";n", [[<Cmd>BufferLineCycleNext<CR>]])
--- nmap(";p", [[<Cmd>BufferLineCyclePrev<CR>]])
+-- move between buffers
 nmap(";n", [[<Cmd>bnext<CR>]])
 nmap(";p", [[<Cmd>bprevious<CR>]])
+
+-- kill buffer with ;q , quit window with :q . This make sense.
+nmap(";q", function()
+  if is_cmdline() then
+    vim.notify(
+      "Cannot execute wincmd in commandline, close the window to exit.",
+      vim.log.levels.INFO
+    )
+  else
+    require("bufdel").delete_buffer_expr()
+  end
+end)
 
 -- close window
 nmap(";c", [[<Cmd>close<CR>]])
 
--- move tabs
--- nmap("<A->>", [[<CMD>BufferLineMoveNext<CR>]])
--- nmap("<A-<>", [[<CMD>BufferLineMovePrev<CR>]])
--- nmap("<A-p>", [[<CMD>BufferLinePick<CR>]])
-
 -- dispatch
 nmap(";d", ":Dispatch ", { noremap = true, silent = false })
 
+-- repl
+nmap("<leader>rl", function()
+  require("lib.repl").launch()
+end)
+
+nmap("<leader>rt", function()
+  require("lib.repl").toggle()
+end)
+
+nmap("<leader>rk", function()
+  require("lib.repl").kill_all()
+end)
+
 -- neogen
 nmap("<leader>doc", [[:lua require("neogen").generate()<CR>]])
-
--- rust-tools.nvim
--- nmap("<Leader>ra", ':lua require("rust-tools.hover_actions").hover_actions()<CR>')
 
 -- fugitive
 -- keep the same prefix as the git sign
