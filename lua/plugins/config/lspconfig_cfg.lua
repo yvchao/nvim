@@ -136,10 +136,10 @@ local configured_lsp_list =
   { "lua_ls", "texlab", "pyright", "ltex", "ruff_lsp", "clangd", "marksman" }
 local settings = {}
 
-local ok, custom = pcall(require, "custom")
+local success, custom = pcall(require, "custom")
 local custom_options = {}
-if ok then
-  custom_options = custom.lsp or {}
+if success then
+  custom_options = custom.lsp_options or {}
 end
 
 settings["texlab"] = {

@@ -4,12 +4,12 @@ set mouse=a
 " Set Editor Font
 if exists(':GuiFont')
     " Use GuiFont! to ignore font errors
-    GuiFont Iosevka\ Fixed\ SS14:h12
+    GuiFont Hack\ Nerd\ Font\ Mono,LXGW\ WenKai\ GB\ Screen:h12
 endif
 
 " Disable GUI Tabline
 if exists(':GuiTabline')
-    GuiTabline 1
+    GuiTabline 0
 endif
 
 " Disable GUI Popupmenu
@@ -23,6 +23,6 @@ if exists(':GuiScrollBar')
 endif
 
 " Right Click Context Menu (Copy-Cut-Paste)
-nnoremap <silent><RightMouse> :call GuiShowContextMenu()<CR>
-inoremap <silent><RightMouse> <Esc>:call GuiShowContextMenu()<CR>
-vnoremap <silent><RightMouse> :call GuiShowContextMenu()<CR>gv
+" nnoremap <silent><RightMouse> :call GuiShowContextMenu()<CR>
+" inoremap <silent><RightMouse> <Esc>:call GuiShowContextMenu()<CR>
+" vnoremap <silent><RightMouse> :call GuiShowContextMenu()<CR>gv

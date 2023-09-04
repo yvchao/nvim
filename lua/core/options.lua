@@ -150,7 +150,10 @@ end
 
 if vim.g.neovide then
   -- neovide specific settings
-  vim.o.guifont = "Iosevka Fixed SS14:h12"
+  local ok, custom = pcall(require, "custom")
+  if ok then
+    vim.o.guifont = custom.guifont or nil
+  end
   vim.g.neovide_cursor_vfx_mode = "railgun"
   vim.g.neovide_remember_window_size = true
   -- vim.g.neovide_no_custom_clipboard = true

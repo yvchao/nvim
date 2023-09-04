@@ -98,7 +98,9 @@ return {
           if vim.api.nvim_buf_get_option(props.buf, "modified") then
             res = res .. " [+]"
           end
-          res = "▒░ " .. res .. " ░▒"
+          local left = "▓▒░ "
+          local right = " ░▒▓"
+          res = left .. res .. right
           return res
         end,
         window = {

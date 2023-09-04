@@ -12,7 +12,10 @@ vim.api.nvim_create_autocmd("TermOpen", { pattern = "term://*", command = "start
 vim.api.nvim_create_autocmd("UIEnter", {
   callback = function()
     if vim.v.event.chan > 1 then
-      vim.o.guifont = "Iosevka Fixed SS14:h12"
+      local ok, custom = pcall(require, "custom")
+      if ok then
+        vim.o.guifont = custom.guifont or nil
+      end
       vim.notify = require("lib.notify").notify_message
       if vim.g.loaded_clipboard_provider then
         vim.g.loaded_clipboard_provider = nil
