@@ -6,11 +6,11 @@ return {
     config = function()
       require("plugins").load_cfg("treesitter_cfg")
     end,
-    ft = vim.g.enable_treesitter_ft,
-  },
+    dependencies = {
 
-  {
-    "nvim-treesitter/nvim-treesitter-textobjects",
+      "nvim-treesitter/nvim-treesitter-textobjects",
+    },
+    ft = vim.g.enable_treesitter_ft,
   },
 
   {
@@ -21,7 +21,6 @@ return {
     config = function()
       require("treesitter-context").setup({ enable = false })
     end,
-    ft = vim.g.enable_treesitter_ft,
     enabled = false,
   },
 
@@ -41,6 +40,7 @@ return {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       -- "ray-x/lsp_signature.nvim",
+      "barreiroleo/ltex-extra.nvim",
       "lsp_lines.nvim",
     },
     ft = vim.g.enable_lspconfig_ft,
@@ -48,19 +48,18 @@ return {
 
   {
     "williamboman/mason.nvim",
-    ft = vim.g.enable_lspconfig_ft,
     config = function()
       require("mason").setup()
     end,
   },
 
-  {
-    "williamboman/mason-lspconfig.nvim",
-    config = function()
-      require("mason-lspconfig").setup()
-    end,
-    -- after = "mason.nvim",
-  },
+  -- {
+  --   "williamboman/mason-lspconfig.nvim",
+  --   config = function()
+  --     require("mason-lspconfig").setup()
+  --   end,
+  --   -- after = "mason.nvim",
+  -- },
 
   {
     url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
@@ -128,9 +127,9 @@ return {
     end,
   },
 
-  {
-    "barreiroleo/ltex-extra.nvim",
-  },
+  -- {
+  --   "barreiroleo/ltex-extra.nvim",
+  -- },
 
   -- -- debugger plugin
   {
@@ -243,7 +242,10 @@ return {
   {
     "abecodes/tabout.nvim",
     config = function()
-      require("tabout").setup()
+      require("tabout").setup({
+        ignore_beginning = true,
+        act_as_tab = true,
+      })
     end,
   },
 

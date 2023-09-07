@@ -6,16 +6,15 @@ return {
     lazy = false,
   },
 
-  -- markdown table
-  {
-    "godlygeek/tabular",
-  },
   -- markdown editing enhancement
   {
     "plasticboy/vim-markdown",
-    dependencies = { "tabular" },
+    dependencies = {
+      "godlygeek/tabular", -- markdown table
+    },
     ft = {
       "markdown",
+      "quarto",
     },
   },
 
@@ -207,7 +206,7 @@ return {
     "nvim-telescope/telescope.nvim",
     -- event = "BufReadPost",
     dependencies = {
-      "nvim-lua/popup.nvim",
+      -- "nvim-lua/popup.nvim",
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
     },
@@ -379,6 +378,11 @@ return {
         },
       })
     end,
+  },
+
+  -- undo tree
+  {
+    "mbbill/undotree",
   },
 
   -- session manager

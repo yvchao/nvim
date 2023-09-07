@@ -64,6 +64,9 @@ nmap("<leader>rk", function()
   require("lib.repl").kill_all()
 end)
 
+-- undo tree
+nmap("<leader>u", vim.cmd.UndotreeToggle)
+
 -- neogen
 nmap("<leader>doc", [[:lua require("neogen").generate()<CR>]])
 
