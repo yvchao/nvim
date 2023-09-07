@@ -29,7 +29,7 @@ end
 
 for _, module_name in ipairs({
   "core.options",
-  "mappings",
+  -- "mappings",
   "core.autocmd",
   "plugins.options",
 }) do
@@ -45,3 +45,6 @@ end
 -- require("plugins").load()
 -- end, 0)
 require("plugins").load()
+
+-- setup mappings after plugins are loaded
+require("mappings")

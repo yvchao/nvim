@@ -61,6 +61,9 @@ nmap("<C-S-left>", ":vertical resize-5<CR>")
 -- center editing line
 map("i", "<C-c>", "<ESC>zzi")
 
+-- use very magic mode for searching
+nmap("/", [[/\v]], { silent = false })
+
 -- load plugin's keymapping
 require("mappings.plugins")
 
