@@ -2,6 +2,7 @@ local cmp = require("cmp")
 local compare = require("cmp.config.compare")
 local luasnip = require("luasnip")
 local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+local feedkey = require("lib.keymap").feedkeys
 
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
@@ -16,10 +17,6 @@ local has_trigger_before = function()
   return col ~= 0
     and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("[.\\/]")
       ~= nil
-end
-
-local feedkey = function(key, mode)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
 
 local kind_icons = {
@@ -104,13 +101,16 @@ cmp.setup({
       behavior = cmp.ConfirmBehavior.Insert, -- Replace will remove chars on the right
       select = true,
     }),
-    ["<Space>"] = cmp.mapping(
-      cmp.mapping.confirm({
-        behavior = cmp.ConfirmBehavior.Insert,
-        select = true,
-      }),
-      { "i", "c" }
-    ),
+    ["<Space>"] = cmp.mapping(function(fallback)
+      if vim.fn.pumvisible() == 0 and cmp.visible() then
+        cmp.confirm({
+          behavior = cmp.ConfirmBehavior.Insert,
+          select = true,
+        })
+      else
+        fallback()
+      end
+    end, { "i", "c" }),
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
@@ -139,7 +139,7 @@ cmp.setup({
       name = "nvim_lsp",
       group_index = 1,
       priority = 10,
-      entry_filter = function(entry, ctx)
+      entry_filter = function(entry)
         return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
       end,
     },
@@ -180,11 +180,24 @@ cmp.setup.cmdline("/", {
 })
 
 cmp.setup.cmdline(":", {
-  mapping = cmp.mapping.preset.cmdline(),
+  mapping = cmp.mapping.preset.cmdline({
+    ["<Tab>"] = {
+      c = function()
+        if cmp.visible() then
+          cmp.select_next_item()
+        else
+          -- cmp.complete()
+          feedkey("<C-Tab>", "nt") -- fallback to nvim native completion
+        end
+      end,
+    },
+  }),
   sources = cmp.config.sources({
     { name = "path", trigger_characters = { "/" } },
   }, {
-    { name = "cmdline" },
+    { name = "cmdline", option = {
+      ignore_cmds = { "Man", "!" },
+    } },
   }),
 })
 
