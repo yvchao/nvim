@@ -609,8 +609,9 @@ insert_right({
   color = { fg = colors.bg_alt, bg = colors.bg_alt },
 })
 
-vim.api.nvim_create_augroup("lualine_augroup", { clear = false })
-vim.api.nvim_create_autocmd("User LspProgressStatusUpdated", {
+vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
+vim.api.nvim_create_autocmd("User", {
+  pattern = "LspProgressStatusUpdated",
   group = "lualine_augroup",
   callback = require("lualine").refresh,
 })
@@ -628,14 +629,10 @@ insert_right({
           if #progress > max_size then
             local pos = progress:sub(max_size, max_size + 10):match("^.*()%%")
             progress = progress:sub(1, pos and max_size + pos or max_size) .. "…"
-            -- if progress:sub(-3, -1) == "%%%" then
-            --   progress = progress .. "%…"
-            -- elseif progress:sub(-1, -1) == "%" and progress:sub(-2, -2) ~= "%" then
-            --   progress = progress .. "%…"
-            -- else
-            -- progress = progress .. "…"
-            -- end
           end
+
+          progress = progress:gsub("[%%]+", "%%%%") -- fix issue with single % symbol
+
           return progress .. " " .. status
         else
           return status

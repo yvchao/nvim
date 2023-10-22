@@ -2,7 +2,7 @@
 local util = require("formatter.util")
 
 -- Provides the Format, FormatWrite, FormatLock, and FormatWriteLock commands
-require("formatter").setup {
+require("formatter").setup({
   -- Enable or disable logging
   logging = true,
   -- Set the log level
@@ -18,13 +18,13 @@ require("formatter").setup {
 
       -- You can also define your own configuration
       -- function()
-        -- Supports conditional formatting
-        -- if util.get_current_buffer_file_name() == "special.lua" then
-        --   return nil
-        -- end
+      -- Supports conditional formatting
+      -- if util.get_current_buffer_file_name() == "special.lua" then
+      --   return nil
+      -- end
 
-        -- Full specification of configurations is down below and in Vim help
-        -- files
+      -- Full specification of configurations is down below and in Vim help
+      -- files
       --   return {
       --     exe = "stylua",
       --     args = {
@@ -49,7 +49,7 @@ require("formatter").setup {
           args = { "--edition 2021" },
           stdin = true,
         }
-      end
+      end,
     },
 
     c = {
@@ -69,14 +69,13 @@ require("formatter").setup {
     ["*"] = {
       -- "formatter.filetypes.any" defines default configurations for any
       -- filetype
-      require("formatter.filetypes.any").remove_trailing_whitespace
-    }
-  }
-}
-
+      require("formatter.filetypes.any").remove_trailing_whitespace,
+    },
+  },
+})
 
 vim.api.nvim_create_augroup("formatter", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePost", {
-    group = "formatter",
-    command = "FormatWrite",
+  group = "formatter",
+  command = "FormatWrite",
 })

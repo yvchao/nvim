@@ -7,6 +7,7 @@ map("v", "<leader>e", ":EasyAlign<CR>")
 
 -- oil file management
 nmap(";t", ":Oil %:p:h<CR>")
+nmap("gx", [[:execute 'silent! !xdg-open ' . shellescape(expand('<cfile>'), 1)<CR>]])
 
 -- formatter
 -- map({ "n", "x" }, "gf", ":Format<CR>")

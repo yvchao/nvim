@@ -86,8 +86,8 @@ M.kanagawa_setup = function()
         WinSeparator = { fg = palette.lightBlue },
         InclineNormal = { fg = palette.sumiInk1, bg = palette.waveRed },
         InclineNormalNC = { fg = palette.winterBlue, bg = palette.sakuraPink },
-        NormalFloat = { bg = "none" },
-        FloatBorder = { bg = "none" },
+        -- NormalFloat = { bg = "none" },
+        -- FloatBorder = { bg = "none" },
       }
     end,
   })

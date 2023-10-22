@@ -48,7 +48,7 @@ opt.viewoptions = "cursor,folds,slash,unix"
 opt.wrap = true
 
 -- set text width to zero to use the wrap functionality
-opt.tw = 0
+opt.textwidth = 0
 
 opt.cindent = true
 
