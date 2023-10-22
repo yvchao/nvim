@@ -5,6 +5,14 @@ local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 local feedkey = require("lib.keymap").feedkeys
 
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+-- to work with copilot
+cmp.event:on("menu_opened", function()
+  vim.b.copilot_suggestion_hidden = true
+end)
+
+cmp.event:on("menu_closed", function()
+  vim.b.copilot_suggestion_hidden = false
+end)
 
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -118,8 +126,12 @@ cmp.setup({
         cmp.complete()
       -- elseif vim.fn["vsnip#jumpable"](1) == 1 then
       --   feedkey("<Plug>(vsnip-jump-next)", "")
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
+      elseif luasnip.jumpable(1) then
+        luasnip.jump(1)
+      elseif luasnip.expandable() then
+        luasnip.expand()
+      -- elseif luasnip.expand_or_jumpable() then
+      --   luasnip.expand_or_jump()
       else
         fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
       end
@@ -144,25 +156,38 @@ cmp.setup({
       end,
     },
     -- { name = "vsnip", group_index = 1, priority = 3 },
-    { name = "luasnip", group_index = 1, priority = 3 },
+    { name = "luasnip", group_index = 2, priority = 3 },
     { name = "buffer", group_index = 4, priority = 1, max_item_count = 3 },
     { name = "path", group_index = 3, priority = 2, trigger_characters = { "/" } },
-    { name = "latex_symbols", group_index = 1, trigger_characters = { "\\" } },
+    {
+      name = "latex_symbols",
+      group_index = 3,
+      max_item_count = 20,
+      priority = 1,
+      trigger_characters = { "\\" },
+    },
   }),
   sorting = {
     priority_weight = 2,
     comparators = {
-      compare.offset,
       compare.exact,
       -- compare.scopes, -- what?
       compare.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
+      compare.offset,
       compare.recently_used,
       compare.locality,
-      compare.kind,
+      -- compare.kind,
       -- compare.sort_text,
       compare.length, -- useless
       compare.order,
     },
+  },
+  matching = {
+    disallow_fuzzy_matching = true,
+    disallow_fullfuzzy_matching = true,
+    disallow_partial_fuzzy_matching = true,
+    disallow_partial_matching = false,
+    disallow_prefix_unmatching = true,
   },
   experimental = {
     ghost_text = { hl_group = "NonText" },

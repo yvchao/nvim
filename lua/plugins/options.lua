@@ -1,8 +1,5 @@
 local g = vim.g
 
-g.loaded_netrw = 1
-g.loaded_netrwPlugin = 1
-
 g.rooter_manual_only = 0
 -- g.rooter_change_directory_for_non_project_files = "current"
 g.rooter_buftypes = { "" }
@@ -27,6 +24,7 @@ g.enable_treesitter_ft = {
   "python",
   "markdown",
   "latex",
+  "julia",
 }
 
 -- enable lspconfig for what filetype?
@@ -45,5 +43,6 @@ g.enable_lspconfig_ft = {
   "toml",
   "tex",
   "markdown",
+  "julia",
   -- "gitcommit",
 }

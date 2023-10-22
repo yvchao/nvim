@@ -64,8 +64,7 @@ return {
   {
     url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
     config = function()
-      require("lsp_lines").setup()
-      vim.diagnostic.config({ virtual_lines = { only_current_line = true } })
+      require("lsp_lines").setup({ virtual_lines = { only_current_line = true } })
     end,
   },
 
@@ -246,6 +245,15 @@ return {
         ignore_beginning = true,
         act_as_tab = true,
       })
+    end,
+  },
+
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({})
     end,
   },
 

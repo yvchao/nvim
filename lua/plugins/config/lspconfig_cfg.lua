@@ -92,7 +92,7 @@ local set_keymap = function(client, bufnr, minimal)
   map("n", "gq", "<cmd>lua vim.diagnostic.setloclist()<CR>", { desc = "open diagnostic list" })
   map("n", "gj", vim.diagnostic.goto_next, { desc = "goto next diagnostic" })
   map("n", "gk", vim.diagnostic.goto_prev, { desc = "goto previous diagnostic" })
-  map("n", "gx", ":lua vim.lsp.buf.code_action()<CR>", { desc = "code action [LSP]" })
+  map("n", "ga", ":lua vim.lsp.buf.code_action()<CR>", { desc = "code action [LSP]" })
 end
 
 local on_attach = function(client, bufnr)
@@ -133,7 +133,7 @@ end
 -- Set default client capabilities plus window/workDoneProgress
 local default_capabilities = vim.tbl_extend("keep", setup_capabilities() or {}, {})
 local configured_lsp_list =
-  { "lua_ls", "texlab", "pyright", "ltex", "ruff_lsp", "clangd", "marksman" }
+  { "lua_ls", "texlab", "pyright", "ltex", "ruff_lsp", "clangd", "marksman", "julials" }
 local settings = {}
 
 local success, custom = pcall(require, "custom")
@@ -148,16 +148,17 @@ settings["texlab"] = {
       executable = "latexmk",
       args = {
         "-pdf",
+        "-silent",
         "-interaction=nonstopmode",
         "-synctex=1",
-        "-outdir=output",
+        "-outdir=build",
         "%f",
       },
       onSave = true,
       forwardSearchAfter = false,
     },
     rootDirectory = ".",
-    auxDirectory = "output",
+    auxDirectory = "build",
     forwardSearch = {
       executable = "zathura",
       args = {
