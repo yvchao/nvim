@@ -79,7 +79,8 @@ return {
       require("incline").setup({
         hide = {
           focused_win = false,
-          only_win = false,
+          only_win = true,
+          cursorline = true,
         },
         ignore = {
           filetypes = {
@@ -308,6 +309,7 @@ return {
   -- generate line for guiding indent
   {
     "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
     config = function()
       require("plugins").load_cfg("indent_cfg")
     end,
@@ -344,13 +346,13 @@ return {
   },
 
   -- scroll smoothly
-  {
-    "karb94/neoscroll.nvim",
-    config = function()
-      require("plugins").load_cfg("neoscroll_cfg")
-    end,
-    keys = { { "<C-e>" }, { "<C-y>" }, { "<C-f>" }, { "<C-b>" } },
-  },
+  -- {
+  --   "karb94/neoscroll.nvim",
+  --   config = function()
+  --     require("plugins").load_cfg("neoscroll_cfg")
+  --   end,
+  --   keys = { { "<C-e>" }, { "<C-y>" }, { "<C-f>" }, { "<C-b>" } },
+  -- },
 
   -- search and replace with a panel
   -- {
