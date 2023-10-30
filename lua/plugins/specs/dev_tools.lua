@@ -64,7 +64,9 @@ return {
   {
     url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
     config = function()
-      require("lsp_lines").setup({ virtual_lines = { only_current_line = true } })
+      -- require("lsp_lines").setup({ virtual_lines = { only_current_line = true } })
+      require("lsp_lines").setup()
+      vim.diagnostic.config({ virtual_lines = false })
     end,
   },
 
@@ -246,6 +248,7 @@ return {
         act_as_tab = true,
       })
     end,
+    enabled = true,
   },
 
   {
@@ -253,7 +256,14 @@ return {
     cmd = "Copilot",
     event = "InsertEnter",
     config = function()
-      require("copilot").setup({})
+      require("copilot").setup({
+        filetypes = {
+          python = true,
+          c = true,
+          cpp = true,
+          ["*"] = false,
+        },
+      })
     end,
   },
 
@@ -286,12 +296,10 @@ return {
 
   {
     "quarto-dev/quarto-nvim",
-    dev = false,
     ft = "quarto",
     dependencies = {
       {
         "jmbuhr/otter.nvim",
-        dev = false,
         dependencies = {
           { "neovim/nvim-lspconfig" },
         },
@@ -300,6 +308,7 @@ return {
       },
     },
     opts = {
+      debug = false,
       lspFeatures = {
         enabled = true,
         languages = { "python", "bash", "html" },

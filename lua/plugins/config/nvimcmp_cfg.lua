@@ -189,9 +189,9 @@ cmp.setup({
     disallow_partial_matching = false,
     disallow_prefix_unmatching = true,
   },
-  experimental = {
-    ghost_text = { hl_group = "NonText" },
-  },
+  -- experimental = {
+  --   ghost_text = { hl_group = "NonText" },
+  -- },
 })
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).

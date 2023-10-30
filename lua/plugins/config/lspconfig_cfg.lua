@@ -27,7 +27,6 @@ local set_keymap = function(client, bufnr, minimal)
   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 
   -- Mappings.
-
   if not minimal then
     map("n", "gh", ":lua vim.lsp.buf.hover()<CR>", { desc = "hover information [LSP]" })
     map("n", "gr", ":lua vim.lsp.buf.rename()<CR>", { desc = "rename [LSP]" })
@@ -177,7 +176,11 @@ settings["ltex"] = {
     ["ltex-ls"] = {
       logLevel = "severe",
     },
-    dictionary = {},
+    dictionary = {
+      -- en = {
+      --   vim.fn.expand("~") .. "/.local/share/ltex/ltex.dictionary.en-US.txt",
+      -- },
+    },
     disabledRules = {},
     hiddenFalsePositives = {},
     additionalRules = {
@@ -258,9 +261,13 @@ custom_opts["marksman"] = {
 }
 
 custom_opts["ltex"] = {
+  filetypes = { "markdown", "tex" },
   on_attach = function(client, bufnr)
     on_attach(client, bufnr)
-    require("ltex_extra").setup()
+    require("ltex_extra").setup({
+      load_langs = { "en-US" },
+      path = vim.fn.expand("~") .. "/.local/share/ltex",
+    })
   end,
 }
 

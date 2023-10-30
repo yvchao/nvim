@@ -618,32 +618,44 @@ vim.api.nvim_create_autocmd("User", {
 
 insert_right({
   function()
-    local max_size = 48
-    local status = require("lsp-progress").progress({
+    local progress = require("lsp-progress").progress({
       format = function(messages)
-        local active_clients = vim.lsp.buf_get_clients()
-        local client_count = #active_clients
-        local status = " LSP [" .. client_count .. "]"
+        local max_size = 40
         if #messages > 0 then
           local progress = table.concat(messages, ";")
           if #progress > max_size then
-            local pos = progress:sub(max_size, max_size + 10):match("^.*()%%")
-            progress = progress:sub(1, pos and max_size + pos or max_size) .. "…"
+            -- local pos = progress:sub(max_size, max_size + 10):match("^.*()%%")
+            -- progress = progress:sub(1, pos and max_size + pos or max_size) .. "…"
+            progress = progress:sub(1, max_size) .. "…"
           end
 
           progress = progress:gsub("[%%]+", "%%%%") -- fix issue with single % symbol
-
-          return progress .. " " .. status
+          return progress
         else
-          return status
+          return nil
         end
       end,
     })
-    return status
+
+    local active_clients = vim.lsp.buf_get_clients()
+    -- local client_count = #active_clients
+    local client_names = {}
+    for i, client in pairs(active_clients) do
+      if client and client.name ~= "" then
+        table.insert(client_names, client.name)
+      end
+    end
+    local status = " [" .. table.concat(client_names, ", ") .. "]"
+
+    if progress ~= nil then
+      return progress .. " " .. status
+    else
+      return status
+    end
   end,
   cond = function()
     local active_clients = vim.lsp.buf_get_clients()
-    return #active_clients >= 1 and conditions.checkwidth()
+    return next(active_clients) ~= nil and conditions.checkwidth()
   end,
   color = { fg = colors.fg, bg = colors.bg_alt },
   padding = { left = 0, right = 1 },
