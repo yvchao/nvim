@@ -209,11 +209,11 @@ return {
     dependencies = {
       -- "nvim-lua/popup.nvim",
       "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope-ui-select.nvim",
+      -- "nvim-telescope/telescope-ui-select.nvim",
     },
     config = function()
       require("plugins").load_cfg("telescope_cfg")
-      require("telescope").load_extension("ui-select")
+      -- require("telescope").load_extension("ui-select")
     end,
     -- module = "telescope",
   },

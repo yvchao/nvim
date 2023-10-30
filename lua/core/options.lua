@@ -104,7 +104,7 @@ opt.formatoptions = "qj"
 opt.hidden = true
 
 -- conceal the text
-opt.conceallevel = 2
+opt.conceallevel = 0
 -- show hiding character at cursor line
 opt.concealcursor = ""
 
