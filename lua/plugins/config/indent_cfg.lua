@@ -3,7 +3,7 @@ require("ibl").setup({
     char = "▏",
   },
   scope = {
-    enabled = true,
+    enabled = false,
     show_start = true,
     show_end = false,
     injected_languages = false,

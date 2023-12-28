@@ -1,3 +1,11 @@
+-- set defaul terminal shell
+local shell = vim.o.shell
+if vim.fn.executable("fish") == 1 then
+  shell = "/usr/bin/fish"
+elseif vim.fn.executable("zsh") == 1 then
+  shell = "/usr/bin/zsh"
+end
+
 require("toggleterm").setup({
   -- size can be a number or function which is passed the current terminal
   size = function(term)
@@ -23,7 +31,8 @@ require("toggleterm").setup({
   persist_size = true,
   direction = "horizontal", -- 'window' | 'float' | 'vertical' ,
   close_on_exit = true, -- close the terminal window when the process exits
-  shell = vim.o.shell, -- change the default shell
+  shell = shell, -- change the default shell
+
   -- This field is only relevant if direction is set to 'float'
   float_opts = {
     -- The border key is *almost* the same as 'nvim_open_win'

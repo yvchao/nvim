@@ -115,7 +115,7 @@ return {
         },
       })
     end,
-    enabled = true,
+    enabled = false,
   },
 
   -- tree style file manager
@@ -141,13 +141,15 @@ return {
 
   -- generate color from hex/rgb code
   {
-    "norcalli/nvim-colorizer.lua",
+    "NvChad/nvim-colorizer.lua",
     config = function()
       require("colorizer").setup({
-        "*", -- Highlight all files, but customize some others.
-        css = {
-          rgb_fn = true,
-        }, -- Enable parsing rgb(...) functions in css.
+        filetypes = {
+          "*", -- Highlight all files, but customize some others.
+          "!vim", -- Exclude vim from highlighting.
+          css = { rgb_fn = true }, -- Enable parsing rgb(...) functions in css.
+          html = { names = false }, -- Disable parsing "names" like Blue or Gray
+        },
       })
     end,
     event = "BufRead",
@@ -159,15 +161,15 @@ return {
   },
 
   -- editing with multiple cursor
-  {
-    "mg979/vim-visual-multi",
-    event = "InsertEnter",
-    config = function()
-      vim.g.VM_maps = {
-        ["I BS"] = "", -- disable backspace mapping to avoid conflit with autopair
-      }
-    end,
-  },
+  -- {
+  --   "mg979/vim-visual-multi",
+  --   event = "InsertEnter",
+  --   config = function()
+  --     vim.g.VM_maps = {
+  --       ["I BS"] = "", -- disable backspace mapping to avoid conflit with autopair
+  --     }
+  --   end,
+  -- },
 
   -- Linux coreutil in vim
   {
@@ -187,14 +189,14 @@ return {
   },
 
   -- a dashboard that useless but beautiful
-  {
-    "goolord/alpha-nvim",
-    config = function()
-      require("plugins").load_cfg("alpha_cfg")
-    end,
-    dependencies = { "nvim-telescope/telescope.nvim" },
-    lazy = false,
-  },
+  -- {
+  --   "goolord/alpha-nvim",
+  --   config = function()
+  --     require("plugins").load_cfg("alpha_cfg")
+  --   end,
+  --   dependencies = { "nvim-telescope/telescope.nvim" },
+  --   lazy = false,
+  -- },
 
   -- cd into the root directory
   {
@@ -366,19 +368,30 @@ return {
   },
 
   -- file manager in buffer
+  -- {
+  --   "stevearc/oil.nvim",
+  --   config = function()
+  --     require("oil").setup({
+  --       columns = {
+  --         "icon",
+  --         "size",
+  --       },
+  --       delete_to_trash = true,
+  --       win_options = {
+  --         concealcursor = "nvci",
+  --       },
+  --     })
+  --   end,
+  -- },
   {
-    "stevearc/oil.nvim",
+    "echasnovski/mini.nvim",
+    version = false,
     config = function()
-      require("oil").setup({
-        columns = {
-          "icon",
-          "size",
-        },
-        delete_to_trash = true,
-        win_options = {
-          concealcursor = "nvci",
-        },
-      })
+      require("mini.starter").setup()
+      require("mini.files").setup()
+      require("mini.sessions").setup()
+      require("mini.pick").setup()
+      vim.ui.select = require("mini.pick").ui_select
     end,
   },
 
@@ -387,18 +400,26 @@ return {
     "mbbill/undotree",
   },
 
-  -- session manager
+  -- smart buffer in tabs
   {
-    "rmagatti/auto-session",
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-    },
+    "tiagovla/scope.nvim",
     config = function()
-      require("auto-session").setup({
-        log_level = "error",
-        auto_session_suppress_dirs = { "~", "~/Projects", "~/Downloads", "/" },
-      })
-      require("telescope").load_extension("session-lens")
+      require("scope").setup({})
     end,
   },
+
+  -- session manager
+  -- {
+  --   "rmagatti/auto-session",
+  --   dependencies = {
+  --     "nvim-telescope/telescope.nvim",
+  --   },
+  --   config = function()
+  --     require("auto-session").setup({
+  --       log_level = "error",
+  --       auto_session_suppress_dirs = { "~", "~/Projects", "~/Downloads", "/" },
+  --     })
+  --     require("telescope").load_extension("session-lens")
+  --   end,
+  -- },
 }

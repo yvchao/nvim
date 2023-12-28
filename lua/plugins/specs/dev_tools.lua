@@ -128,10 +128,6 @@ return {
     end,
   },
 
-  -- {
-  --   "barreiroleo/ltex-extra.nvim",
-  -- },
-
   -- -- debugger plugin
   {
     "mfussenegger/nvim-dap",
@@ -244,7 +240,7 @@ return {
     "abecodes/tabout.nvim",
     config = function()
       require("tabout").setup({
-        ignore_beginning = true,
+        ignore_beginning = false,
         act_as_tab = true,
       })
     end,

@@ -6,7 +6,8 @@ local is_cmdline = require("lib.misc").is_cmdline
 map("v", "<leader>e", ":EasyAlign<CR>")
 
 -- oil file management
-nmap(";t", ":Oil %:p:h<CR>")
+-- nmap(";t", ":Oil %:p:h<CR>")
+nmap(";t", [[:lua MiniFiles.open(vim.fn.expand("%:p:h"))<CR>]])
 nmap("gx", [[:execute 'silent! !xdg-open ' . shellescape(expand('<cfile>'), 1)<CR>]])
 
 -- formatter

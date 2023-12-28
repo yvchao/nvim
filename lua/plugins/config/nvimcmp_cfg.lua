@@ -126,7 +126,7 @@ cmp.setup({
         cmp.complete()
       -- elseif vim.fn["vsnip#jumpable"](1) == 1 then
       --   feedkey("<Plug>(vsnip-jump-next)", "")
-      elseif luasnip.jumpable(1) then
+      elseif luasnip.locally_jumpable(1) then
         luasnip.jump(1)
       elseif luasnip.expandable() then
         luasnip.expand()
@@ -170,13 +170,13 @@ cmp.setup({
   sorting = {
     priority_weight = 2,
     comparators = {
+      compare.offset,
       compare.exact,
       -- compare.scopes, -- what?
       compare.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
-      compare.offset,
       compare.recently_used,
       compare.locality,
-      -- compare.kind,
+      compare.kind,
       -- compare.sort_text,
       compare.length, -- useless
       compare.order,
@@ -227,4 +227,10 @@ cmp.setup.cmdline(":", {
 })
 
 -- for friendly snippets
-require("luasnip.loaders.from_vscode").lazy_load()
+require("luasnip.loaders.from_vscode").lazy_load({
+  paths = { vim.fn.expand("~") .. "/.local/share/nvim/lazy/friendly-snippets/" },
+})
+luasnip.config.set_config({
+  region_check_events = "InsertEnter",
+  delete_check_events = "InsertLeave",
+})
