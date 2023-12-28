@@ -8,8 +8,8 @@ alias("ClipView", [[Telescope neoclip]])
 -- alias("LuaFormat", [[Dispatch! stylua %]])
 
 -- close buffer
-alias("BufCL", [[BufferLineCloseLeft]])
-alias("BufCR", [[BufferLineCloseRight]])
+-- alias("BufCL", [[BufferLineCloseLeft]])
+-- alias("BufCR", [[BufferLineCloseRight]])
 
 -- debug ui
 -- alias("DapUIToggle", [[lua require("dapui").toggle()]])

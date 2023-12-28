@@ -5,7 +5,7 @@ vim.opt.background = "dark"
 local M = {
   -- "kanagawa" by default
   -- Available theme value:
-  --  "kanagawa", "deus", "night","dawn","day","nord","dusk"+"fox"
+  --  "kanagawa", "night","dawn","day","nord","dusk"+"fox"
   theme = "kanagawa",
 }
 
@@ -36,17 +36,15 @@ end
 -- configure the kanagawa theme
 M.kanagawa_setup = function()
   require("kanagawa").setup({
-    undercurl = true, -- enable undercurls
-    commentStyle = { italic = true },
     functionStyle = { bold = true },
-    keywordStyle = { italic = true },
-    statementStyle = { bold = true },
     typeStyle = { bold = true },
-    variablebuiltinStyle = { italic = true },
-    specialReturn = true, -- special highlight for the return keyword
-    specialException = true, -- special highlight for exception handling keywords
     transparent = false, -- do not set background color
     dimInactive = true,
+    theme = "wave",
+    background = {
+      dark = "wave",
+      light = "lotus",
+    },
     overrides = function(colors)
       local palette = colors.palette
       local theme = colors.theme
@@ -86,8 +84,6 @@ M.kanagawa_setup = function()
         WinSeparator = { fg = palette.lightBlue },
         InclineNormal = { fg = palette.sumiInk1, bg = palette.waveRed },
         InclineNormalNC = { fg = palette.winterBlue, bg = palette.sakuraPink },
-        -- NormalFloat = { bg = "none" },
-        -- FloatBorder = { bg = "none" },
       }
     end,
   })

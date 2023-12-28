@@ -5,7 +5,6 @@ vim.api.nvim_create_autocmd("InsertLeave", { pattern = "*", command = [[set rela
 -- vim.api.nvim_create_autocmd("RecordingLeave", { pattern = "*", command = [[set cmdheight=0]] })
 
 -- start insert when enter the terminal
--- vim.cmd("autocmd TermOpen term://* startinsert")
 vim.api.nvim_create_autocmd("TermOpen", { pattern = "term://*", command = "startinsert" })
 
 -- auto config font with remote ui
