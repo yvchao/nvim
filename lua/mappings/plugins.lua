@@ -7,7 +7,7 @@ map("v", "<leader>e", ":EasyAlign<CR>")
 
 -- oil file management
 -- nmap(";t", ":Oil %:p:h<CR>")
-nmap(";t", [[:lua MiniFiles.open(vim.fn.expand("%:p:h"))<CR>]])
+nmap(";t", [[:lua MiniFiles.open(vim.fn.expand("%:p"), {use_latest = false})<CR>]])
 nmap("gx", [[:execute 'silent! !xdg-open ' . shellescape(expand('<cfile>'), 1)<CR>]])
 
 -- formatter
@@ -26,7 +26,8 @@ map("t", ";h", [[<C-\><C-n><C-w>h]])
 -- telescope
 nmap("<LEADER>ff", [[:lua require('telescope.builtin').find_files{previewer = false}<CR>]])
 nmap("<LEADER>fg", [[:lua require('telescope.builtin').live_grep{}<CR>]])
-nmap("<A-p>", [[<CMD>lua require("telescope.builtin").buffers({previewer = false})<CR>]])
+-- nmap("<A-p>", [[<CMD>lua require("telescope.builtin").buffers({previewer = false})<CR>]])
+nmap("<A-p>", [[<CMD>lua MiniPick.builtin.buffers()<CR>]])
 
 -- fugitive
 nmap("<LEADER>g", [[<CMD>Git<CR>]])

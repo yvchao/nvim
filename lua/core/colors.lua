@@ -9,17 +9,6 @@ local M = {
   theme = "kanagawa",
 }
 
--- Try to update the theme value if the lua/custom.lua file exist.
--- User should return their custom value in the below form:
---
--- ```lua
--- local M = {
---     theme = "deus",
--- }
---
--- return M
--- ```
-
 local ok, custom = pcall(require, "custom")
 -- if file exist, return table exist and return table has `theme` field
 if ok and custom and custom.theme then
@@ -29,8 +18,9 @@ end
 -- This functions finally apply the colorscheme
 local function apply()
   vim.cmd("colorscheme " .. M.theme)
-  vim.api.nvim_set_hl(0, "NormalFloat", { link = "Normal" })
+  vim.api.nvim_set_hl(0, "NormalFloat", { link = "Normal", bg = "none" })
   vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
+  vim.api.nvim_set_hl(0, "FloatTitle", { bg = "none" })
 end
 
 -- configure the kanagawa theme

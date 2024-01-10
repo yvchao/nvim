@@ -37,6 +37,7 @@ g.enable_lspconfig_ft = {
   "html",
   "javascript",
   "json",
+  "jsonc",
   "lua",
   "python",
   "sh",
@@ -44,5 +45,6 @@ g.enable_lspconfig_ft = {
   "tex",
   "markdown",
   "julia",
+  "cmake",
   -- "gitcommit",
 }

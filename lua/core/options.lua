@@ -121,13 +121,14 @@ opt.concealcursor = ""
 opt.laststatus = 3
 
 -- hide cmdline when not used
--- opt.cmdheight = 0
+opt.cmdheight = 1
 
 -- disable tabline
 opt.showtabline = 0
 
 -- perfer latex ft.
 vim.g.tex_flavor = "latex"
+vim.g.tex_indent_items = ""
 
 -- skip python provider checking
 vim.g.python3_host_skip_check = 1
@@ -156,7 +157,12 @@ if vim.g.neovide then
   end
   vim.g.neovide_cursor_vfx_mode = "railgun"
   vim.g.neovide_remember_window_size = true
-  -- vim.g.neovide_no_custom_clipboard = true
   vim.g.neovide_input_ime = true
-  vim.g.neovide_cursor_animation_length = 0
+  vim.g.neovide_cursor_animation_length = 0.03
+  vim.g.neovide_floating_blur_amount_x = 1.0
+  vim.g.neovide_floating_blur_amount_y = 1.0
+  vim.g.neovide_floating_shadow = false
+  vim.g.neovide_floating_z_height = 10
+  vim.g.neovide_light_angle_degrees = 45
+  vim.g.neovide_light_radius = 5
 end

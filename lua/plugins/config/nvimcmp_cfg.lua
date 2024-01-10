@@ -97,7 +97,7 @@ cmp.setup({
       "i",
       "c",
     }),
-    ["<C-e>"] = cmp.mapping({
+    ["<C-q>"] = cmp.mapping({
       i = cmp.mapping.abort(),
       c = cmp.mapping.close(),
     }),

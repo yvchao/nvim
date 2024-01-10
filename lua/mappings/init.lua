@@ -64,6 +64,17 @@ map("i", "<C-c>", "<ESC>zzi")
 -- use very magic mode for searching
 nmap("/", [[/\v]], { silent = false })
 
+-- search and replace in visual mode
+map("v", "<leader>/", [[y/\v<C-r>"<CR>]], { desc = "Search selected text" })
+map("v", "<leader>s", [[y:s/\v<C-r>"//g<Left><Left>]], { desc = "Replace selected text" })
+
+-- emacs-like cursor movement in insert mode
+map("i", "<C-a>", "<Home>")
+map("i", "<C-e>", "<End>")
+map("i", "<A-f>", "<C-Right>")
+map("i", "<A-b>", "<C-Left>")
+map("c", "<C-a>", "<C-B>")
+
 -- load plugin's keymapping
 require("mappings.plugins")
 
