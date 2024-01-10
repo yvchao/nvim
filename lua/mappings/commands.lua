@@ -1,15 +1,8 @@
 local alias = require("lib.misc").alias
 
 -- plugin neoclip
-alias("ClipRec", [[lua require('neoclip').start()]])
-alias("ClipView", [[Telescope neoclip]])
-
--- run stylua in background
--- alias("LuaFormat", [[Dispatch! stylua %]])
-
--- close buffer
--- alias("BufCL", [[BufferLineCloseLeft]])
--- alias("BufCR", [[BufferLineCloseRight]])
+-- alias("ClipRec", [[lua require('neoclip').start()]])
+-- alias("ClipView", [[Telescope neoclip]])
 
 -- debug ui
 -- alias("DapUIToggle", [[lua require("dapui").toggle()]])
@@ -37,6 +30,9 @@ alias("LspLineToggle", [[lua require("lsp_lines").toggle()]])
 
 alias("HiCurLine", [[call matchadd('HighlightLineMatches', '\%'.line('.').'l')]])
 alias("HiCurLineOff", [[call clearmatches()]])
+
+-- format
+alias("Format", [[lua require("conform").format({async = true})]])
 
 -- repl
 alias("REPLLaunch", function()

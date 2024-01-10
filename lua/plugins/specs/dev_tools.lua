@@ -39,9 +39,9 @@ return {
       "airblade/vim-rooter",
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      -- "ray-x/lsp_signature.nvim",
       "barreiroleo/ltex-extra.nvim",
       "lsp_lines.nvim",
+      "Issafalcon/lsp-overloads.nvim",
     },
     ft = vim.g.enable_lspconfig_ft,
   },
@@ -53,14 +53,6 @@ return {
     end,
   },
 
-  -- {
-  --   "williamboman/mason-lspconfig.nvim",
-  --   config = function()
-  --     require("mason-lspconfig").setup()
-  --   end,
-  --   -- after = "mason.nvim",
-  -- },
-
   {
     url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
     config = function()
@@ -68,6 +60,7 @@ return {
       require("lsp_lines").setup()
       vim.diagnostic.config({ virtual_lines = false })
     end,
+    enabled = false,
   },
 
   {
@@ -78,13 +71,6 @@ return {
         enable = false,
       })
     end,
-    enabled = false,
-  },
-
-  -- alternative signature help
-  {
-    "ray-x/lsp_signature.nvim",
-    event = "VeryLazy",
     enabled = false,
   },
 
@@ -101,16 +87,51 @@ return {
     config = function()
       require("plugins").load_cfg("formatter_cfg")
     end,
+    enabled = false,
+  },
+
+  {
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
+    init = function()
+      -- If you want the formatexpr, here is the place to set it
+      vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+    end,
+    config = function()
+      require("plugins").load_cfg("conform_cfg")
+    end,
+  },
+
+  -- symbol list
+  {
+    "stevearc/aerial.nvim",
+    opts = {},
+    -- Optional dependencies
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("aerial").setup({
+        -- optionally use on_attach to set keymaps when aerial has attached to a buffer
+        on_attach = function(bufnr)
+          -- Jump forwards/backwards with '{' and '}'
+          vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
+          vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
+        end,
+      })
+    end,
   },
 
   -- Pre-set for rust lsp
-  {
-    "simrat39/rust-tools.nvim",
-    ft = "rust",
-    config = function()
-      require("plugins").load_cfg("rust_tools_cfg")
-    end,
-  },
+  -- {
+  --   "simrat39/rust-tools.nvim",
+  --   ft = "rust",
+  --   config = function()
+  --     require("plugins").load_cfg("rust_tools_cfg")
+  --   end,
+  -- },
 
   -- enhance the Cargo dependencies management
   {
@@ -137,12 +158,12 @@ return {
     end,
   },
 
-  {
-    "theHamsta/nvim-dap-virtual-text",
-    config = function()
-      require("nvim-dap-virtual-text").setup()
-    end,
-  },
+  -- {
+  --   "theHamsta/nvim-dap-virtual-text",
+  --   config = function()
+  --     require("nvim-dap-virtual-text").setup()
+  --   end,
+  -- },
 
   -- use `gcc` `gbc` to comment
   {
