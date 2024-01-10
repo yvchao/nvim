@@ -217,34 +217,22 @@ return {
       require("plugins").load_cfg("telescope_cfg")
       -- require("telescope").load_extension("ui-select")
     end,
-    -- module = "telescope",
   },
 
   -- record and manage your paste history
-  {
-    "AckslD/nvim-neoclip.lua",
-    event = "TextYankPost",
-    config = function()
-      require("neoclip").setup()
-      require("telescope").load_extension("neoclip")
-    end,
-  },
+  -- {
+  --   "AckslD/nvim-neoclip.lua",
+  --   event = "TextYankPost",
+  --   config = function()
+  --     require("neoclip").setup()
+  --     require("telescope").load_extension("neoclip")
+  --   end,
+  -- },
 
   -- surrounding select text with given signs
   {
     "tpope/vim-surround",
     event = "BufRead",
-    config = function()
-      local map = require("lib.keymap").map
-      -- release the S key to the lightspeed
-      map("x", "S", "<Plug>Lightspeed_S", {
-        noremap = false,
-      })
-      -- and remap it to gs
-      map("x", "gs", "<Plug>VSurround", {
-        noremap = false,
-      })
-    end,
   },
 
   {
@@ -347,21 +335,10 @@ return {
     cmd = "Sort",
   },
 
-  -- scroll smoothly
-  -- {
-  --   "karb94/neoscroll.nvim",
-  --   config = function()
-  --     require("plugins").load_cfg("neoscroll_cfg")
-  --   end,
-  --   keys = { { "<C-e>" }, { "<C-y>" }, { "<C-f>" }, { "<C-b>" } },
-  -- },
-
-  -- search and replace with a panel
-  -- {
-  --   "windwp/nvim-spectre",
-  --   requires = { "nvim-lua/plenary.nvim" },
-  --   module = "spectre",
-  -- },
+  -- disable slow plugins for bigfiles
+  {
+    "LunarVim/bigfile.nvim",
+  },
 
   {
     "h-hg/fcitx.nvim",

@@ -39,13 +39,18 @@ return {
     },
   },
 
+  -- Convert file containing conflict markers into a two-way diff
+  {
+    "whiteinge/diffconflicts",
+  },
+
   -- Flog is a lightweight and powerful git branch viewer that integrates with fugitive.
   {
     "rbong/vim-flog",
-    -- run command after the vim fugitive
-    cmd = {
-      "Flog",
-      "Flogsplit",
+    lazy = true,
+    cmd = { "Flog", "Flogsplit", "Floggit" },
+    dependencies = {
+      "tpope/vim-fugitive",
     },
   },
 }
