@@ -1,50 +1,63 @@
 local current_scheme = vim.g.colors_name
-local colors = {
-  bg_alt = "#592147",
-  bg = "#2F3445",
-  active_buffer = "#FFBBDD",
-  inactive_buffer = "#AA7788",
-  fg = "#F5DBDB",
-  black = "#16161D",
-  grey = "#303030",
-  yellow = "#E5C07B",
-  cyan = "#70C0BA",
-  dimblue = "#83A598",
-  green = "#98C379",
-  orange = "#FF8800",
-  purple = "#C678DD",
-  magenta = "#C858E9",
-  blue = "#73BA9F",
-  red = "#D54E53",
-}
 
-if current_scheme == "everforest" then
-  colors.bg = "#282E2C"
-  colors.black = "#222B28"
-elseif current_scheme == "gruvbox" then
-  colors.bg = "#261C00"
-  colors.black = "#3A2300"
-elseif current_scheme == "dawnfox" then
-  colors.bg = "#898180"
-  colors.black = "#625c5c"
-elseif current_scheme:match("github_light[%l_]*") then
-  local custom = {
-    fg = "#24292f",
-    bg = "#bbd6ee",
-    black = "#9fc5e8",
-    yellow = "#dbab09",
-    cyan = "#0598bc",
-    green = "#28a745",
-    orange = "#d18616",
-    magenta = "#5a32a3",
-    purple = "#5a32a3",
-    blue = "#0366d6",
-    red = "#d73a49",
+local set_palette = function()
+  local colors = {
+    bg_alt = "#592147",
+    bg = "#2F3445",
+    active_buffer = "#FFBBDD",
+    inactive_buffer = "#AA7788",
+    fg = "#F5DBDB",
+    black = "#16161D",
+    grey = "#303030",
+    yellow = "#E5C07B",
+    cyan = "#70C0BA",
+    dimblue = "#83A598",
+    green = "#98C379",
+    orange = "#FF8800",
+    purple = "#C678DD",
+    magenta = "#C858E9",
+    blue = "#73BA9F",
+    red = "#D54E53",
   }
+  if current_scheme == "kanagawa" then
+    if vim.o.background == "light" then
+      colors.bg = "#C8C093"
+      colors.black = "#f2ecbc"
+    else
+      colors.bg = "#223249"
+      colors.black = "#1F1F28"
+    end
+  elseif current_scheme == "everforest" then
+    colors.bg = "#282E2C"
+    colors.black = "#222B28"
+  elseif current_scheme == "gruvbox" then
+    colors.bg = "#261C00"
+    colors.black = "#3A2300"
+  elseif current_scheme == "dawnfox" then
+    colors.bg = "#898180"
+    colors.black = "#625c5c"
+  elseif current_scheme:match("github_light[%l_]*") then
+    local custom = {
+      fg = "#24292f",
+      bg = "#bbd6ee",
+      black = "#9fc5e8",
+      yellow = "#dbab09",
+      cyan = "#0598bc",
+      green = "#28a745",
+      orange = "#d18616",
+      magenta = "#5a32a3",
+      purple = "#5a32a3",
+      blue = "#0366d6",
+      red = "#d73a49",
+    }
 
-  -- merge custom color to default
-  colors = vim.tbl_deep_extend("force", {}, colors, custom)
+    -- merge custom color to default
+    colors = vim.tbl_deep_extend("force", {}, colors, custom)
+  end
+  return colors
 end
+
+local colors = set_palette()
 
 local short_line_list = {
   "oil",
@@ -279,9 +292,15 @@ local function get_file_name()
   return fname
 end
 
+-- vim.api.nvim_create_autocmd("ColorScheme", {
+--   pattern = "*",
+--   callback = set_palette,
+-- })
+
 return {
   conditions = conditions,
   colors = colors,
+  set_palette = set_palette,
   get_mode_color = get_mode_color,
   get_mode = get_mode,
   get_file_name = get_file_name,

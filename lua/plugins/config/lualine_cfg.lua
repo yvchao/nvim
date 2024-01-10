@@ -4,24 +4,29 @@ local status_helper = require("lib.status")
 local conditions = status_helper.conditions
 local colors = status_helper.colors
 
+local set_theme = function()
+  local new_colors = status_helper.set_palette()
+  return {
+    normal = {
+      a = { fg = new_colors.active_buffer, bg = new_colors.bg },
+      b = { fg = new_colors.fg, bg = new_colors.black },
+      c = { fg = new_colors.black, bg = new_colors.black },
+    },
+    inactive = {
+      a = { fg = new_colors.inactive_buffer, bg = new_colors.bg },
+      b = { fg = new_colors.fg, bg = new_colors.black },
+      c = { fg = new_colors.black, bg = new_colors.black },
+    },
+  }
+end
+
 -- Config
 local config = {
   options = {
     -- Disable sections and component separators
     component_separators = "",
     section_separators = "",
-    theme = {
-      normal = {
-        a = { fg = colors.active_buffer, bg = colors.bg },
-        b = { fg = colors.fg, bg = colors.bg },
-        c = { fg = colors.black, bg = colors.black },
-      },
-      inactive = {
-        a = { fg = colors.inactive_buffer, bg = colors.bg },
-        b = { fg = colors.fg, bg = colors.bg },
-        c = { fg = colors.black, bg = colors.black },
-      },
-    },
+    theme = set_theme,
     globalstatus = true,
   },
   sections = {
@@ -66,29 +71,36 @@ end
 ----------------- start insert ----------------------
 -----------------------------------------------------
 -- { mode panel start
-local separator_left = "░▒▓"
-local separator_right = "▓▒░"
+local separator_left = " ░▒▓"
+local separator_right = "▓▒░ "
 
-insert_left({
-  function()
-    return " "
-  end,
-  color = { fg = colors.fg, bg = colors.bg },
-})
+-- insert_left({
+--   function()
+--     return " "
+--   end,
+--   color = { fg = colors.fg, bg = colors.bg },
+-- })
 
 insert_left({
   function()
     local mode = status_helper.get_mode()
-    return mode.icon .. " " .. mode.alias
+    return " " .. mode.icon .. mode.alias .. " "
   end,
-  color = { fg = status_helper.get_mode_color() },
+  color = { fg = status_helper.get_mode_color(), bg = colors.bg },
 })
+
+-- insert_left({
+--   function()
+--     return "▓"
+--   end,
+--   color = { fg = colors.bg },
+-- })
 
 insert_left({
   function()
-    return separator_right .. " "
+    return separator_right
   end,
-  color = { fg = colors.bg, bg = colors.black },
+  color = { fg = colors.bg },
 })
 
 -- mode panel end}
@@ -96,9 +108,9 @@ insert_left({
 -- {information panel start
 insert_left({
   function()
-    return " " .. separator_left
+    return separator_left
   end,
-  color = { fg = colors.bg, bg = colors.black },
+  color = { fg = colors.bg },
 })
 
 insert_left({
@@ -114,7 +126,7 @@ insert_left({
   cond = function()
     return not conditions.check_special_buffer() and conditions.check_git_workspace()
   end,
-  color = { colors.fg, colors.bg },
+  color = { fg = colors.fg, bg = colors.bg },
   padding = { left = 0, right = 1 },
 })
 
@@ -130,22 +142,7 @@ insert_left({
   cond = function()
     return not conditions.check_special_buffer() and conditions.check_git_workspace()
   end,
-  padding = { left = 0, right = 1 },
-})
-
-insert_left({
-  "diagnostics",
-  icon = { "", color = { fg = colors.yellow, gui = "bold" } },
-  sources = { "nvim_diagnostic" },
-  symbols = { error = " ", warn = " ", info = " ", hint = "󰌶 " },
-  diagnostics_color = {
-    color_error = { fg = colors.red },
-    color_warn = { fg = colors.yellow },
-    color_info = { fg = colors.cyan },
-    color_hint = { fg = colors.white },
-  },
-  update_in_insert = false,
-  cond = conditions.checkwidth,
+  color = { fg = colors.fg, bg = colors.bg },
   padding = { left = 0, right = 1 },
 })
 
@@ -183,17 +180,17 @@ insert_left({
 
 insert_left({
   function()
-    return separator_right .. " "
+    return separator_right
   end,
-  color = { fg = colors.bg_alt, bg = colors.black },
+  color = { fg = colors.bg_alt },
 })
 -- left information panel end}
 
 insert_right({
   function()
-    return " " .. separator_left
+    return separator_left
   end,
-  color = { fg = colors.bg_alt, bg = colors.black },
+  color = { fg = colors.bg_alt },
 })
 
 insert_right({
@@ -234,7 +231,7 @@ insert_right({
     local active_clients = vim.lsp.buf_get_clients()
     -- local client_count = #active_clients
     local client_names = {}
-    for i, client in pairs(active_clients) do
+    for _, client in pairs(active_clients) do
       if client and client.name ~= "" then
         table.insert(client_names, client.name)
       end
@@ -256,8 +253,26 @@ insert_right({
 })
 
 insert_right({
+  "diagnostics",
+  icon = { "", color = { fg = colors.yellow, gui = "bold" } },
+  sources = { "nvim_diagnostic" },
+  symbols = { error = " ", warn = " ", info = " ", hint = "󰌶 " },
+  diagnostics_color = {
+    color_error = { fg = colors.red },
+    color_warn = { fg = colors.yellow },
+    color_info = { fg = colors.cyan },
+    color_hint = { fg = colors.white },
+  },
+  update_in_insert = false,
+  cond = conditions.checkwidth,
+  color = { fg = colors.fg, bg = colors.bg_alt },
+  padding = { left = 0, right = 1 },
+})
+
+insert_right({
   function()
-    return ""
+    -- return ""
+    return ""
   end,
   color = { fg = colors.bg_alt, bg = colors.bg },
   padding = 0,
