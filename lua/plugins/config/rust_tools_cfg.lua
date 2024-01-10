@@ -6,12 +6,6 @@ if not ok then
   return
 end
 
-local function on_attach(client, bufnr)
-  require("plugins.config.lspconfig_cfg").on_attach(client, bufnr)
-  vim.keymap.set("n", "<leader>ra", rt.hover_actions.hover_actions, { buffer = bufnr })
-  -- vim.keymap.set("n", "<leader>rag", rt.code_action_group.code_action_group, { buffer = bufnr })
-end
-
 local opts = {
   tools = {
     autoSetHints = true,
@@ -60,7 +54,6 @@ local opts = {
       auto_focus = true,
     },
   },
-  server = { on_attach = on_attach }, -- rust-analyer options
 }
 
 rt.setup(opts)

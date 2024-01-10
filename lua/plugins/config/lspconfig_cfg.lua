@@ -39,8 +39,19 @@ end
 -- setup lsp servers
 -- Set default client capabilities plus window/workDoneProgress
 local default_capabilities = vim.tbl_extend("keep", setup_capabilities() or {}, {})
-local configured_lsp_list =
-  { "lua_ls", "texlab", "pyright", "ltex", "ruff_lsp", "clangd", "marksman", "julials" }
+local configured_lsp_list = {
+  "lua_ls",
+  "texlab",
+  "pyright",
+  "ltex",
+  "ruff_lsp",
+  "clangd",
+  "marksman",
+  "julials",
+  "taplo",
+  "jsonls",
+  "neocmake",
+}
 local settings = {}
 
 local success, custom = pcall(require, "custom")
@@ -153,7 +164,7 @@ settings["pyright"] = {
 local custom_opts = {}
 
 custom_opts["clangd"] = {
-  cmd = { "clangd", "--offset-encoding=utf-16", "--compile-commands-dir=build", "--log=error" },
+  cmd = { "clangd", "--offset-encoding=utf-16", "--compile-commands-dir=./build", "--log=error" },
 }
 
 custom_opts["marksman"] = {
@@ -227,7 +238,19 @@ local map = function(mode, lhs, rhs, opts)
   opts = vim.tbl_extend("keep", opts, { noremap = true, silent = true })
   vim.keymap.set(mode, lhs, rhs, opts)
 end
-map("n", "gl", vim.diagnostic.setloclist, { desc = "open diagnostic list" })
+
+local show_loclist = function()
+  vim.ui.select(vim.diagnostic.severity, {
+    prompt = "Select the severity",
+    format_item = function(item)
+      return item
+    end,
+  }, function(item)
+    vim.diagnostic.setloclist({ severity = { min = vim.diagnostic.severity[item] } })
+  end)
+end
+
+map("n", "gl", show_loclist, { desc = "open diagnostic list" })
 map("n", "gj", vim.diagnostic.goto_next, { desc = "goto next diagnostic" })
 map("n", "gk", vim.diagnostic.goto_prev, { desc = "goto previous diagnostic" })
 
@@ -247,7 +270,19 @@ vim.api.nvim_create_autocmd("LspAttach", {
           load_langs = { "en-US" },
           path = vim.fn.expand("~") .. "/.local/share/ltex",
         })
-      end, 5000)
+      end, 10000)
+    end
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client.server_capabilities.signatureHelpProvider then
+      require("lsp-overloads").setup(client, {
+        keymaps = {
+          next_signature = "<C-j>",
+          previous_signature = "<C-k>",
+          next_parameter = "<C-l>",
+          previous_parameter = "<C-h>",
+          close_signature = "<C-q>",
+        },
+      })
     end
 
     -- Buffer local mappings.
