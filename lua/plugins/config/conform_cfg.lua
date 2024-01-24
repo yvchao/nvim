@@ -11,5 +11,6 @@ require("conform").setup({
       extra_args = { "--edition", "2021" },
     },
   },
-  format_on_save = { timeout_ms = 300, lsp_fallback = true },
+  -- format_on_save = { timeout_ms = 600, lsp_fallback = true },
+  format_after_save = { lsp_fallback = true },
 })

@@ -20,6 +20,10 @@ local set_theme = function()
   }
 end
 
+local breadcrump_sep = " ⟩ "
+local separator_left = " ░▒▓"
+local separator_right = "▓▒░ "
+
 -- Config
 local config = {
   options = {
@@ -28,6 +32,31 @@ local config = {
     section_separators = "",
     theme = set_theme,
     globalstatus = true,
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {
+        "help",
+        "startify",
+        "dashboard",
+        "packer",
+        "neogitstatus",
+        "NvimTree",
+        "Trouble",
+        "alpha",
+        "lir",
+        "Outline",
+        "spectre_panel",
+        "toggleterm",
+        "starter",
+        "fugitive",
+        "gitcommit",
+        "qf",
+        "aerial",
+        "man",
+        "fugitiveblame",
+        "DiffviewFiles",
+      },
+    },
   },
   sections = {
     -- these are to remove the defaults
@@ -48,7 +77,33 @@ local config = {
     lualine_c = {},
     lualine_x = {},
   },
-  winbar = {},
+  winbar = {
+    lualine_a = {
+      {
+        "filename",
+        path = 1,
+        separator = vim.trim(breadcrump_sep),
+        fmt = function(str)
+          local path_separator = package.config:sub(1, 1)
+          return str:gsub(path_separator, breadcrump_sep)
+        end,
+      },
+      { "aerial", sep = breadcrump_sep },
+    },
+  },
+  inactive_winbar = {
+    lualine_a = {
+      {
+        "filename",
+        path = 1, -- relative path
+        separator = vim.trim(breadcrump_sep),
+        fmt = function(str)
+          local path_separator = package.config:sub(1, 1)
+          return str:gsub(path_separator, breadcrump_sep)
+        end,
+      },
+    },
+  },
 }
 
 -- Inserts a component in lualine_c at left section
@@ -71,8 +126,6 @@ end
 ----------------- start insert ----------------------
 -----------------------------------------------------
 -- { mode panel start
-local separator_left = " ░▒▓"
-local separator_right = "▓▒░ "
 
 -- insert_left({
 --   function()

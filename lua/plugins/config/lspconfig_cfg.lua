@@ -55,10 +55,7 @@ local configured_lsp_list = {
 local settings = {}
 
 local success, custom = pcall(require, "custom")
-local custom_options = {}
-if success then
-  custom_options = custom.lsp_options or {}
-end
+local custom_lsp_options = success and custom.lsp_options or {}
 
 settings["texlab"] = {
   texlab = {
@@ -88,7 +85,7 @@ settings["texlab"] = {
   },
 }
 
-local ltex_options = custom_options.ltex
+local ltex_options = custom_lsp_options.ltex
 local modelPath = ltex_options and ltex_options.modelPath or nil
 settings["ltex"] = {
   ltex = {
@@ -133,9 +130,8 @@ settings["lua_ls"] = {
   },
 }
 
-local python_options = custom_options.python
+local python_options = custom_lsp_options.python
 local stubPath = python_options and python_options.stubPath or nil
-local pythonPath = python_options and python_options.pythonPath or nil
 
 settings["pyright"] = {
   pyright = {
@@ -143,7 +139,7 @@ settings["pyright"] = {
     disableOrganizeImports = true,
   },
   python = {
-    pythonPath = pythonPath,
+    pythonPath = vim.g.python3_host_prog,
     analysis = {
       logLevel = "Error",
       autoSearchPath = false,
@@ -156,6 +152,13 @@ settings["pyright"] = {
         reportOptionalMemberAccess = "none",
         reportOptionalSubscript = "none",
         reportPrivateImportUsage = "none",
+        reportIndexIssue = "none",
+        reportRedeclaration = "none",
+        reportArgumentType = "none",
+        reportAssignmentType = "none",
+        reportCallIssue = "none",
+        reportReturnType = "none",
+        reportAttributeAccessIssue = "none",
       },
     },
   },
@@ -282,6 +285,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
           previous_parameter = "<C-h>",
           close_signature = "<C-q>",
         },
+        ui = {
+          max_height = 10,
+        },
       })
     end
 
@@ -319,6 +325,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
       print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, opts)
     opts["desc"] = "view document symbols [LSP]"
-    vim.keymap.set("n", "<leader>ls", "<cmd>Telescope lsp_document_symbols<CR>", opts)
+    vim.keymap.set(
+      "n",
+      "<leader>ls",
+      [[<cmd>lua require("fzf-lua").lsp_document_symbols()<CR>]],
+      opts
+    )
   end,
 })

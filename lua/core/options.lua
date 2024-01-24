@@ -96,9 +96,11 @@ opt.mouse = "a"
 opt.mousemodel = "extend"
 
 -- use indent as the fold method
-opt.foldmethod = "indent"
+opt.foldmethod = "marker"
 opt.foldlevel = 99
 opt.foldenable = true
+opt.foldmarker = "{{{,}}}"
+
 opt.formatoptions = "qj"
 
 opt.hidden = true
@@ -107,15 +109,6 @@ opt.hidden = true
 opt.conceallevel = 0
 -- show hiding character at cursor line
 opt.concealcursor = ""
-
--- set defaul terminal shell
--- if vim.fn.executable("fish") == 1 then
---   opt.shell = "/usr/bin/fish"
--- elseif vim.fn.executable("zsh") == 1 then
---   opt.shell = "/usr/bin/zsh"
--- else
---   opt.shell = "usr/bin/bash"
--- end
 
 -- enable global status line
 opt.laststatus = 3
@@ -149,12 +142,14 @@ if undo_stat and has_persist == 1 then
   opt.undodir = undo_dir
 end
 
+local success, custom = pcall(require, "custom")
+vim.o.guifont = success and custom.guifont or nil
+vim.g.python3_host_prog = success and custom.pythonPath or nil
+
 if vim.g.neovide then
   -- neovide specific settings
-  local ok, custom = pcall(require, "custom")
-  if ok then
-    vim.o.guifont = custom.guifont or nil
-  end
+  -- vim.g.neovide_unlink_border_highlights = true -- hack to fix border and winbar scroll glitches
+  vim.g.neovide_scroll_animation_length = 0 -- temporary fix for winbar glitch
   vim.g.neovide_cursor_vfx_mode = "railgun"
   vim.g.neovide_remember_window_size = true
   vim.g.neovide_input_ime = true

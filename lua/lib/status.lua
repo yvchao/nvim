@@ -5,7 +5,7 @@ local set_palette = function()
     bg_alt = "#592147",
     bg = "#2F3445",
     active_buffer = "#FFBBDD",
-    inactive_buffer = "#AA7788",
+    inactive_buffer = "#BB88AA",
     fg = "#F5DBDB",
     black = "#16161D",
     grey = "#303030",
@@ -23,6 +23,8 @@ local set_palette = function()
     if vim.o.background == "light" then
       colors.bg = "#C8C093"
       colors.black = "#f2ecbc"
+      colors.active_buffer = "#363646"
+      colors.inactive_buffer = "#54546D"
     else
       colors.bg = "#223249"
       colors.black = "#1F1F28"

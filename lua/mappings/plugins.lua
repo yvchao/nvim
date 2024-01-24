@@ -2,21 +2,36 @@ local map = require("lib.keymap").map
 local nmap = require("lib.keymap").nmap
 local is_cmdline = require("lib.misc").is_cmdline
 
+local wk = require("which-key")
+wk.register({
+  ["<leader>"] = {
+    g = {
+      name = "Git",
+    },
+    f = {
+      name = "Grep",
+    },
+    d = {
+      name = "Docstring",
+    },
+  },
+})
+
 -- EasyAlign
-map("v", "<leader>e", ":EasyAlign<CR>")
+map("v", "<leader>e", "<cmd>EasyAlign<CR>")
 
 -- oil file management
--- nmap(";t", ":Oil %:p:h<CR>")
-nmap(";t", [[:lua MiniFiles.open(vim.fn.expand("%:p"), {use_latest = false})<CR>]])
-nmap("gx", [[:execute 'silent! !xdg-open ' . shellescape(expand('<cfile>'), 1)<CR>]])
+-- nmap(";t", "<cmd>Oil %:p:h<CR>")
+nmap(";t", [[<cmd>lua MiniFiles.open(vim.fn.expand("%:p"), {use_latest = false})<CR>]])
+nmap("gx", [[<cmd>execute 'silent! !xdg-open ' . shellescape(expand('<cfile>'), 1)<CR>]])
 
 -- formatter
--- map({ "n", "x" }, "gf", ":Format<CR>")
+-- map({ "n", "x" }, "gf", "<cmd>Format<CR>")
 
 -- fterm
-nmap("<C-\\>", [[:ToggleTerm direction=float<CR>]])
-nmap("<M-`>", [[:ToggleTerm direction=horizontal<CR>]])
-map("t", "<C-\\>", [[<C-\><C-n>:ToggleTerm<CR>]])
+nmap("<C-\\>", [[<cmd>ToggleTerm direction=float<CR>]])
+-- nmap("<M-`>", [[<cmd>ToggleTerm direction=horizontal<CR>]])
+map("t", "<C-\\>", [[<C-\><C-n><cmd>ToggleTerm<CR>]])
 map("t", "<C-n>", [[<C-\><C-n>]])
 -- This for horizontal terminal
 map("t", ";k", [[<C-\><C-n><C-w>k]])
@@ -24,8 +39,20 @@ map("t", ";k", [[<C-\><C-n><C-w>k]])
 map("t", ";h", [[<C-\><C-n><C-w>h]])
 
 -- telescope
-nmap("<LEADER>ff", [[:lua require('telescope.builtin').find_files{previewer = false}<CR>]])
-nmap("<LEADER>fg", [[:lua require('telescope.builtin').live_grep{}<CR>]])
+-- nmap(
+--   "<LEADER>ff",
+--   [[<cmd>lua require('telescope.builtin').find_files{previewer = false}<CR>]],
+--   { desc = "File grep" }
+-- )
+-- nmap(
+--   "<LEADER>fg",
+--   [[<cmd>lua require('telescope.builtin').live_grep{}<CR>]],
+--   { desc = "Live grep" }
+-- )
+
+-- fzf
+nmap("<LEADER>ff", [[<cmd>lua require('fzf-lua').files()<CR>]], { desc = "File grep" })
+nmap("<LEADER>fg", [[<cmd>lua require('fzf-lua').live_grep()<CR>]], { desc = "Live grep" })
 -- nmap("<A-p>", [[<CMD>lua require("telescope.builtin").buffers({previewer = false})<CR>]])
 nmap("<A-p>", [[<CMD>lua MiniPick.builtin.buffers()<CR>]])
 
@@ -52,7 +79,7 @@ end)
 nmap(";c", [[<Cmd>close<CR>]])
 
 -- dispatch
-nmap(";d", ":Dispatch ", { noremap = true, silent = false })
+nmap(";d", "<cmd>Dispatch ", { noremap = true, silent = false })
 
 -- repl
 nmap("<leader>rl", function()
@@ -68,13 +95,13 @@ nmap("<leader>rk", function()
 end)
 
 -- undo tree
-nmap("<leader>u", vim.cmd.UndotreeToggle)
+nmap("<leader>u", vim.cmd.UndotreeToggle, { desc = "Undo tree toggle" })
 
 -- neogen
-nmap("<leader>doc", [[:lua require("neogen").generate()<CR>]])
+nmap("<leader>doc", [[<cmd>lua require("neogen").generate()<CR>]])
 
 -- fugitive
 -- keep the same prefix as the git sign
 -- See git-sign keymap in lua/plugins/config/gitsign_cfg.lua
-nmap("gic", ":Git commit -sS<CR>")
-nmap("giP", ":Git! push ", { silent = false })
+nmap("gic", "<cmd>Git commit -sS<CR>")
+nmap("giP", "<cmd>Git! push ", { silent = false })

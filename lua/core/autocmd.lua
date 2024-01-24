@@ -16,10 +16,10 @@ vim.api.nvim_create_autocmd("UIEnter", {
         vim.o.guifont = custom.guifont or nil
       end
       vim.notify = require("lib.notify").notify_message
-      if vim.g.loaded_clipboard_provider then
-        vim.g.loaded_clipboard_provider = nil
-        vim.api.nvim_cmd({ cmd = "runtime", args = { "autoload/provider/clipboard.vim" } }, {})
-      end
+      -- if vim.g.loaded_clipboard_provider then
+      --   vim.g.loaded_clipboard_provider = nil
+      --   vim.api.nvim_cmd({ cmd = "runtime", args = { "autoload/provider/clipboard.vim" } }, {})
+      -- end
     end
   end,
 })

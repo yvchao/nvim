@@ -101,10 +101,10 @@ cmp.setup({
       i = cmp.mapping.abort(),
       c = cmp.mapping.close(),
     }),
-    ["<C-Space>"] = cmp.mapping(
-      cmp.mapping.complete({ reason = cmp.ContextReason.Auto }),
-      { "i", "c" }
-    ),
+    -- ["<C-Space>"] = cmp.mapping(
+    --   cmp.mapping.complete({ reason = cmp.ContextReason.Auto }),
+    --   { "i", "c" }
+    -- ),
     ["<CR>"] = cmp.mapping.confirm({
       behavior = cmp.ConfirmBehavior.Insert, -- Replace will remove chars on the right
       select = true,

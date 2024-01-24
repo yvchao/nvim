@@ -285,30 +285,14 @@ return {
   },
 
   {
-    "jpalardy/vim-slime",
+    "benlubas/molten-nvim",
+    ft = "quarto",
+    version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
+    build = ":UpdateRemotePlugins",
     init = function()
-      vim.g.slime_target = "neovim"
-      vim.g.slime_no_mappings = 1
-      vim.g.slime_python_ipython = 1
-      vim.g.slime_paste_file = vim.env.HOME .. "/.cache/slime_paste"
-      vim.b["quarto_is_" .. "python" .. "_chunk"] = false
-      Quarto_is_in_python_chunk = function()
-        require("otter.tools.functions").is_otter_language_context("python")
-      end
-
-      vim.cmd([[
-      let g:slime_dispatch_ipython_pause = 100
-      function SlimeOverride_EscapeText_quarto(text)
-      call v:lua.Quarto_is_in_python_chunk()
-      if exists('g:slime_python_ipython') && len(split(a:text,"\n")) > 1 && b:quarto_is_python_chunk
-      return ["%cpaste -q\n", g:slime_dispatch_ipython_pause, a:text, "--", "\n"]
-      else
-      return a:text
-      end
-      endfunction
-      ]])
+      -- this is an example, not a default. Please see the readme for more configuration options
+      vim.g.molten_output_win_max_height = 12
     end,
-    ft = { "python", "quarto", "julia" },
   },
 
   {
@@ -323,16 +307,21 @@ return {
         opts = {},
         ft = "quarto",
       },
+      { "benlubas/molten-nvim" },
     },
     opts = {
       debug = false,
       lspFeatures = {
         enabled = true,
-        languages = { "python", "bash", "html" },
+        languages = { "python", "bash", "julia", "html" },
         diagnostics = {
           enabled = true,
-          triggers = { "InsertLeave" },
+          triggers = { "InsertLeave", "BufWritePost" },
         },
+      },
+      codeRunner = {
+        enabled = true,
+        default_method = "molten",
       },
       keymap = {
         hover = "gh",

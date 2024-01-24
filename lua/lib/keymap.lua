@@ -18,12 +18,7 @@ M.map = function(mode, lhs, rhs, opts)
   if opts then
     options = vim.tbl_extend("force", options, opts)
   end
-  local stat, error = pcall(vim.keymap.set, mode, lhs, rhs, options)
-  if not stat then
-    vim.notify(error, vim.log.levels.ERROR, {
-      title = "keymap",
-    })
-  end
+  vim.keymap.set(mode, lhs, rhs, options)
 end
 
 -- nmap create a new mapping in normal mode
