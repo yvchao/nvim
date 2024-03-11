@@ -50,7 +50,6 @@ local configured_lsp_list = {
   "julials",
   "taplo",
   "jsonls",
-  "neocmake",
 }
 local settings = {}
 
@@ -62,7 +61,10 @@ settings["texlab"] = {
     build = {
       executable = "latexmk",
       args = {
-        "-pdf",
+        -- "-pdf",
+        "-pdfxe",
+        "-dvi-",
+        "-ps-",
         "-silent",
         "-interaction=nonstopmode",
         "-synctex=1",
@@ -176,6 +178,12 @@ custom_opts["marksman"] = {
 
 custom_opts["ltex"] = {
   filetypes = { "markdown", "tex" },
+  on_attach = function()
+    require("ltex_extra").setup({
+      load_langs = { "en-US" },
+      path = vim.fn.expand("~") .. "/.local/share/ltex",
+    })
+  end,
 }
 
 for _, server_name in pairs(configured_lsp_list) do
@@ -267,13 +275,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local ft = vim.fn.getbufvar(ev.buf, "&filetype")
     if ft == "quarto" then
       return
-    elseif ft == "tex" or ft == "markdown" then
-      vim.defer_fn(function()
-        require("ltex_extra").setup({
-          load_langs = { "en-US" },
-          path = vim.fn.expand("~") .. "/.local/share/ltex",
-        })
-      end, 10000)
     end
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     if client.server_capabilities.signatureHelpProvider then
@@ -286,8 +287,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
           close_signature = "<C-q>",
         },
         ui = {
-          max_height = 10,
+          max_height = 5,
         },
+        display_automatically = true,
       })
     end
 
@@ -303,7 +305,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     opts["desc"] = "goto implementation [LSP]"
     vim.keymap.set("n", "gm", vim.lsp.buf.implementation, opts)
     opts["desc"] = "signature_help [LSP]"
-    vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
+    vim.keymap.set("n", "gH", vim.lsp.buf.signature_help, opts)
     opts["desc"] = "goto type definition [LSP]"
     vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
     opts["desc"] = "rename [LSP]"

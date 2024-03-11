@@ -11,14 +11,10 @@ Source: https://github.com/Avimitin/nvim
 License: MIT License
 --]]
 
--- load basic configuration
+-- setup notification backend
 local notify = require("lib.notify")
 
--- Try to call the cache plugin
--- pcall(require, "impatient")
-
 local ok, custom = pcall(require, "custom")
--- if file exist, return table exist and return table has `theme` field
 if ok and custom then
   if custom.notify ~= "neovim" and vim.fn.executable("notify-send") == 1 then
     vim.notify = notify.notify_send
@@ -27,11 +23,11 @@ if ok and custom then
   end
 end
 
+-- load basic configuration
 for _, module_name in ipairs({
-  "core.options",
-  -- "mappings",
   "core.autocmd",
-  "plugins.options",
+  "core.options",
+  "core.plugin_options",
 }) do
   local success, err = pcall(require, module_name)
   if not success then
@@ -40,10 +36,7 @@ for _, module_name in ipairs({
   end
 end
 
--- since we have packer compiled, we don't need to load this immediately
--- vim.defer_fn(function()
--- require("plugins").load()
--- end, 0)
+-- load plugin settings
 require("plugins").load()
 
 -- setup mappings after plugins are loaded

@@ -88,7 +88,18 @@ local config = {
           return str:gsub(path_separator, breadcrump_sep)
         end,
       },
-      { "aerial", sep = breadcrump_sep },
+      {
+        "aerial",
+        sep = breadcrump_sep,
+        cond = function()
+          for _, v in ipairs(vim.g.enable_treesitter_ft) do
+            if v == vim.bo.filetype then
+              return true
+            end
+          end
+          return false
+        end,
+      },
     },
   },
   inactive_winbar = {
@@ -317,7 +328,7 @@ insert_right({
     color_hint = { fg = colors.white },
   },
   update_in_insert = false,
-  cond = conditions.checkwidth,
+  -- cond = conditions.checkwidth,
   color = { fg = colors.fg, bg = colors.bg_alt },
   padding = { left = 0, right = 1 },
 })

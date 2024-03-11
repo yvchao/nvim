@@ -1,6 +1,4 @@
 -- theme
-vim.opt.termguicolors = true
-vim.opt.background = "dark"
 
 local M = {
   -- "kanagawa" by default
@@ -67,13 +65,13 @@ M.kanagawa_setup = function()
         HighLightLineMatches = {
           bg = palette.winterYellow,
         },
-        -- TelescopeTitle = { fg = theme.ui.special, bold = true },
-        TelescopePreviewTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
-        TelescopePromptTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
-        TelescopeResultsTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
         WinSeparator = { fg = palette.lightBlue },
-        InclineNormal = { fg = palette.sumiInk1, bg = palette.waveRed },
-        InclineNormalNC = { fg = palette.winterBlue, bg = palette.sakuraPink },
+        -- TelescopeTitle = { fg = theme.ui.special, bold = true },
+        -- TelescopePreviewTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
+        -- TelescopePromptTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
+        -- TelescopeResultsTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
+        -- InclineNormal = { fg = palette.sumiInk1, bg = palette.waveRed },
+        -- InclineNormalNC = { fg = palette.winterBlue, bg = palette.sakuraPink },
       }
     end,
   })

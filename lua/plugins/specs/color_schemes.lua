@@ -3,12 +3,12 @@ return {
   {
     "rebelot/kanagawa.nvim",
     cond = function()
-      return require("core.colors").theme == "kanagawa"
+      return require("plugins.colors").theme == "kanagawa"
     end,
     lazy = false,
     priority = 1000,
     config = function()
-      require("core.colors").kanagawa_setup()
+      require("plugins.colors").kanagawa_setup()
     end,
   },
 
@@ -16,7 +16,7 @@ return {
   {
     "projekt0n/github-nvim-theme",
     cond = function()
-      local select = require("core.colors").theme
+      local select = require("plugins.colors").theme
       for _, avail in ipairs({
         "github_dark",
         "github_dimmed",
@@ -29,9 +29,8 @@ return {
       end
       return false
     end,
-    priority = 1000,
     config = function()
-      require("core.colors").github_setup()
+      require("plugins.colors").github_setup()
     end,
   },
 
@@ -39,7 +38,7 @@ return {
   {
     "EdenEast/nightfox.nvim",
     cond = function()
-      local select = require("core.colors").theme
+      local select = require("plugins.colors").theme
       for _, avail in ipairs({ "nightfox", "dayfox", "dawnfox", "nordfox", "duskfox" }) do
         if select == avail then
           return true
@@ -47,9 +46,8 @@ return {
       end
       return false
     end,
-    priority = 1000,
     config = function()
-      require("core.colors").nightfox_setup()
+      require("plugins.colors").nightfox_setup()
     end,
   },
 }

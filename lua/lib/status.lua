@@ -206,7 +206,9 @@ local mode_icons = {
 
 local function get_mode()
   local vim_mode = vim.fn.mode()
-  return { icon = mode_icons[vim_mode], alias = mode_alias[vim_mode] }
+  local icon = mode_icons[vim_mode] or " "
+  local alias = mode_alias[vim_mode] or vim_mode
+  return { icon = icon, alias = alias }
 end
 
 local function get_mode_color()

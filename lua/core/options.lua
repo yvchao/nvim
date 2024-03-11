@@ -1,5 +1,9 @@
 local opt = vim.opt
 
+-- set color options
+opt.termguicolors = true
+opt.background = "dark"
+
 opt.encoding = "utf-8"
 -- When file encoding forcely set to UTF-8, some file with non-Unicode
 -- encoding will lose information during the encoding conversion.

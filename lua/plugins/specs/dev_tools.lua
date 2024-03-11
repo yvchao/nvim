@@ -3,11 +3,11 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
+    -- commit = "7a2c621",
     config = function()
       require("plugins").load_cfg("treesitter_cfg")
     end,
     dependencies = {
-
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
     ft = vim.g.enable_treesitter_ft,
@@ -24,10 +24,6 @@ return {
     enabled = false,
   },
 
-  {
-    "h-hg/fcitx.nvim",
-  },
-
   -- manage the lsp server
   {
     "neovim/nvim-lspconfig",
@@ -38,9 +34,9 @@ return {
     dependencies = {
       "airblade/vim-rooter",
       "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
+      -- "williamboman/mason-lspconfig.nvim",
       "barreiroleo/ltex-extra.nvim",
-      "lsp_lines.nvim",
+      -- "lsp_lines.nvim",
       "Issafalcon/lsp-overloads.nvim",
     },
     ft = vim.g.enable_lspconfig_ft,
@@ -51,6 +47,7 @@ return {
     config = function()
       require("mason").setup()
     end,
+    cmd = { "Mason" },
   },
 
   {
@@ -70,22 +67,6 @@ return {
       require("lsp-lens").setup({
         enable = false,
       })
-    end,
-    enabled = false,
-  },
-
-  -- {
-  --   "jose-elias-alvarez/null-ls.nvim",
-  --   config = function()
-  --     require("plugins").load_cfg("nullls_cfg")
-  --   end,
-  --   ft = { "python", "tex", "c", "cpp", "lua" },
-  -- },
-
-  {
-    "mhartington/formatter.nvim",
-    config = function()
-      require("plugins").load_cfg("formatter_cfg")
     end,
     enabled = false,
   },
@@ -122,16 +103,10 @@ return {
         end,
       })
     end,
+    ft = vim.g.enable_treesitter_ft,
+    cmd = "AerialOpen",
+    event = "VeryLazy",
   },
-
-  -- Pre-set for rust lsp
-  -- {
-  --   "simrat39/rust-tools.nvim",
-  --   ft = "rust",
-  --   config = function()
-  --     require("plugins").load_cfg("rust_tools_cfg")
-  --   end,
-  -- },
 
   -- enhance the Cargo dependencies management
   {
@@ -156,6 +131,7 @@ return {
     config = function()
       require("plugins").load_cfg("dap_cfg")
     end,
+    cmd = { "DapBreakpoint" },
   },
 
   -- {
@@ -185,7 +161,10 @@ return {
     config = function()
       require("plugins").load_cfg("neogen_cfg")
     end,
-    -- requires = "nvim-treesitter/nvim-treesitter",
+    keys = {
+      "<leader>doc",
+      mode = "n",
+    },
   },
 
   -- find definition, reference
@@ -215,6 +194,7 @@ return {
     config = function()
       require("lsp-progress").setup()
     end,
+    event = "LspAttach",
   },
 
   -- lot's of pre-set snippets
@@ -225,6 +205,7 @@ return {
       { ":", mode = "n" },
       { "/", mode = "n" },
     },
+    ft = vim.g.enable_lspconfig_ft,
   },
 
   -- the completion core
@@ -234,14 +215,12 @@ return {
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
-      -- "hrsh7th/cmp-vsnip",
-      -- "hrsh7th/vim-vsnip",
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-cmdline",
       "kdheepak/cmp-latex-symbols",
     },
-    lazy = false,
+    event = "InsertEnter",
     config = function()
       require("plugins").load_cfg("nvimcmp_cfg")
     end,
@@ -255,6 +234,7 @@ return {
     dependencies = {
       "rafamadriz/friendly-snippets",
     },
+    event = "InsertEnter",
   },
 
   {
@@ -266,6 +246,7 @@ return {
       })
     end,
     enabled = true,
+    event = "InsertEnter",
   },
 
   {

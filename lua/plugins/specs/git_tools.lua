@@ -42,6 +42,7 @@ return {
   -- Convert file containing conflict markers into a two-way diff
   {
     "whiteinge/diffconflicts",
+    event = "BufRead",
   },
 
   -- Flog is a lightweight and powerful git branch viewer that integrates with fugitive.

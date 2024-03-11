@@ -20,7 +20,7 @@ nmap("W", "5w")
 nmap("B", "5b")
 
 -- no more background key
-nmap("<C-z>", "u")
+-- nmap("<C-z>", "u")
 
 -- move block easily
 nmap("<", "<<")
@@ -41,8 +41,9 @@ xmap("<C-y>", [["+y]])
 nmap("<C-p>", [["+p]])
 map("i", "<C-p>", [[<ESC>"+pa]])
 
--- shut down the search high light
+-- shut down the search highlight
 nmap("<ESC>", ":nohlsearch<CR>")
+
 -- no more finger expansion
 map("i", "<A-;>", "<ESC>")
 
@@ -59,7 +60,7 @@ nmap("<C-S-right>", ":vertical resize+5<CR>")
 nmap("<C-S-left>", ":vertical resize-5<CR>")
 
 -- center editing line
-map("i", "<C-c>", "<ESC>zzi")
+-- map("i", "<C-c>", "<ESC>zzi")
 
 -- use very magic mode for searching
 nmap("/", [[/\v]], { silent = false })
@@ -73,7 +74,7 @@ map("i", "<C-a>", "<Home>")
 map("i", "<C-e>", "<End>")
 map("i", "<A-f>", "<C-Right>")
 map("i", "<A-b>", "<C-Left>")
-map("c", "<C-a>", "<C-B>")
+map("c", "<C-a>", "<Home>")
 
 -- load plugin's keymapping
 require("mappings.plugins")

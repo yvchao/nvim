@@ -1,7 +1,8 @@
 local g = vim.g
 
 g.rooter_manual_only = 0
--- g.rooter_change_directory_for_non_project_files = "current"
+-- WARN: this maybe a bad option.
+g.rooter_change_directory_for_non_project_files = "current"
 g.rooter_buftypes = { "" }
 g.rooter_patterns = {
   ".git",
@@ -46,5 +47,4 @@ g.enable_lspconfig_ft = {
   "markdown",
   "julia",
   "cmake",
-  -- "gitcommit",
 }

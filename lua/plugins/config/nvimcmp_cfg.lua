@@ -4,7 +4,9 @@ local luasnip = require("luasnip")
 local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 local feedkey = require("lib.keymap").feedkeys
 
+-- to work with autopairs
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+
 -- to work with copilot
 cmp.event:on("menu_opened", function()
   vim.b.copilot_suggestion_hidden = true
@@ -14,17 +16,16 @@ cmp.event:on("menu_closed", function()
   vim.b.copilot_suggestion_hidden = false
 end)
 
-local has_words_before = function()
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0
-    and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
+-- local has_words_before = function()
+--   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+--   return col ~= 0
+--     and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+-- end
 
 local has_trigger_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0
-    and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("[.\\/]")
-      ~= nil
+    and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("[\\/]") ~= nil
 end
 
 local kind_icons = {
@@ -155,7 +156,6 @@ cmp.setup({
         return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
       end,
     },
-    -- { name = "vsnip", group_index = 1, priority = 3 },
     { name = "luasnip", group_index = 2, priority = 3 },
     { name = "buffer", group_index = 4, priority = 1, max_item_count = 3 },
     { name = "path", group_index = 3, priority = 2, trigger_characters = { "/" } },
