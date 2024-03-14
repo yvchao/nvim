@@ -10,7 +10,7 @@ return {
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
-    ft = vim.g.enable_treesitter_ft,
+    event = "UIEnter",
   },
 
   {
@@ -40,6 +40,7 @@ return {
       "Issafalcon/lsp-overloads.nvim",
     },
     ft = vim.g.enable_lspconfig_ft,
+    lazy = true,
   },
 
   {
@@ -103,7 +104,6 @@ return {
         end,
       })
     end,
-    ft = vim.g.enable_treesitter_ft,
     cmd = "AerialOpen",
     event = "VeryLazy",
   },
@@ -220,7 +220,10 @@ return {
       "hrsh7th/cmp-cmdline",
       "kdheepak/cmp-latex-symbols",
     },
-    event = "InsertEnter",
+    event = {
+      "InsertEnter",
+      "CmdlineEnter",
+    },
     config = function()
       require("plugins").load_cfg("nvimcmp_cfg")
     end,
@@ -263,6 +266,7 @@ return {
         },
       })
     end,
+    enabled = false,
   },
 
   {

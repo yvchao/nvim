@@ -37,27 +37,6 @@ M.kanagawa_setup = function()
       local palette = colors.palette
       local theme = colors.theme
       return {
-        htmlH1 = {
-          fg = palette.peachRed,
-          bold = true,
-        },
-        htmlH2 = {
-          fg = palette.roninYellow,
-          bold = true,
-        },
-        htmlH3 = {
-          fg = palette.autumnYellow,
-          bold = true,
-        },
-        htmlH4 = {
-          fg = palette.autumnGreen,
-          bold = true,
-        },
-        Todo = {
-          fg = palette.fujiWhite,
-          bg = palette.samuraiRed,
-          bold = true,
-        },
         Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1, blend = vim.o.pumblend }, -- add `blend = vim.o.pumblend` to enable transparency
         PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
         PmenuSbar = { bg = theme.ui.bg_m1 },
@@ -72,6 +51,7 @@ M.kanagawa_setup = function()
         -- TelescopeResultsTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
         -- InclineNormal = { fg = palette.sumiInk1, bg = palette.waveRed },
         -- InclineNormalNC = { fg = palette.winterBlue, bg = palette.sakuraPink },
+        ["@comment.todo"] = { link = "@text.todo" },
       }
     end,
   })

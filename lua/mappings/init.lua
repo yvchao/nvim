@@ -63,7 +63,7 @@ nmap("<C-S-left>", ":vertical resize-5<CR>")
 -- map("i", "<C-c>", "<ESC>zzi")
 
 -- use very magic mode for searching
-nmap("/", [[/\v]], { silent = false })
+-- nmap("/", [[/\v]], { silent = false })
 
 -- search and replace in visual mode
 map("v", "<leader>/", [[y/\v<C-r>"<CR>]], { desc = "Search selected text" })
