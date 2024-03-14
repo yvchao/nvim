@@ -288,6 +288,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
         },
         ui = {
           max_height = 5,
+          close_events = {
+            "CursorMoved",
+            "CursorMovedI",
+            "InsertCharPre",
+            "BufHidden",
+            "InsertLeave",
+          },
         },
         display_automatically = true,
       })
@@ -304,7 +311,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
     opts["desc"] = "goto implementation [LSP]"
     vim.keymap.set("n", "gm", vim.lsp.buf.implementation, opts)
-    opts["desc"] = "signature_help [LSP]"
+    opts["desc"] = "show signature help [LSP]"
     vim.keymap.set("n", "gH", vim.lsp.buf.signature_help, opts)
     opts["desc"] = "goto type definition [LSP]"
     vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)

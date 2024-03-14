@@ -300,7 +300,7 @@ insert_right({
         table.insert(client_names, client.name)
       end
     end
-    local status = " [" .. table.concat(client_names, ", ") .. "]"
+    local status = "  [" .. table.concat(client_names, ", ") .. "]"
 
     if progress ~= nil then
       return progress .. " " .. status
