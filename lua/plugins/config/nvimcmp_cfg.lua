@@ -2,7 +2,7 @@ local cmp = require("cmp")
 local compare = require("cmp.config.compare")
 local luasnip = require("luasnip")
 local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-local feedkey = require("lib.keymap").feedkeys
+-- local feedkey = require("lib.keymap").feedkeys
 
 -- to work with autopairs
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
@@ -16,11 +16,12 @@ cmp.event:on("menu_closed", function()
   vim.b.copilot_suggestion_hidden = false
 end)
 
--- local has_words_before = function()
---   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
---   return col ~= 0
---     and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
--- end
+local has_words_before = function()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0
+    and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col - 1, col - 1):match("%s")
+      == nil
+end
 
 local has_trigger_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -68,6 +69,10 @@ local source_menu = {
   dictionary = "[ Dict]",
 }
 
+local ELLIPSIS_CHAR = "…"
+local MAX_LABEL_WIDTH = 20
+local MIN_LABEL_WIDTH = 20
+
 cmp.setup({
   completion = {
     autocomplete = false,
@@ -79,6 +84,13 @@ cmp.setup({
   },
   formatting = {
     format = function(entry, item)
+      local label = item.abbr
+      local label_len = string.len(label)
+      if label_len >= MAX_LABEL_WIDTH then
+        item.abbr = vim.fn.strcharpart(label, 0, MAX_LABEL_WIDTH) .. ELLIPSIS_CHAR
+      elseif label_len < MIN_LABEL_WIDTH then
+        item.abbr = label .. string.rep(" ", MIN_LABEL_WIDTH - label_len)
+      end
       -- return special icon for cmdline completion
       if entry.source.name == "cmdline" then
         item.kind = string.format("%s %s", kind_icons["VimCmdLine"], "Vim")
@@ -92,20 +104,33 @@ cmp.setup({
   mapping = cmp.mapping.preset.insert({
     ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), {
       "i",
-      "c",
     }),
     ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), {
       "i",
-      "c",
     }),
     ["<C-q>"] = cmp.mapping({
       i = cmp.mapping.abort(),
       c = cmp.mapping.close(),
     }),
-    -- ["<C-Space>"] = cmp.mapping(
-    --   cmp.mapping.complete({ reason = cmp.ContextReason.Auto }),
-    --   { "i", "c" }
-    -- ),
+    ["<BS>"] = cmp.mapping(function(fallback)
+      fallback()
+      if cmp.visible() and not has_words_before() then
+        -- we only close the popup here, the popup appears again when we start typing
+        cmp.mapping.close()
+      end
+    end, { "i", "s" }),
+    ["<C-w>"] = cmp.mapping(function(fallback)
+      -- delete a whole word
+      fallback()
+      -- if cmp is in completion mode, we close the popup and reset its state
+      if cmp.visible() then
+        -- close the popup window
+        cmp.mapping.close()
+        -- Based on the behavior of cmp.confirm, we can call cmp.core:reset() to cancel the current completion
+        -- https://github.com/hrsh7th/nvim-cmp/blob/04e0ca376d6abdbfc8b52180f8ea236cbfddf782/lua/cmp/core.lua#L131
+        cmp.core:reset()
+      end
+    end, { "i", "s" }),
     ["<CR>"] = cmp.mapping.confirm({
       behavior = cmp.ConfirmBehavior.Insert, -- Replace will remove chars on the right
       select = true,
@@ -125,14 +150,10 @@ cmp.setup({
         cmp.select_next_item()
       elseif has_trigger_before() then
         cmp.complete()
-      -- elseif vim.fn["vsnip#jumpable"](1) == 1 then
-      --   feedkey("<Plug>(vsnip-jump-next)", "")
       elseif luasnip.locally_jumpable(1) then
         luasnip.jump(1)
       elseif luasnip.expandable() then
         luasnip.expand()
-      -- elseif luasnip.expand_or_jumpable() then
-      --   luasnip.expand_or_jump()
       else
         fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
       end
@@ -140,9 +161,7 @@ cmp.setup({
     ["<S-Tab>"] = cmp.mapping(function()
       if cmp.visible() then
         cmp.select_prev_item()
-      -- elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-      --   feedkey("<Plug>(vsnip-jump-prev)", "")
-      elseif luasnip.jumpable(-1) then
+      elseif luasnip.locally_jumpable(-1) then
         luasnip.jump(-1)
       end
     end, { "i", "s" }),
@@ -157,11 +176,11 @@ cmp.setup({
       end,
     },
     { name = "luasnip", group_index = 2, priority = 3 },
-    { name = "buffer", group_index = 4, priority = 1, max_item_count = 3 },
+    { name = "buffer", group_index = 3, priority = 1, max_item_count = 10 },
     { name = "path", group_index = 3, priority = 2, trigger_characters = { "/" } },
     {
       name = "latex_symbols",
-      group_index = 3,
+      group_index = 4,
       max_item_count = 20,
       priority = 1,
       trigger_characters = { "\\" },
@@ -206,13 +225,15 @@ cmp.setup.cmdline("/", {
 
 cmp.setup.cmdline(":", {
   mapping = cmp.mapping.preset.cmdline({
+    ["<C-n>"] = cmp.config.disable,
+    ["<C-p>"] = cmp.config.disable,
     ["<Tab>"] = {
       c = function()
         if cmp.visible() then
           cmp.select_next_item()
         else
-          -- cmp.complete()
-          feedkey("<C-Tab>", "nt") -- fallback to nvim native completion
+          cmp.complete()
+          -- feedkey("<C-Tab>", "nt") -- fallback to nvim native completion
         end
       end,
     },
