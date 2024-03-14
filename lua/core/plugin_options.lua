@@ -1,5 +1,8 @@
 local g = vim.g
 
+-- disable default mappings of vim surround
+g.surround_no_mappings = 1
+
 g.rooter_manual_only = 0
 -- WARN: this maybe a bad option.
 g.rooter_change_directory_for_non_project_files = "current"

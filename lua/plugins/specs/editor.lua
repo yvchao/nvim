@@ -253,13 +253,15 @@ return {
   {
     "ggandor/leap.nvim",
     config = function()
-      require("leap").add_default_mappings()
+      -- require("leap").create_default_mappings()
+      vim.keymap.set({ "n", "x", "o" }, "f", "<Plug>(leap-forward)")
+      vim.keymap.set({ "n", "x", "o" }, "F", "<Plug>(leap-backward)")
     end,
     keys = {
-      { "s", mode = "n" },
-      { "s", mode = "v" },
-      { "S", mode = "n" },
-      { "S", mode = "v" },
+      { "f", mode = "n" },
+      { "f", mode = "v" },
+      { "F", mode = "n" },
+      { "F", mode = "v" },
     },
   },
 
@@ -297,7 +299,7 @@ return {
     config = function()
       require("plugins").load_cfg("indent_cfg")
     end,
-    event = "BufRead",
+    event = "UIEnter",
   },
 
   -- repeat your last action, what ever command or keymaps or inputs
@@ -357,6 +359,13 @@ return {
   {
     "mbbill/undotree",
     event = "BufReadPost",
+  },
+
+  -- remote clipboard with osc52
+  {
+    "ojroques/nvim-osc52",
+    event = "UIEnter",
+    enabled = false,
   },
 
   -- smart buffer in tabs
