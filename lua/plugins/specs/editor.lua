@@ -75,62 +75,14 @@ return {
   -- },
 
   -- float statusline
-  -- {
-  --   "b0o/incline.nvim",
-  --   config = function()
-  --     require("incline").setup({
-  --       hide = {
-  --         focused_win = false,
-  --         only_win = true,
-  --         cursorline = true,
-  --       },
-  --       ignore = {
-  --         filetypes = {
-  --           "alpha",
-  --           "oil",
-  --           "qf",
-  --           "help",
-  --           "man",
-  --           "term",
-  --         },
-  --       },
-  --       render = function(props)
-  --         local bufname = vim.api.nvim_buf_get_name(props.buf)
-  --         local res = bufname ~= "" and vim.fn.fnamemodify(bufname, ":t") or "[No Name]"
-  --         if vim.api.nvim_buf_get_option(props.buf, "modified") then
-  --           res = res .. " [+]"
-  --         end
-  --         local left = "▓▒░ "
-  --         local right = " ░▒▓"
-  --         res = left .. res .. right
-  --         return res
-  --       end,
-  --       window = {
-  --         padding = {
-  --           left = 0,
-  --           right = 0,
-  --         },
-  --         margin = {
-  --           horizontal = 0,
-  --           vertical = 1,
-  --         },
-  --       },
-  --     })
-  --   end,
-  --   enabled = false,
-  -- },
-  --
-  -- tree style file manager
-  -- {
-  --   "kyazdani42/nvim-tree.lua",
-  --   config = function()
-  --     require("plugins").load_cfg("nvimtree_cfg")
-  --   end,
-  --   cmd = {
-  --     "NvimTreeRefresh",
-  --     "NvimTreeToggle",
-  --   },
-  -- },
+  {
+    "b0o/incline.nvim",
+    config = function()
+      require("plugins").load_cfg("incline_cfg")
+    end,
+    enabled = true,
+    event = "UIEnter",
+  },
 
   {
     "akinsho/toggleterm.nvim",
@@ -195,7 +147,6 @@ return {
     },
     config = function()
       require("plugins").load_cfg("telescope_cfg")
-      -- require("telescope").load_extension("ui-select")
     end,
     enabled = false,
   },
@@ -214,6 +165,7 @@ return {
     keys = {
       { "<leader>f", mode = "n" },
     },
+    cmd = { "FzfLua" },
   },
 
   {

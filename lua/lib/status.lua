@@ -1,5 +1,7 @@
 local current_scheme = vim.g.colors_name
 
+local special_buffer_list = vim.g.special_buffer_list or {}
+
 local set_palette = function()
   local colors = {
     bg_alt = "#592147",
@@ -61,20 +63,6 @@ end
 
 local colors = set_palette()
 
-local short_line_list = {
-  "oil",
-  "term",
-  "nerdtree",
-  "fugitive",
-  "fugitiveblame",
-  "DiffviewFiles",
-  "qf",
-  "help",
-  "toggleterm",
-  "starter",
-  "man",
-}
-
 local BufferTypeMap = {
   ["oil"] = " File Management",
   ["starter"] = "󰡃 Dashboard",
@@ -132,7 +120,7 @@ local conditions = {
     return gitdir and #gitdir > 0
   end,
   check_special_buffer = function()
-    for _, v in ipairs(short_line_list) do
+    for _, v in ipairs(special_buffer_list) do
       if v == vim.bo.filetype then
         return true
       end
@@ -285,7 +273,7 @@ local function file_with_icons(file, modified_icon, readonly_icon)
 end
 
 local function get_file_name()
-  for _, v in ipairs(short_line_list) do
+  for _, v in ipairs(special_buffer_list) do
     if v == vim.bo.filetype then
       return BufferTypeMap[v]
     end

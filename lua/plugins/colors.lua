@@ -16,9 +16,18 @@ end
 -- This functions finally apply the colorscheme
 local function apply()
   vim.cmd("colorscheme " .. M.theme)
+
   vim.api.nvim_set_hl(0, "NormalFloat", { link = "Normal", bg = "none" })
-  vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
-  vim.api.nvim_set_hl(0, "FloatTitle", { bg = "none" })
+  local opts = {}
+  opts = vim.api.nvim_get_hl(0, { name = "FloatBorder" })
+  opts.bg = "none"
+  vim.api.nvim_set_hl(0, "FloatBorder", opts)
+  opts = vim.api.nvim_get_hl(0, { name = "FloatTitle" })
+  opts.bg = "none"
+  vim.api.nvim_set_hl(0, "FloatTitle", opts)
+  opts = vim.api.nvim_get_hl(0, { name = "Visual" })
+  opts.reverse = true
+  vim.api.nvim_set_hl(0, "Visual", opts)
 end
 
 -- configure the kanagawa theme
@@ -49,8 +58,8 @@ M.kanagawa_setup = function()
         -- TelescopePreviewTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
         -- TelescopePromptTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
         -- TelescopeResultsTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
-        -- InclineNormal = { fg = palette.sumiInk1, bg = palette.waveRed },
-        -- InclineNormalNC = { fg = palette.winterBlue, bg = palette.sakuraPink },
+        InclineNormal = { fg = palette.sumiInk1, bg = palette.waveRed },
+        InclineNormalNC = { fg = palette.winterBlue, bg = palette.sakuraPink },
         ["@comment.todo"] = { link = "@text.todo" },
       }
     end,

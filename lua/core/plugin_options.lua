@@ -51,3 +51,32 @@ g.enable_lspconfig_ft = {
   "julia",
   "cmake",
 }
+
+g.special_buffer_list = {
+  -- file manager
+  "oil",
+  "NvimTree",
+  "nerdtree",
+  -- quick fix and terminal, etc.
+  "qf",
+  "toggleterm",
+  "term",
+  "Outline",
+  "aerial",
+  "spectre_panel",
+  "Trouble",
+  -- start screen
+  "startify",
+  "starter",
+  "alpha",
+  "dashboard",
+  -- man pages and help
+  "man",
+  "help",
+  -- git
+  "fugitive",
+  "fugitiveblame",
+  "gitcommit",
+  "neogitstatus",
+  "DiffviewFiles",
+}

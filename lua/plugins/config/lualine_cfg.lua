@@ -20,7 +20,7 @@ local set_theme = function()
   }
 end
 
-local breadcrump_sep = " ⟩ "
+-- local breadcrump_sep = " ⟩ "
 local separator_left = " ░▒▓"
 local separator_right = "▓▒░ "
 
@@ -34,28 +34,7 @@ local config = {
     globalstatus = true,
     disabled_filetypes = {
       statusline = {},
-      winbar = {
-        "help",
-        "startify",
-        "dashboard",
-        "packer",
-        "neogitstatus",
-        "NvimTree",
-        "Trouble",
-        "alpha",
-        "lir",
-        "Outline",
-        "spectre_panel",
-        "toggleterm",
-        "starter",
-        "fugitive",
-        "gitcommit",
-        "qf",
-        "aerial",
-        "man",
-        "fugitiveblame",
-        "DiffviewFiles",
-      },
+      winbar = vim.g.special_buffer_list or {},
     },
   },
   sections = {
@@ -78,42 +57,42 @@ local config = {
     lualine_x = {},
   },
   winbar = {
-    lualine_a = {
-      {
-        "filename",
-        path = 1,
-        separator = vim.trim(breadcrump_sep),
-        fmt = function(str)
-          local path_separator = package.config:sub(1, 1)
-          return str:gsub(path_separator, breadcrump_sep)
-        end,
-      },
-      {
-        "aerial",
-        sep = breadcrump_sep,
-        cond = function()
-          for _, v in ipairs(vim.g.enable_treesitter_ft) do
-            if v == vim.bo.filetype then
-              return true
-            end
-          end
-          return false
-        end,
-      },
-    },
+    -- lualine_a = {
+    --   {
+    --     "filename",
+    --     path = 1,
+    --     separator = vim.trim(breadcrump_sep),
+    --     fmt = function(str)
+    --       local path_separator = package.config:sub(1, 1)
+    --       return str:gsub(path_separator, breadcrump_sep)
+    --     end,
+    --   },
+    --   {
+    --     "aerial",
+    --     sep = breadcrump_sep,
+    --     cond = function()
+    --       for _, v in ipairs(vim.g.enable_treesitter_ft) do
+    --         if v == vim.bo.filetype then
+    --           return true
+    --         end
+    --       end
+    --       return false
+    --     end,
+    --   },
+    -- },
   },
   inactive_winbar = {
-    lualine_a = {
-      {
-        "filename",
-        path = 1, -- relative path
-        separator = vim.trim(breadcrump_sep),
-        fmt = function(str)
-          local path_separator = package.config:sub(1, 1)
-          return str:gsub(path_separator, breadcrump_sep)
-        end,
-      },
-    },
+    --   lualine_a = {
+    --     {
+    --       "filename",
+    --       path = 1, -- relative path
+    --       separator = vim.trim(breadcrump_sep),
+    --       fmt = function(str)
+    --         local path_separator = package.config:sub(1, 1)
+    --         return str:gsub(path_separator, breadcrump_sep)
+    --       end,
+    --     },
+    --   },
   },
 }
 
@@ -300,7 +279,7 @@ insert_right({
         table.insert(client_names, client.name)
       end
     end
-    local status = "  [" .. table.concat(client_names, ", ") .. "]"
+    local status = " [" .. table.concat(client_names, ", ") .. "]"
 
     if progress ~= nil then
       return progress .. " " .. status
