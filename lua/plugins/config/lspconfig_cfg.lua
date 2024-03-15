@@ -107,11 +107,15 @@ settings["ltex"] = {
   },
 }
 
+local lua_runtime_path = vim.split(package.path, ":")
+table.insert(lua_runtime_path, "lua/?.lua")
+table.insert(lua_runtime_path, "lua/?/init.lua")
 settings["lua_ls"] = {
   Lua = {
     runtime = {
       -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
       version = "LuaJIT",
+      path = lua_runtime_path,
     },
     diagnostics = {
       globals = {
@@ -119,9 +123,10 @@ settings["lua_ls"] = {
       },
     },
     workspace = {
+      checkThirdParty = false,
       library = {
-        [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-        [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+        vim.fn.expand("$VIMRUNTIME/lua"),
+        vim.fn.stdpath("config") .. "/lua",
       },
       maxPreload = 100000,
       preloadFileSize = 10000,
