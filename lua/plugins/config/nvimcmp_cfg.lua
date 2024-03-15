@@ -18,15 +18,19 @@ end)
 
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0
+  return col ~= 1
     and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col - 1, col - 1):match("%s")
       == nil
 end
 
 local has_trigger_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0
-    and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("[\\/]") ~= nil
+  return col ~= 1
+    and vim.api
+        .nvim_buf_get_lines(0, line - 1, line, true)[1]
+        :sub(col - 1, col - 1)
+        :match("[\\/]")
+      ~= nil
 end
 
 local kind_icons = {
@@ -70,8 +74,8 @@ local source_menu = {
 }
 
 local ELLIPSIS_CHAR = "…"
-local MAX_LABEL_WIDTH = 20
-local MIN_LABEL_WIDTH = 20
+local MAX_LABEL_WIDTH = 30
+local MIN_LABEL_WIDTH = 30
 
 cmp.setup({
   completion = {
@@ -116,7 +120,7 @@ cmp.setup({
       fallback()
       if cmp.visible() and not has_words_before() then
         -- we only close the popup here, the popup appears again when we start typing
-        cmp.mapping.close()
+        cmp.close()
       end
     end, { "i", "s" }),
     ["<C-w>"] = cmp.mapping(function(fallback)
