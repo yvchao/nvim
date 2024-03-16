@@ -153,7 +153,7 @@ vim.g.python3_host_prog = success and custom.pythonPath or nil
 if vim.g.neovide then
   -- neovide specific settings
   -- vim.g.neovide_unlink_border_highlights = true -- hack to fix border and winbar scroll glitches
-  vim.g.neovide_scroll_animation_length = 0 -- temporary fix for winbar glitch
+  vim.g.neovide_scroll_animation_length = 0.2 -- temporary fix for winbar glitch
   vim.g.neovide_cursor_vfx_mode = "railgun"
   vim.g.neovide_remember_window_size = true
   vim.g.neovide_input_ime = true
