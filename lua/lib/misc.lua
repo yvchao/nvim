@@ -24,9 +24,15 @@ end
 -- alias can help create new vim command.
 -- @param cmd The user command
 -- @param repl The actual command or function
--- @param force force create command? boolean
-local alias = function(cmd, repl, force)
-  vim.api.nvim_create_user_command(cmd, repl, { bang = force })
+-- @param opts The table of options
+local alias = function(cmd, repl, opts)
+  local options = {
+    bang = false,
+  }
+  if opts and type(opts) == "table" then
+    options = vim.tbl_extend("force", options, opts)
+  end
+  vim.api.nvim_create_user_command(cmd, repl, options)
 end
 
 return {

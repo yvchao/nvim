@@ -59,6 +59,7 @@ g.special_buffer_list = {
   "nerdtree",
   -- quick fix and terminal, etc.
   "qf",
+  "nredir",
   "toggleterm",
   "term",
   "Outline",

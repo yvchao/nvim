@@ -73,6 +73,7 @@ local BufferTypeMap = {
   ["neoterm"] = " NeoTerm",
   ["toggleterm"] = " ToggleTerm",
   ["help"] = "󰞋 Help",
+  ["nredir"] = " Cmd Output",
   ["git"] = " Git",
   ["DiffviewFiles"] = " Diff View",
   ["DapBreakpoint"] = " Dap Breakpoints",

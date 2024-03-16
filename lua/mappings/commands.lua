@@ -39,3 +39,7 @@ alias("Format", [[lua require("conform").format({async = true})]])
 -- alias("REPLKillAll", function()
 --   require("lib.repl").kill_all()
 -- end)
+--
+alias(require("lib.nredir").command, function(q_args)
+  require("lib.nredir").nredir(q_args.args)
+end, { nargs = 1, complete = "command" })
