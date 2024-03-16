@@ -25,9 +25,9 @@ local function apply()
   opts = vim.api.nvim_get_hl(0, { name = "FloatTitle" })
   opts.bg = "none"
   vim.api.nvim_set_hl(0, "FloatTitle", opts)
-  opts = vim.api.nvim_get_hl(0, { name = "Visual" })
-  opts.reverse = true
-  vim.api.nvim_set_hl(0, "Visual", opts)
+  -- opts = vim.api.nvim_get_hl(0, { name = "Visual" })
+  -- opts.reverse = true
+  -- vim.api.nvim_set_hl(0, "Visual", opts)
 end
 
 -- configure the kanagawa theme
