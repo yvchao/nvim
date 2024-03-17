@@ -76,6 +76,9 @@ map("i", "<A-f>", "<C-Right>")
 map("i", "<A-b>", "<C-Left>")
 map("c", "<C-a>", "<Home>")
 
+-- reasonable pasting experience
+map({ "n", "x" }, "<leader>p", [["0p"]], { desc = "Paste from yank register" })
+
 -- load plugin's keymapping
 require("mappings.plugins")
 

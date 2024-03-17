@@ -310,37 +310,37 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }
-    opts["desc"] = "goto declaration [LSP]"
+    opts["desc"] = "Goto declaration [LSP]"
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-    opts["desc"] = "goto definition [LSP]"
+    opts["desc"] = "Goto definition [LSP]"
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-    opts["desc"] = "hover documentation [LSP]"
+    opts["desc"] = "Hover documentation [LSP]"
     vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
-    opts["desc"] = "goto implementation [LSP]"
+    opts["desc"] = "Goto implementation [LSP]"
     vim.keymap.set("n", "gm", vim.lsp.buf.implementation, opts)
-    opts["desc"] = "show signature help [LSP]"
+    opts["desc"] = "Show signature help [LSP]"
     vim.keymap.set("n", "gH", vim.lsp.buf.signature_help, opts)
-    opts["desc"] = "goto type definition [LSP]"
+    opts["desc"] = "Goto type definition [LSP]"
     vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
-    opts["desc"] = "rename [LSP]"
+    opts["desc"] = "Rename [LSP]"
     vim.keymap.set("n", "gr", vim.lsp.buf.rename, opts)
-    opts["desc"] = "code action [LSP]"
+    opts["desc"] = "Code action [LSP]"
     vim.keymap.set({ "n", "v" }, "ga", vim.lsp.buf.code_action, opts)
-    opts["desc"] = "show references [LSP]"
+    opts["desc"] = "Show references [LSP]"
     vim.keymap.set("n", "gR", vim.lsp.buf.references, opts)
-    opts["desc"] = "format code [LSP]"
-    vim.keymap.set("n", "<leader>f", function()
-      vim.lsp.buf.format({ async = true })
-    end, opts)
-    opts["desc"] = "add workspace folder [LSP]"
+    -- opts["desc"] = "Format code [LSP]"
+    -- vim.keymap.set("n", "<leader>f", function()
+    --   vim.lsp.buf.format({ async = true })
+    -- end, opts)
+    opts["desc"] = "Add workspace folder [LSP]"
     vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
-    opts["desc"] = "remove workspace folder [LSP]"
+    opts["desc"] = "Remove workspace folder [LSP]"
     vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
-    opts["desc"] = "list workspace folders [LSP]"
+    opts["desc"] = "List workspace folders [LSP]"
     vim.keymap.set("n", "<leader>wl", function()
       print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, opts)
-    opts["desc"] = "view document symbols [LSP]"
+    opts["desc"] = "View document symbols [LSP]"
     vim.keymap.set(
       "n",
       "<leader>ls",
