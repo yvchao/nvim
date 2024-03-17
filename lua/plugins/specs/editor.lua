@@ -156,7 +156,7 @@ return {
     -- optional for icon support
     dependencies = {
       "nvim-tree/nvim-web-devicons",
-      "junegunn/fzf",
+      -- "junegunn/fzf",
     },
     config = function()
       -- calling `setup` is optional for customization
@@ -171,7 +171,10 @@ return {
   {
     "junegunn/fzf",
     build = "./install --bin",
-    event = "UIEnter",
+    cmd = { "FZF" },
+    enabled = function()
+      return vim.fn.executable("fzf") ~= 1
+    end,
   },
 
   -- surrounding select text with given signs

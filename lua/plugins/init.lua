@@ -33,7 +33,7 @@ M.load = function()
   vim.opt.rtp:prepend(lazypath)
   require("lazy").setup("plugins.specs", {
     change_detection = {
-      enabled = true,
+      enabled = false, -- disable change detection since there are bug reports about it causing memory leaking
       notify = false,
     },
   })
