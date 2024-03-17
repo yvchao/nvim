@@ -43,3 +43,8 @@ alias("Format", [[lua require("conform").format({async = true})]])
 alias(require("lib.nredir").command, function(q_args)
   require("lib.nredir").nredir(q_args.args)
 end, { nargs = 1, complete = "command" })
+
+-- check plugins that uses lots of memory
+alias("DebugMemory", function()
+  require("lib.utility").check_memory_usage()
+end)
