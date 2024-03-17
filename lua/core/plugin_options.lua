@@ -16,6 +16,9 @@ g.rooter_patterns = {
 
 -- enable treesitter for what filetype?
 g.enable_treesitter_ft = {
+  "bash",
+  "vim",
+  "make",
   "c",
   "comment",
   "cpp",
