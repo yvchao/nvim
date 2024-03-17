@@ -30,7 +30,6 @@ return {
     config = function()
       require("plugins").load_cfg("lspconfig_cfg")
     end,
-    -- module = "lspconfig",
     dependencies = {
       "airblade/vim-rooter",
       "williamboman/mason.nvim",
@@ -38,6 +37,7 @@ return {
       "barreiroleo/ltex-extra.nvim",
       -- "lsp_lines.nvim",
       "Issafalcon/lsp-overloads.nvim",
+      "hrsh7th/cmp-nvim-lsp",
     },
     ft = vim.g.enable_lspconfig_ft,
     lazy = true,
