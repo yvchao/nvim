@@ -5,9 +5,9 @@ local is_cmdline = require("lib.misc").is_cmdline
 local wk = require("which-key")
 wk.register({
   ["<leader>"] = {
-    g = {
-      name = "Git",
-    },
+    -- g = {
+    --   name = "Git",
+    -- },
     f = {
       name = "Grep",
     },
@@ -25,7 +25,11 @@ map("v", "<leader>e", "<cmd>EasyAlign<CR>")
 
 -- oil file management
 -- nmap(";t", "<cmd>Oil %:p:h<CR>")
-nmap(";t", [[<cmd>lua MiniFiles.open(vim.fn.expand("%:p"), {use_latest = false})<CR>]])
+nmap(
+  ";t",
+  [[<cmd>lua MiniFiles.open(vim.fn.expand("%:p"), {use_latest = false})<CR>]],
+  { desc = "MiniFiles" }
+)
 nmap("gx", [[<cmd>execute 'silent! !xdg-open ' . shellescape(expand('<cfile>'), 1)<CR>]])
 
 -- formatter
@@ -54,13 +58,13 @@ map("t", ";h", [[<C-\><C-n><C-w>h]])
 -- )
 
 -- fzf
-nmap("<LEADER>ff", [[<cmd>lua require('fzf-lua').files()<CR>]], { desc = "File grep" })
-nmap("<LEADER>fg", [[<cmd>lua require('fzf-lua').live_grep()<CR>]], { desc = "Live grep" })
+nmap("<leader>ff", [[<cmd>lua require('fzf-lua').files()<CR>]], { desc = "File grep" })
+nmap("<leader>fg", [[<cmd>lua require('fzf-lua').live_grep()<CR>]], { desc = "Live grep" })
 -- nmap("<A-p>", [[<CMD>lua require("telescope.builtin").buffers({previewer = false})<CR>]])
-nmap("<A-p>", [[<CMD>lua MiniPick.builtin.buffers()<CR>]])
+nmap("<A-p>", [[<cmd>lua MiniPick.builtin.buffers()<CR>]])
 
 -- fugitive
-nmap("<LEADER>g", [[<CMD>Git<CR>]])
+nmap("<leader>g", [[<cmd>Git<CR>]], { desc = "Git" })
 
 -- move between buffers
 -- nmap(";n", [[<Cmd>bnext<CR>]])
@@ -68,11 +72,11 @@ nmap("<LEADER>g", [[<CMD>Git<CR>]])
 
 nmap(";n", function()
   require("lib.misc").buffer_jump(1)
-end)
+end, { desc = "Next Buf" })
 
 nmap(";p", function()
   require("lib.misc").buffer_jump(-1)
-end)
+end, { desc = "Prev Buf" })
 
 -- kill buffer with ;q , quit window with :q . This make sense.
 nmap(";q", function()
@@ -84,10 +88,10 @@ nmap(";q", function()
   else
     require("bufdel").delete_buffer_expr()
   end
-end)
+end, { desc = "Del Buf" })
 
 -- close window
-nmap(";c", [[<cmd>close<CR>]])
+nmap(";c", [[<cmd>close<CR>]], { desc = "Close Win" })
 
 -- dispatch
 nmap(";d", "<cmd>Dispatch ", { noremap = true, silent = false })

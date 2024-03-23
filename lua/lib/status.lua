@@ -64,10 +64,11 @@ end
 local colors = set_palette()
 
 local BufferTypeMap = {
-  ["oil"] = " File Management",
-  ["minifiles"] = " File Management",
+  ["oil"] = "  File Management",
+  ["minifiles"] = "  File Management",
   ["starter"] = "󰡃 Dashboard",
   ["fugitive"] = " Fugitive",
+  ["gitcommit"] = " Commit Message",
   ["fugitiveblame"] = " Fugitive Blame",
   ["minimap"] = "Minimap",
   ["qf"] = "󰁨 Quick Fix",

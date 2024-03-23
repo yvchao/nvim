@@ -34,7 +34,7 @@ nmap("<C-T>l", ":tabnext<CR>")
 nmap("<C-T>n", ":tabnew<CR>")
 
 -- save quickly
-nmap(";w", ":w<CR>")
+nmap(";w", ":w<CR>", { desc = "Save Buf" })
 
 -- do thing like ctrl c and ctrl v
 xmap("<C-y>", [["+y]])

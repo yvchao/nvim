@@ -44,11 +44,13 @@ local function buffer_jump(direction)
 
   if is_floating_win() then
     -- don't jump in floating windows
+    vim.notify("Cannot jump to other buffers from a floating window!", vim.log.levels.INFO)
     return
   end
 
   if not not_special_buffer(vim.bo.ft) then
     -- don't jump from special buffers
+    vim.notify("Cannot jump to other buffers from a special buffer!", vim.log.levels.INFO)
     return
   end
 
@@ -60,6 +62,9 @@ local function buffer_jump(direction)
   end, vim.api.nvim_list_bufs())
 
   local buf_num = #buffers
+  if buf_num == 1 then
+    vim.notify("There is only one buffer!", vim.log.levels.INFO)
+  end
   local idx_cur = nil
   for i, buf_id in ipairs(buffers) do
     if buf_id == buf_cur then
