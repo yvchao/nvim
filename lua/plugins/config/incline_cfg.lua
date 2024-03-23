@@ -59,7 +59,7 @@ require("incline").setup({
       right = 0,
     },
     margin = {
-      horizontal = 0,
+      horizontal = 1,
       vertical = 1,
     },
   },
