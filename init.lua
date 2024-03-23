@@ -11,6 +11,11 @@ Source: https://github.com/Avimitin/nvim
 License: MIT License
 --]]
 
+if vim.fn.has("nvim-0.9") then
+  -- use the new loader with byte-compilation cache
+  vim.loader.enable()
+end
+
 -- setup notification backend
 local notify = require("lib.notify")
 
