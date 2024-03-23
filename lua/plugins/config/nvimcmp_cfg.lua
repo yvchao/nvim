@@ -135,10 +135,16 @@ cmp.setup({
         cmp.core:reset()
       end
     end, { "i", "s" }),
-    ["<CR>"] = cmp.mapping.confirm({
-      behavior = cmp.ConfirmBehavior.Insert, -- Replace will remove chars on the right
-      select = true,
-    }),
+    ["<CR>"] = cmp.mapping(function(fallback)
+      if vim.fn.pumvisible() == 0 and cmp.visible() then
+        cmp.confirm({
+          behavior = cmp.ConfirmBehavior.Insert,
+          select = true,
+        })
+      else
+        fallback()
+      end
+    end, { "i", "c" }),
     ["<Space>"] = cmp.mapping(function(fallback)
       if vim.fn.pumvisible() == 0 and cmp.visible() then
         cmp.confirm({
@@ -159,6 +165,7 @@ cmp.setup({
       elseif luasnip.expandable() then
         luasnip.expand()
       else
+        -- vim.print("call fallback.")
         fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
       end
     end, { "i", "s" }),
