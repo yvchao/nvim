@@ -60,6 +60,7 @@ g.special_buffer_list = {
   "oil",
   "NvimTree",
   "nerdtree",
+  "minifiles",
   -- quick fix and terminal, etc.
   "qf",
   "nredir",

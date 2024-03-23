@@ -65,6 +65,7 @@ local colors = set_palette()
 
 local BufferTypeMap = {
   ["oil"] = " File Management",
+  ["minifiles"] = " File Management",
   ["starter"] = "󰡃 Dashboard",
   ["fugitive"] = " Fugitive",
   ["fugitiveblame"] = " Fugitive Blame",

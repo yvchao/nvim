@@ -63,8 +63,16 @@ nmap("<A-p>", [[<CMD>lua MiniPick.builtin.buffers()<CR>]])
 nmap("<LEADER>g", [[<CMD>Git<CR>]])
 
 -- move between buffers
-nmap(";n", [[<Cmd>bnext<CR>]])
-nmap(";p", [[<Cmd>bprevious<CR>]])
+-- nmap(";n", [[<Cmd>bnext<CR>]])
+-- nmap(";p", [[<Cmd>bprevious<CR>]])
+
+nmap(";n", function()
+  require("lib.misc").buffer_jump(1)
+end)
+
+nmap(";p", function()
+  require("lib.misc").buffer_jump(-1)
+end)
 
 -- kill buffer with ;q , quit window with :q . This make sense.
 nmap(";q", function()
