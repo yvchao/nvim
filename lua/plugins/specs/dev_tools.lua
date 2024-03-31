@@ -36,7 +36,7 @@ return {
       -- "williamboman/mason-lspconfig.nvim",
       "barreiroleo/ltex-extra.nvim",
       -- "lsp_lines.nvim",
-      "Issafalcon/lsp-overloads.nvim",
+      "Issafalcon/lsp-overloads.nvim", -- TODO: replace this
       "hrsh7th/cmp-nvim-lsp",
     },
     ft = vim.g.enable_lspconfig_ft,

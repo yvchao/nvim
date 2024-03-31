@@ -123,7 +123,7 @@ nmap("<leader>doc", [[<cmd>lua require("neogen").generate()<CR>]])
 
 -- deal with vim surround
 -- Just the defaults copied here.
-vim.keymap.set("n", "ds", "<Plug>Dsurround")
+vim.keymap.set("n", "xs", "<Plug>Dsurround")
 vim.keymap.set("n", "cs", "<Plug>Csurround")
 vim.keymap.set("n", "cS", "<Plug>CSurround")
 vim.keymap.set("n", "ys", "<Plug>Ysurround")

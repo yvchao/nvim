@@ -128,11 +128,12 @@ cmp.setup({
       fallback()
       -- if cmp is in completion mode, we close the popup and reset its state
       if cmp.visible() then
-        -- close the popup window
-        cmp.mapping.close()
         -- Based on the behavior of cmp.confirm, we can call cmp.core:reset() to cancel the current completion
         -- https://github.com/hrsh7th/nvim-cmp/blob/04e0ca376d6abdbfc8b52180f8ea236cbfddf782/lua/cmp/core.lua#L131
+        -- https://github.com/hrsh7th/nvim-cmp/blob/97dc716fc914c46577a4f254035ebef1aa72558a/lua/cmp/init.lua#L354
+        -- This is equivalent to the behavior on InsertLeave
         cmp.core:reset()
+        cmp.core.view:close()
       end
     end, { "i", "s" }),
     ["<CR>"] = cmp.mapping(function(fallback)

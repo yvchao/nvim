@@ -58,6 +58,17 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
+    init = function()
+      -- lualine optimization
+      vim.g.lualine_laststatus = vim.o.laststatus
+      if vim.fn.argc(-1) > 0 then
+        -- set an empty statusline till lualine loads
+        vim.o.statusline = " "
+      else
+        -- hide the statusline on the starter page
+        vim.o.laststatus = 0
+      end
+    end,
     config = function()
       require("plugins").load_cfg("lualine_cfg")
     end,
@@ -209,14 +220,14 @@ return {
     "ggandor/leap.nvim",
     config = function()
       -- require("leap").create_default_mappings()
-      vim.keymap.set({ "n", "x", "o" }, "f", "<Plug>(leap-forward)")
-      vim.keymap.set({ "n", "x", "o" }, "F", "<Plug>(leap-backward)")
+      vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap-forward)")
+      vim.keymap.set({ "n", "x", "o" }, "S", "<Plug>(leap-backward)")
     end,
     keys = {
-      { "f", mode = "n" },
-      { "f", mode = "v" },
-      { "F", mode = "n" },
-      { "F", mode = "v" },
+      { "s", mode = "n" },
+      { "s", mode = "v" },
+      { "S", mode = "n" },
+      { "S", mode = "v" },
     },
   },
 
@@ -275,6 +286,7 @@ return {
       require("plugins").load_cfg("rest_nvim_cfg")
     end,
     ft = "http",
+    enabled = false,
   },
 
   -- sort the number or text

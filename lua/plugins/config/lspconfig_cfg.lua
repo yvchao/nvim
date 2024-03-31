@@ -176,7 +176,14 @@ settings["pyright"] = {
 local custom_opts = {}
 
 custom_opts["clangd"] = {
-  cmd = { "clangd", "--offset-encoding=utf-16", "--compile-commands-dir=./build", "--log=error" },
+  cmd = {
+    "clangd",
+    "--offset-encoding=utf-16",
+    "--header-insertion-decorators=false",
+    "--clang-tidy",
+    "--compile-commands-dir=./build",
+    "--log=error",
+  },
 }
 
 custom_opts["marksman"] = {
@@ -295,10 +302,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
         },
         ui = {
           max_height = 5,
+          max_weidth = 100,
           close_events = {
-            "CursorMoved",
             "CursorMovedI",
-            "InsertCharPre",
             "BufHidden",
             "InsertLeave",
           },

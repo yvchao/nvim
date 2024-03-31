@@ -263,7 +263,7 @@ insert_right({
             progress = progress:sub(1, max_size) .. "…"
           end
 
-          progress = progress:gsub("[%%]+", "%%%%") -- fix issue with single % symbol
+          progress = progress:gsub("[%%]+", "%%") -- fix issue with single % symbol
           return progress
         else
           return nil
