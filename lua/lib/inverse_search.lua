@@ -23,24 +23,23 @@ local function find_window_in_tab(tab, buffer)
 end
 
 local function texlab_running()
-  local active_clients = vim.lsp.get_active_clients()
-  for _, client in pairs(active_clients) do
-    if client and client.name == "texlab" then
-      return true
-    end
+  local active_clients = vim.lsp.get_clients({ name = "texlab" })
+  if rawequal(next(active_clients), nil) then
+    return false
+  else
+    return true
   end
-  return false
 end
 
 -- Note that the function has to be public.
-local function texlab_perform_inversesearch(filename, line)
+local function texlab_perform_inversesearch(filename, line, column)
   -- Check if Texlab is running in this instance.
   if not texlab_running() then
     return
   end
   filename = vim.fn.resolve(filename)
   local buf = vim.fn.bufnr(filename)
-
+  ---@type integer|nil
   local target_win = vim.api.nvim_get_current_win()
   local target_tab = vim.api.nvim_get_current_tabpage()
 
@@ -48,6 +47,7 @@ local function texlab_perform_inversesearch(filename, line)
   if not vim.api.nvim_buf_is_loaded(buf) then
     buf = vim.fn.bufadd(filename)
     vim.fn.bufload(buf)
+    vim.api.nvim_set_option_value("buflisted", true, { buf = buf })
   else
     -- Search buffer, starting from the current tab.
     target_win = find_window_in_tab(target_tab, buf)
@@ -73,8 +73,8 @@ local function texlab_perform_inversesearch(filename, line)
   vim.api.nvim_win_set_buf(target_win, buf)
 
   local last_line = vim.fn.line("$")
-  if line <= last_line then
-    vim.api.nvim_win_set_cursor(target_win, { line, 0 })
+  if line <= last_line and column > 0 then
+    vim.api.nvim_win_set_cursor(target_win, { line, column - 1 })
   end
 end
 

@@ -11,40 +11,27 @@ alias("CrateUpgrade", [[lua require("crates").upgrade_crate()]])
 alias("CrateMenu", [[lua require("crates").show_popup()]])
 alias("CrateReload", [[lua require("crates").reload()]])
 
--- nvim-spectre
--- alias("SpectreOpen", "lua require('spectre').open()")
-
--- lsp_lines
--- alias("LspLineToggle", [[lua require("lsp_lines").toggle()]])
-
-alias("HiCurLine", [[call matchadd('HighlightLineMatches', '\%'.line('.').'l')]])
-alias("HiCurLineOff", [[call clearmatches()]])
-
 -- format
 alias("Format", [[lua require("conform").format({async = true})]])
 
--- repl
--- alias("REPLLaunch", function()
---   require("lib.repl").launch()
--- end)
---
--- alias("REPLToggle", function()
---   require("lib.repl").toggle()
--- end)
---
--- alias("REPLKill", function()
---   require("lib.repl").shutdown()
--- end)
---
--- alias("REPLKillAll", function()
---   require("lib.repl").kill_all()
--- end)
---
-alias(require("lib.nredir").command, function(q_args)
-  require("lib.nredir").nredir(q_args.args)
+alias("Nredir", function(args)
+  require("lib.nredir").nredir(args.args)
 end, { nargs = 1, complete = "command" })
+
+alias("Grep", function(args)
+  require("lib.grep").rg(args.fargs)
+end, { nargs = "*", complete = "file_in_path", bar = true })
 
 -- check plugins that uses lots of memory
 alias("DebugMemory", function()
   require("lib.utility").check_memory_usage()
 end)
+
+-- Copy text to clipboard using codeblock format ```{ft}{content}```
+alias("CopyCodeBlock", function(opts)
+  local lines = vim.api.nvim_buf_get_lines(0, opts.line1 - 1, opts.line2, true)
+  local content = table.concat(lines, "\n")
+  local result = string.format("```%s\n%s\n```", vim.bo.filetype, content)
+  vim.fn.setreg("+", result)
+  vim.notify("Text copied to clipboard")
+end, { range = true })

@@ -58,7 +58,8 @@ local function buffer_jump(direction)
 
   -- get all valid buffers
   local buffers = vim.tbl_filter(function(buf)
-    return vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, "buflisted")
+    return vim.api.nvim_buf_is_valid(buf)
+      and vim.api.nvim_get_option_value("buflisted", { buf = buf })
   end, vim.api.nvim_list_bufs())
 
   local buf_num = #buffers
@@ -72,6 +73,10 @@ local function buffer_jump(direction)
       break
     end
   end
+  if idx_cur == nil then
+    vim.notify("Current buffer is invalid!", vim.log.levels.INFO)
+    return
+  end
 
   local buf_next = nil
   local buf_idx = nil
@@ -83,7 +88,7 @@ local function buffer_jump(direction)
     else
       buf_next = buffers[buf_idx]
     end
-    local ft = vim.api.nvim_buf_get_option(buf_next, "filetype")
+    local ft = vim.api.nvim_get_option_value("filetype", { buf = buf_next })
     if ft and not_special_buffer(ft) then
       vim.api.nvim_set_current_buf(buf_next)
       return
@@ -109,6 +114,19 @@ local function alias(cmd, repl, opts)
   end
   vim.api.nvim_create_user_command(cmd, repl, options)
 end
+
+-- local function resolve()
+--   local current_file = vim.fn.expand("%:p")
+--   local current_dir
+--   -- if file is a symlinks
+--   if vim.fn.getftype(current_file) == "link" then
+--     local real_file = vim.fn.resolve(current_file)
+--     current_dir = vim.fn.fnamemodify(real_file, ":h")
+--   else
+--     current_dir = vim.fn.expand("%:p:h")
+--   end
+--   return current_dir
+-- end
 
 return {
   scroll_to_end = scroll_to_end,
