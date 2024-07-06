@@ -23,3 +23,9 @@ vim.api.nvim_create_autocmd("UIEnter", {
     end
   end,
 })
+
+-- automatically update color palette
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "*",
+  callback = require("lib.palette").update_palette,
+})
