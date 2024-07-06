@@ -1,0 +1,38 @@
+{
+    "name": "better-snippets",
+    "engines": {
+        "vscode": "^1.11.0"
+    },
+    "contributes": {
+        "snippets": [
+            {
+                "language": [
+                    "plaintex",
+                    "tex"
+                ],
+                "path": "./latex/latex.json"
+            },
+            {
+                "language": [
+                    "plaintex",
+                    "tex"
+                ],
+                "path": "./latex/latex-snippets.json"
+            },
+            {
+                "language": [
+                    "plaintex",
+                    "tex"
+                ],
+                "path": "./latex/vscode-latex-snippets.json"
+            },
+            {
+                "language": [
+                    "bibtex",
+                    "bib"
+                ],
+                "path": "./latex/bibtex.json"
+            }
+        ]
+    }
+}

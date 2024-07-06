@@ -30,12 +30,16 @@ return {
 
   {
     "ojroques/nvim-bufdel",
-    -- keys = { ";q", mode = "n" },
   },
 
   {
     "kevinhwang91/nvim-bqf",
     ft = "qf",
+    opts = {
+      preview = {
+        auto_preview = false,
+      },
+    },
   },
 
   -- list of nerdfont icons
@@ -43,16 +47,6 @@ return {
     "nvim-tree/nvim-web-devicons",
     event = "BufRead",
   },
-
-  -- fancy status line
-  -- {
-  --   "nvimdev/galaxyline.nvim",
-  --   dependencies = { "nvim-tree/nvim-web-devicons", "linrongbin16/lsp-progress.nvim" },
-  --   config = function()
-  --     require("plugins").load_cfg("galaxyline_cfg")
-  --   end,
-  --   enabled = false,
-  -- },
 
   -- lua line
   {
@@ -75,23 +69,13 @@ return {
     event = "UIEnter",
   },
 
-  -- buffer manager
-  -- {
-  --   "akinsho/nvim-bufferline.lua",
-  --   config = function()
-  --     require("plugins").load_cfg("bufferline_cfg")
-  --   end,
-  --   event = "BufRead",
-  --   enabled = false,
-  -- },
-
   -- float statusline
   {
     "b0o/incline.nvim",
     config = function()
       require("plugins").load_cfg("incline_cfg")
     end,
-    enabled = true,
+    enabled = false,
     event = "UIEnter",
   },
 
@@ -141,6 +125,19 @@ return {
       "Chmod",
       "Mkdir",
     },
+    enabled = false,
+  },
+
+  {
+    "lambdalisue/suda.vim",
+    cmd = {
+      "SudaRead",
+      "SudaWrite",
+    },
+    init = function()
+      vim.g.suda_smart_edit = 0 -- avoid creating virtual files
+    end,
+    event = "BufReadPre",
   },
 
   -- cd into the root directory
@@ -150,17 +147,21 @@ return {
   },
 
   -- telescope: extensible fuzzy file finder
-  {
-    "nvim-telescope/telescope.nvim",
-    event = "BufReadPost",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    config = function()
-      require("plugins").load_cfg("telescope_cfg")
-    end,
-    enabled = false,
-  },
+  -- {
+  --   "nvim-telescope/telescope.nvim",
+  --   event = "BufReadPost",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --   },
+  --   config = function()
+  --     require("plugins").load_cfg("telescope_cfg")
+  --   end,
+  --   keys = {
+  --     { "<leader>f", mode = "n" },
+  --   },
+  --   cmd = { "Telescope" },
+  --   enabled = false,
+  -- },
 
   {
     "ibhagwan/fzf-lua",
@@ -171,12 +172,17 @@ return {
     },
     config = function()
       -- calling `setup` is optional for customization
-      require("fzf-lua").setup({})
+      require("fzf-lua").setup({
+        fzf_colors = {
+          ["gutter"] = { "bg", "Normal" },
+        },
+      })
     end,
     keys = {
       { "<leader>f", mode = "n" },
     },
     cmd = { "FzfLua" },
+    enabled = true,
   },
 
   {
@@ -191,7 +197,7 @@ return {
   -- surrounding select text with given signs
   {
     "tpope/vim-surround",
-    event = "BufRead",
+    event = "UIEnter",
   },
 
   {
@@ -207,6 +213,7 @@ return {
       },
     },
     event = "UIEnter",
+    enabled = false,
   },
 
   -- a swiss knife for aligning text
@@ -249,15 +256,6 @@ return {
     event = "InsertEnter",
   },
 
-  -- split single line and join multiple lines, useful for closing bracket
-  -- {
-  --   "AndrewRadev/splitjoin.vim",
-  --   keys = {
-  --     { "gJ", mode = "n" },
-  --     { "gS", mode = "n" },
-  --   },
-  -- },
-
   -- generate line for guiding indent
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -276,19 +274,6 @@ return {
     },
   },
 
-  -- a curl wrapper in neovim
-  {
-    "NTBBloodbath/rest.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    config = function()
-      require("plugins").load_cfg("rest_nvim_cfg")
-    end,
-    ft = "http",
-    enabled = false,
-  },
-
   -- sort the number or text
   {
     "sQVe/sort.nvim",
@@ -304,17 +289,17 @@ return {
     event = "BufRead",
   },
 
-  {
-    "h-hg/fcitx.nvim",
-    event = "VeryLazy",
-  },
+  -- {
+  --   "h-hg/fcitx.nvim",
+  --   event = "VeryLazy",
+  -- },
 
   {
     "echasnovski/mini.nvim",
     version = false,
     config = function()
       require("mini.starter").setup()
-      require("mini.files").setup()
+      -- require("mini.files").setup()
       require("mini.sessions").setup()
       require("mini.pick").setup()
       require("mini.splitjoin").setup()
@@ -322,17 +307,19 @@ return {
     end,
   },
 
+  {
+    "stevearc/oil.nvim",
+    -- Optional dependencies
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("oil").setup({})
+    end,
+  },
+
   -- undo tree
   {
     "mbbill/undotree",
-    event = "BufReadPost",
-  },
-
-  -- remote clipboard with osc52
-  {
-    "ojroques/nvim-osc52",
     event = "UIEnter",
-    enabled = false,
   },
 
   -- smart buffer in tabs

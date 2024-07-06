@@ -52,6 +52,7 @@ require("incline").setup({
   },
   ignore = {
     filetypes = special_buffer_list,
+    buftypes = "special",
   },
   window = {
     padding = {
@@ -66,7 +67,7 @@ require("incline").setup({
   render = function(props)
     local res = {}
 
-    local breadcrump_sep = " ⟩ "
+    local breadcrump_sep = " ⟨.. "
     local prefix = " "
     local suffix = " "
     local depth = -1
@@ -82,7 +83,7 @@ require("incline").setup({
     local filename = bufname ~= "" and vim.fn.fnamemodify(bufname, ":t") or "[No Name]"
     table.insert(res, { filename })
 
-    if vim.api.nvim_buf_get_option(props.buf, "modified") then
+    if vim.api.nvim_get_option_value("modified", { buf = props.buf }) then
       table.insert(res, { " [+]" })
     end
     table.insert(res, { suffix })

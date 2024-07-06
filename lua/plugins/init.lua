@@ -3,7 +3,7 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 local function has_lazy()
-  return vim.loop.fs_stat(lazypath) ~= nil
+  return vim.uv.fs_stat(lazypath) ~= nil
 end
 
 local function install_lazy()

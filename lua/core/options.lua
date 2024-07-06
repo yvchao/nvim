@@ -36,7 +36,7 @@ opt.list = true
 opt.listchars = "tab:> ,trail:·"
 
 -- Minimal number of screen lines to keep above and below the cursor.
-opt.scrolloff = 5
+opt.scrolloff = 3
 
 -- Time in milliseconds to wait for a key code sequence to complete
 opt.timeoutlen = 200
@@ -144,6 +144,11 @@ local has_persist = vim.fn.has("persistent_undo")
 if undo_stat and has_persist == 1 then
   opt.undofile = true
   opt.undodir = undo_dir
+end
+-- NOTE: we modify the default behavior since nvim 0.10
+if vim.fn.executable("rg") == 1 then
+  opt.grepprg = "rg --vimgrep --smart-case --hidden --ignore-vcs "
+  opt.grepformat = "%f:%l:%c:%m"
 end
 
 local success, custom = pcall(require, "custom")

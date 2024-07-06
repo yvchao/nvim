@@ -161,10 +161,10 @@ cmp.setup({
         cmp.select_next_item()
       elseif has_trigger_before() then
         cmp.complete()
-      elseif luasnip.locally_jumpable(1) then
-        luasnip.jump(1)
       elseif luasnip.expandable() then
         luasnip.expand()
+      elseif luasnip.locally_jumpable(1) then
+        luasnip.jump(1)
       else
         -- vim.print("call fallback.")
         fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
@@ -190,13 +190,13 @@ cmp.setup({
     { name = "luasnip", group_index = 2, priority = 3 },
     { name = "buffer", group_index = 3, priority = 1, max_item_count = 10 },
     { name = "path", group_index = 3, priority = 2, trigger_characters = { "/" } },
-    {
-      name = "latex_symbols",
-      group_index = 4,
-      max_item_count = 20,
-      priority = 1,
-      trigger_characters = { "\\" },
-    },
+    -- {
+    --   name = "latex_symbols",
+    --   group_index = 4,
+    --   max_item_count = 20,
+    --   priority = 1,
+    --   trigger_characters = { "\\" },
+    -- },
   }),
   sorting = {
     priority_weight = 2,
@@ -261,7 +261,10 @@ cmp.setup.cmdline(":", {
 
 -- for friendly snippets
 require("luasnip.loaders.from_vscode").lazy_load({
-  paths = { vim.fn.expand("~") .. "/.local/share/nvim/lazy/friendly-snippets/" },
+  paths = {
+    -- vim.fn.expand("~") .. "/.local/share/nvim/lazy/friendly-snippets/",
+    vim.fn.stdpath("config") .. "/snippets/",
+  },
 })
 luasnip.config.set_config({
   region_check_events = "InsertEnter",

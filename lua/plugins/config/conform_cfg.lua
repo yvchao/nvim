@@ -4,6 +4,7 @@ require("conform").setup({
     python = { "isort", "black" },
     rust = { "rustfmt" },
     quarto = { "injected" },
+    tex = { "latexindent" },
     ["_"] = { "trim_whitespace" },
   },
   formatters = {

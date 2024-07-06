@@ -4,7 +4,7 @@ local M = {
   -- "kanagawa" by default
   -- Available theme value:
   --  "kanagawa", "night","dawn","day","nord","dusk"+"fox"
-  theme = "kanagawa",
+  theme = "rose-pine",
 }
 
 local ok, custom = pcall(require, "custom")
@@ -15,23 +15,25 @@ end
 
 -- This functions finally apply the colorscheme
 local function apply()
-  vim.cmd("colorscheme " .. M.theme)
-
   vim.api.nvim_set_hl(0, "NormalFloat", { link = "Normal", bg = "none" })
-  local opts = {}
-  opts = vim.api.nvim_get_hl(0, { name = "FloatBorder" })
-  opts.bg = "none"
+  vim.api.nvim_set_hl(0, "GitSignsDelete", { bold = true })
+  -- vim.api.nvim_set_hl(0, "@lsp.type.comment", {})
+  local opts = { bg = "none" }
   vim.api.nvim_set_hl(0, "FloatBorder", opts)
-  opts = vim.api.nvim_get_hl(0, { name = "FloatTitle" })
-  opts.bg = "none"
+  -- opts = vim.api.nvim_get_hl(0, { name = "FloatTitle" })
   vim.api.nvim_set_hl(0, "FloatTitle", opts)
   -- opts = vim.api.nvim_get_hl(0, { name = "Visual" })
   -- opts.reverse = true
   -- vim.api.nvim_set_hl(0, "Visual", opts)
+  --
+  vim.cmd("colorscheme " .. M.theme)
 end
 
 -- configure the kanagawa theme
+-- WARN: ss
+-- TODO: sss
 M.kanagawa_setup = function()
+  vim.o.background = "dark"
   require("kanagawa").setup({
     functionStyle = { bold = true },
     typeStyle = { bold = true },
@@ -54,15 +56,37 @@ M.kanagawa_setup = function()
           bg = palette.winterYellow,
         },
         WinSeparator = { fg = palette.lightBlue },
-        -- TelescopeTitle = { fg = theme.ui.special, bold = true },
-        -- TelescopePreviewTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
-        -- TelescopePromptTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
-        -- TelescopeResultsTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
+        TelescopeTitle = { fg = theme.ui.special, bold = true },
+        TelescopePreviewTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
+        TelescopePromptTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
+        TelescopeResultsTitle = { fg = palette.sumiInk0, bg = palette.sakuraPink },
         InclineNormal = { fg = palette.sumiInk1, bg = palette.waveRed },
         InclineNormalNC = { fg = palette.winterBlue, bg = palette.sakuraPink },
         ["@comment.todo"] = { link = "@text.todo" },
       }
     end,
+  })
+  apply()
+end
+
+-- configure the rosepine theme
+M.rosepine_setup = function()
+  vim.o.background = "light"
+  require("rose-pine").setup({
+    highlight_groups = {
+      TelescopeBorder = { fg = "overlay", bg = "overlay" },
+      TelescopeNormal = { fg = "subtle", bg = "overlay" },
+      TelescopeSelection = { fg = "text", bg = "highlight_med" },
+      TelescopeSelectionCaret = { fg = "love", bg = "highlight_med" },
+      TelescopeMultiSelection = { fg = "text", bg = "highlight_high" },
+
+      TelescopeTitle = { fg = "base", bg = "love" },
+      TelescopePromptTitle = { fg = "base", bg = "pine" },
+      TelescopePreviewTitle = { fg = "base", bg = "iris" },
+
+      TelescopePromptNormal = { fg = "text", bg = "surface" },
+      TelescopePromptBorder = { fg = "surface", bg = "surface" },
+    },
   })
   apply()
 end

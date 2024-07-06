@@ -1,4 +1,6 @@
 local ok, lspconfig = pcall(require, "lspconfig")
+local map = require("lib.keymap").map
+
 if not ok then
   vim.notify("Fail to setup LSP", vim.log.levels.ERROR, {
     title = "plugins",
@@ -63,27 +65,26 @@ settings["texlab"] = {
     build = {
       executable = "latexmk",
       args = {
-        -- "-pdf",
-        "-pdfxe",
-        "-dvi-",
-        "-ps-",
+        "-pdf",
+        -- "-pdfxe",
+        -- "-dvi-",
+        -- "-ps-",
         "-silent",
         "-interaction=nonstopmode",
         "-synctex=1",
-        "-outdir=build",
+        -- "-outdir=build",
         "%f",
       },
       onSave = true,
-      forwardSearchAfter = false,
+      forwardSearchAfter = true,
     },
-    rootDirectory = ".",
-    auxDirectory = "build",
+    -- rootDirectory = ".",
+    -- auxDirectory = "build",
     forwardSearch = {
-      executable = "zathura",
+      executable = "okular",
       args = {
-        "--synctex-forward",
-        "%l:1:%f",
-        "%p",
+        "--unique",
+        "%p#src:%l%f",
       },
     },
   },
@@ -96,6 +97,7 @@ settings["ltex"] = {
     ["ltex-ls"] = {
       logLevel = "severe",
     },
+    language = "en-GB",
     dictionary = {
       -- en = {
       --   vim.fn.expand("~") .. "/.local/share/ltex/ltex.dictionary.en-US.txt",
@@ -109,15 +111,15 @@ settings["ltex"] = {
   },
 }
 
-local lua_runtime_path = vim.split(package.path, ":")
-table.insert(lua_runtime_path, "lua/?.lua")
-table.insert(lua_runtime_path, "lua/?/init.lua")
+-- local lua_runtime_path = vim.split(package.path, ":")
+-- table.insert(lua_runtime_path, "lua/?.lua")
+-- table.insert(lua_runtime_path, "lua/?/init.lua")
 settings["lua_ls"] = {
   Lua = {
     runtime = {
       -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
       version = "LuaJIT",
-      path = lua_runtime_path,
+      path = vim.env.VIMRUNTIME,
     },
     diagnostics = {
       globals = {
@@ -192,12 +194,6 @@ custom_opts["marksman"] = {
 
 custom_opts["ltex"] = {
   filetypes = { "markdown", "tex" },
-  on_attach = function()
-    require("ltex_extra").setup({
-      load_langs = { "en-US" },
-      path = vim.fn.expand("~") .. "/.local/share/ltex",
-    })
-  end,
 }
 
 for _, server_name in pairs(configured_lsp_list) do
@@ -259,99 +255,59 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
   border = border,
 })
 
-local map = function(mode, lhs, rhs, opts)
-  opts = vim.tbl_extend("keep", opts, { noremap = true, silent = true })
-  vim.keymap.set(mode, lhs, rhs, opts)
-end
-
-local show_loclist = function()
-  vim.ui.select(vim.diagnostic.severity, {
-    prompt = "Select the severity",
-    format_item = function(item)
-      return item
-    end,
-  }, function(item)
-    vim.diagnostic.setloclist({ severity = { min = vim.diagnostic.severity[item] } })
-  end)
-end
-
-map("n", "gl", show_loclist, { desc = "open diagnostic list" })
-map("n", "gj", vim.diagnostic.goto_next, { desc = "goto next diagnostic" })
-map("n", "gk", vim.diagnostic.goto_prev, { desc = "goto previous diagnostic" })
-
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("UserLspConfig", {}),
   callback = function(ev)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
-    local ft = vim.fn.getbufvar(ev.buf, "&filetype")
-    if ft == "quarto" then
+    local buftype = vim.bo.buftype
+    local filetype = vim.bo.filetype
+    -- Ignore special buffers and quarto files
+    -- TODO: directly use otter.nvim to setup lsp for quarto file
+    if buftype ~= "" or filetype == "quarto" then
       return
     end
-    local client = vim.lsp.get_client_by_id(ev.data.client_id)
-    if client.server_capabilities.signatureHelpProvider then
-      require("lsp-overloads").setup(client, {
-        keymaps = {
-          next_signature = "<C-j>",
-          previous_signature = "<C-k>",
-          next_parameter = "<C-l>",
-          previous_parameter = "<C-h>",
-          close_signature = "<C-q>",
-        },
-        ui = {
-          max_height = 5,
-          max_weidth = 100,
-          close_events = {
-            "CursorMovedI",
-            "BufHidden",
-            "InsertLeave",
-          },
-        },
-        display_automatically = true,
-      })
-    end
+
+    -- Enable completion triggered by <c-x><c-o>
+    vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+    -- TODO: better handling signature help
+    -- local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    -- if client and client.server_capabilities.signatureHelpProvider then
+    --   require("lsp-overloads").setup(client, {
+    --     keymaps = {
+    --       next_signature = "<C-j>",
+    --       previous_signature = "<C-k>",
+    --       next_parameter = "<C-l>",
+    --       previous_parameter = "<C-h>",
+    --       close_signature = "<C-q>",
+    --     },
+    --     ui = {
+    --       max_height = 5,
+    --       max_weidth = 100,
+    --       close_events = {
+    --         "CursorMovedI",
+    --         "BufHidden",
+    --         "InsertLeave",
+    --       },
+    --     },
+    --     display_automatically = false,
+    --   })
+    -- end
 
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }
-    opts["desc"] = "Goto declaration [LSP]"
-    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
     opts["desc"] = "Goto definition [LSP]"
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+    vim.keymap.set("n", "<C>-]", vim.lsp.tagfunc, opts)
     opts["desc"] = "Hover documentation [LSP]"
-    vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
-    opts["desc"] = "Goto implementation [LSP]"
-    vim.keymap.set("n", "gm", vim.lsp.buf.implementation, opts)
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
     opts["desc"] = "Show signature help [LSP]"
-    vim.keymap.set("n", "gH", vim.lsp.buf.signature_help, opts)
-    opts["desc"] = "Goto type definition [LSP]"
-    vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
+    vim.keymap.set("n", "gh", vim.lsp.buf.signature_help, opts)
     opts["desc"] = "Rename [LSP]"
     vim.keymap.set("n", "gr", vim.lsp.buf.rename, opts)
     opts["desc"] = "Code action [LSP]"
     vim.keymap.set({ "n", "v" }, "ga", vim.lsp.buf.code_action, opts)
     opts["desc"] = "Show references [LSP]"
     vim.keymap.set("n", "gR", vim.lsp.buf.references, opts)
-    -- opts["desc"] = "Format code [LSP]"
-    -- vim.keymap.set("n", "<leader>f", function()
-    --   vim.lsp.buf.format({ async = true })
-    -- end, opts)
-    opts["desc"] = "Add workspace folder [LSP]"
-    vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
-    opts["desc"] = "Remove workspace folder [LSP]"
-    vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
-    opts["desc"] = "List workspace folders [LSP]"
-    vim.keymap.set("n", "<leader>wl", function()
-      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, opts)
-    opts["desc"] = "View document symbols [LSP]"
-    vim.keymap.set(
-      "n",
-      "<leader>ls",
-      [[<cmd>lua require("fzf-lua").lsp_document_symbols()<CR>]],
-      opts
-    )
   end,
 })

@@ -25,12 +25,10 @@ g.enable_treesitter_ft = {
   "go",
   "javascript",
   "json",
-  "lua",
   "rust",
   "toml",
   "python",
   "markdown",
-  "latex",
   "julia",
 }
 

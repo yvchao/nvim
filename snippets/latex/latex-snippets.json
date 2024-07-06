@@ -1,0 +1,160 @@
+{
+    "Align(ed)": {
+        "prefix": "align",
+        "body": [
+            "\\begin{align}",
+            "\t$0",
+            "\\end{align}"
+        ],
+        "description": "Align(ed)"
+    },
+    "Equation": {
+        "prefix": "equation",
+        "body": [
+            "\\begin{equation}",
+            "\t$0",
+            "\t\\label{eq:$1}",
+            "\\end{equation}"
+        ],
+        "description": "Add a Equation"
+    },
+    "Display Math — \\[ … \\]": {
+        "prefix": "$$",
+        "body": [
+            "\\[",
+            "\t$TM_SELECTED_TEXT$1",
+            "\\]"
+        ],
+        "description": "Display Math"
+    },
+    "Algorithm": {
+        "prefix": "algo",
+        "body": [
+            "% \\usepackage{algorithm,algorithmicx,algpseudocode}",
+            "\\begin{algorithm}",
+            "\t\\floatname{algorithm}{${1:Algorithm}}",
+            "\t\\algrenewcommand\\algorithmicrequire{\\textbf{${2:Input: }}}",
+            "\t\\algrenewcommand\\algorithmicensure{\\textbf{${3:Output: }}}",
+            "\t\\caption{$4}\\label{alg:$5}",
+            "\t\\begin{algorithmic}[1]",
+            "\t\t\\Require \\$input\\$",
+            "\t\t\\Ensure \\$output\\$",
+            "\t\t$6",
+            "\t\t\\State \\textbf{return} \\$state\\$",
+            "\t\\end{algorithmic}",
+            "\\end{algorithm}",
+            "$0"
+        ],
+        "description": "Add an algorithm"
+    },
+    "Algorithm:State": {
+        "prefix": "state",
+        "body": [
+            "\\State $1"
+        ],
+        "desciption": "Add an statement of algorithm"
+    },
+    "Algorithm:If": {
+        "prefix": "if",
+        "body": [
+            "\\If{$1}",
+            "\\ElsIf{$2}",
+            "\\Else",
+            "\\EndIf"
+        ],
+        "desciption": "Add an if statement of algorithm"
+    },
+    "Algorithm:For": {
+        "prefix": "for",
+        "body": [
+            "\\For{i=0:$1}",
+            "\t\\State $0",
+            "\\EndFor"
+        ],
+        "desciption": "Add an for statement of algorithm"
+    },
+    "Algorithm:While": {
+        "prefix": "while",
+        "body": [
+            "\\While{$1}",
+            "\t\\State $0",
+            "\\EndWhile"
+        ],
+        "desciption": "Add an for statement of algorithm"
+    },
+    "Clever:Ref": {
+        "prefix": "cref",
+        "body": [
+            "\\Cref{$1}$0"
+        ],
+        "description": "Ref for Figure"
+    },
+    "Itemize": {
+        "prefix": "itemize",
+        "body": [
+            "\\\\begin{itemize}",
+            "\t\\item $0",
+            "\\\\end{itemize}"
+        ],
+        "description": "Itemize"
+    },
+    "\\begin{}…\\end{}": {
+        "prefix": "begin",
+        "body": [
+            "\\\\begin{${1:env}}",
+            "\t${1/(enumerate|itemize|list)|(description)|(.*)/${1:+\\item }${2:+\\item[] }${3:+ }/}$0",
+            "\\\\end{${1:env}}"
+        ],
+        "description": "Begin - End"
+    },
+    "Figure": {
+        "prefix": "figure",
+        "body": [
+            "\\begin{figure}",
+            "\t\\begin{center}",
+            "\t\t\\includegraphics[width=0.95\\textwidth]{figures/$1}",
+            "\t\\end{center}",
+            "\t\\caption{$3}\\label{fig:$4}",
+            "\\end{figure}",
+            "$0"
+        ],
+        "description": "Add a figure"
+    },
+    "Table": {
+        "prefix": "table",
+        "body": [
+            "\\begin{table}",
+            "\t\\caption{$1}\\label{tab:$2}",
+            "\t\\begin{center}",
+            "\t\t\\begin{tabular}[c]{l|l}",
+            "\t\t\t\\toprule",
+            "\t\t\t\\C1 & C2",
+            "\t\t\t\\midrule",
+            "\t\t\ta & b \\\\\\\\",
+            "\t\t\tc & d \\\\\\\\",
+            "\t\t\t$3",
+            "\t\t\t\\bottomrule",
+            "\t\t\\end{tabular}",
+            "\t\\end{center}",
+            "\\end{table}",
+            "$0"
+        ],
+        "description": "Add a table"
+    },
+    "Enumerate": {
+        "prefix": "enumerate",
+        "body": [
+            "\\\\begin{enumerate}",
+            "\t\\item $0",
+            "\\\\end{enumerate}"
+        ],
+        "description": "Add a enumerate"
+    },
+    "Cite": {
+        "prefix": "cite",
+        "body": [
+            "\\cite{$1}$0"
+        ],
+        "description": "Add a cite"
+    }
+}

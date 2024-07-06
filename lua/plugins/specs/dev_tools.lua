@@ -3,7 +3,6 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    -- commit = "7a2c621",
     config = function()
       require("plugins").load_cfg("treesitter_cfg")
     end,
@@ -13,16 +12,16 @@ return {
     event = "UIEnter",
   },
 
-  {
-    "nvim-treesitter/nvim-treesitter-context",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-    },
-    config = function()
-      require("treesitter-context").setup({ enable = false })
-    end,
-    enabled = false,
-  },
+  -- {
+  --   "nvim-treesitter/nvim-treesitter-context",
+  --   dependencies = {
+  --     "nvim-treesitter/nvim-treesitter",
+  --   },
+  --   config = function()
+  --     require("treesitter-context").setup({ enable = false })
+  --   end,
+  --   enabled = false,
+  -- },
 
   -- manage the lsp server
   {
@@ -34,13 +33,25 @@ return {
       "airblade/vim-rooter",
       "williamboman/mason.nvim",
       -- "williamboman/mason-lspconfig.nvim",
-      "barreiroleo/ltex-extra.nvim",
       -- "lsp_lines.nvim",
-      "Issafalcon/lsp-overloads.nvim", -- TODO: replace this
+      -- "Issafalcon/lsp-overloads.nvim", -- TODO: replace this
       "hrsh7th/cmp-nvim-lsp",
     },
     ft = vim.g.enable_lspconfig_ft,
     lazy = true,
+  },
+
+  {
+    "barreiroleo/ltex-extra.nvim",
+    config = function()
+      require("ltex_extra").setup({
+        load_langs = { "en-US" },
+        path = vim.fn.expand("~") .. "/.local/share/ltex",
+      })
+    end,
+    ft = { "markdown", "tex" },
+    lazy = true,
+    enabled = false,
   },
 
   {
@@ -51,26 +62,15 @@ return {
     cmd = { "Mason" },
   },
 
-  {
-    url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-    config = function()
-      -- require("lsp_lines").setup({ virtual_lines = { only_current_line = true } })
-      require("lsp_lines").setup()
-      vim.diagnostic.config({ virtual_lines = false })
-    end,
-    enabled = false,
-  },
-
-  {
-    "VidocqH/lsp-lens.nvim",
-    dependencies = { "neovim/nvim-lspconfig" },
-    config = function()
-      require("lsp-lens").setup({
-        enable = false,
-      })
-    end,
-    enabled = false,
-  },
+  -- {
+  --   url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+  --   config = function()
+  --     -- require("lsp_lines").setup({ virtual_lines = { only_current_line = true } })
+  --     require("lsp_lines").setup()
+  --     vim.diagnostic.config({ virtual_lines = false })
+  --   end,
+  --   enabled = false,
+  -- },
 
   {
     "stevearc/conform.nvim",
@@ -134,13 +134,6 @@ return {
     cmd = { "DapBreakpoint" },
   },
 
-  -- {
-  --   "theHamsta/nvim-dap-virtual-text",
-  --   config = function()
-  --     require("nvim-dap-virtual-text").setup()
-  --   end,
-  -- },
-
   -- use `gcc` `gbc` to comment
   {
     "numToStr/Comment.nvim",
@@ -195,6 +188,7 @@ return {
       require("lsp-progress").setup()
     end,
     event = "LspAttach",
+    enabled = false,
   },
 
   -- lot's of pre-set snippets
@@ -206,6 +200,7 @@ return {
       { "/", mode = "n" },
     },
     ft = vim.g.enable_lspconfig_ft,
+    enabled = false,
   },
 
   -- the completion core
@@ -218,7 +213,7 @@ return {
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-cmdline",
-      "kdheepak/cmp-latex-symbols",
+      -- "kdheepak/cmp-latex-symbols",
     },
     event = {
       "InsertEnter",
@@ -235,7 +230,7 @@ return {
     -- install jsregexp (optional!).
     build = "make install_jsregexp",
     dependencies = {
-      "rafamadriz/friendly-snippets",
+      -- "rafamadriz/friendly-snippets",
     },
     event = "InsertEnter",
   },
@@ -253,19 +248,7 @@ return {
   },
 
   {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
-    config = function()
-      require("copilot").setup({
-        filetypes = {
-          python = true,
-          c = true,
-          cpp = true,
-          ["*"] = false,
-        },
-      })
-    end,
+    "github/copilot.vim",
     enabled = false,
   },
 

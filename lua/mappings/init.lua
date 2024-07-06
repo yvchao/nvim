@@ -3,18 +3,9 @@ local map = keymap.map
 local nmap = keymap.nmap
 local xmap = keymap.xmap
 
--- quicker motion
-nmap("J", "5j")
-xmap("J", "5j")
-
-nmap("K", "5k")
-xmap("K", "5k")
-
-nmap("L", "g_")
-nmap("H", "^")
-
-xmap("L", "g_")
-xmap("H", "^")
+-- not needed since we use [d and ]d for diagnostics now
+-- nmap("glj", "g<Down>")
+-- nmap("glk", "g<Up>")
 
 nmap("W", "5w")
 nmap("B", "5b")
@@ -29,12 +20,12 @@ xmap("<", "<gv")
 xmap(">", ">gv")
 
 -- create tab like window
-nmap("<C-T>h", ":tabprevious<CR>")
-nmap("<C-T>l", ":tabnext<CR>")
-nmap("<C-T>n", ":tabnew<CR>")
+nmap("<C-t>h", "<cmd>tabprevious<CR>")
+nmap("<C-t>l", "<cmd>tabnext<CR>")
+nmap("<C-t>n", "<cmd>tabnew<CR>")
 
 -- save quickly
-nmap(";w", ":w<CR>", { desc = "Save Buf" })
+nmap(";w", ":w<CR>", { desc = "save buffer" })
 
 -- do thing like ctrl c and ctrl v
 xmap("<C-y>", [["+y]])
@@ -42,7 +33,7 @@ nmap("<C-p>", [["+p]])
 map("i", "<C-p>", [[<ESC>"+pa]])
 
 -- shut down the search highlight
-nmap("<ESC>", ":nohlsearch<CR>")
+nmap("<ESC>", "<cmd>nohlsearch<CR>")
 
 -- no more finger expansion
 map("i", "<A-;>", "<ESC>")
@@ -59,15 +50,17 @@ nmap("<C-S-down>", ":res -5<CR>")
 nmap("<C-S-right>", ":vertical resize+5<CR>")
 nmap("<C-S-left>", ":vertical resize-5<CR>")
 
--- center editing line
--- map("i", "<C-c>", "<ESC>zzi")
-
 -- use very magic mode for searching
 -- nmap("/", [[/\v]], { silent = false })
 
--- search and replace in visual mode
-map("v", "<leader>/", [[y/\v<C-r>"<CR>]], { desc = "Search selected text" })
-map("v", "<leader>s", [[y:s/\v<C-r>"//g<Left><Left>]], { desc = "Replace selected text" })
+-- search selected text in visual mode
+map("x", "<leader>/", [[y/\v<C-r>"<CR>]], { desc = "Search selected text" })
+map(
+  "x",
+  "<leader>s",
+  [[y<cmd>let @/=substitute(escape(@", '/'), '\n','\\n','g')<cr>"_cgn]],
+  { desc = "Search&replace selected text" }
+)
 
 -- emacs-like cursor movement in insert mode
 map("i", "<C-a>", "<Home>")
@@ -77,7 +70,7 @@ map("i", "<A-b>", "<C-Left>")
 map("c", "<C-a>", "<Home>")
 
 -- reasonable pasting experience
-map({ "n", "x" }, "<leader>p", [["0p"]], { desc = "Paste from yank register" })
+map({ "n", "x" }, "<leader>p", [["0p]], { desc = "paste from yank register" })
 
 -- load plugin's keymapping
 require("mappings.plugins")

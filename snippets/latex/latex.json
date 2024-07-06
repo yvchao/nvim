@@ -1,0 +1,82 @@
+{
+    "item": {
+        "prefix": "item",
+        "body": "\n\\item ",
+        "description": "\\item on a newline"
+    },
+    "partial": {
+        "prefix": "@d",
+        "body": "\\partial",
+        "description": "partial derivative symbol"
+    },
+    "fraction2": {
+        "prefix": "@%",
+        "body": "\\frac{$1}{$2}$0",
+        "description": "fraction"
+    },
+    "hat": {
+        "prefix": "@^",
+        "body": "\\hat{${1:${TM_SELECTED_TEXT}}}$0",
+        "description": "hat"
+    },
+    "bar": {
+        "prefix": "@_",
+        "body": "\\bar{${1:${TM_SELECTED_TEXT}}}$0",
+        "description": "bar"
+    },
+    "equiv": {
+        "prefix": "@=",
+        "body": "\\equiv",
+        "description": "equiv symbol"
+    },
+    "times": {
+        "prefix": "@*",
+        "body": "\\times",
+        "description": "times symbol"
+    },
+    "mathrm": {
+        "prefix": "@rm",
+        "body": "\\mathrm{${1:${TM_SELECTED_TEXT:text}}}",
+        "description": "math roman font"
+    },
+    "mathbf": {
+        "prefix": "@bf",
+        "body": "\\mathbf{${1:${TM_SELECTED_TEXT:text}}}",
+        "description": "math bold font"
+    },
+    "mathbb": {
+        "prefix": "@bb",
+        "body": "\\mathbb{${1:${TM_SELECTED_TEXT:text}}}",
+        "description": "math blackboard bold font"
+    },
+    "mathcal": {
+        "prefix": "@cal",
+        "body": "\\mathcal{${1:${TM_SELECTED_TEXT:text}}}",
+        "description": "math caligraphic font"
+    },
+    "mathit": {
+        "prefix": "@it",
+        "body": "\\mathit{${1:${TM_SELECTED_TEXT:text}}}",
+        "description": "math italic font"
+    },
+    "mathtt": {
+        "prefix": "@tt",
+        "body": "\\mathtt{${1:${TM_SELECTED_TEXT:text}}}",
+        "description": "math typewriter font"
+    },
+    "(": {
+        "prefix": "@(",
+        "body": "\\left( ${1:${TM_SELECTED_TEXT}} \\right)",
+        "description": "left( ... right)"
+    },
+    "{": {
+        "prefix": "@{",
+        "body": "\\left\\{ ${1:${TM_SELECTED_TEXT}} \\right\\\\\\}",
+        "description": "left{ ... right}"
+    },
+    "[": {
+        "prefix": "@[",
+        "body": "\\left[ ${1:${TM_SELECTED_TEXT}} \\right]",
+        "description": "left[ ... right]"
+    }
+}
