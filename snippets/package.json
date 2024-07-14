@@ -32,6 +32,10 @@
                     "bib"
                 ],
                 "path": "./latex/bibtex.json"
+            },
+            {
+                "language": "python",
+                "path": "./python/python.json"
             }
         ]
     }

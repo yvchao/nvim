@@ -30,14 +30,22 @@ return {
 
   {
     "ojroques/nvim-bufdel",
+    opts = {
+      next = "alternate",
+      quit = true,
+    },
   },
 
   {
     "kevinhwang91/nvim-bqf",
     ft = "qf",
+    dependencies = {
+      "junegunn/fzf",
+    },
     opts = {
       preview = {
-        auto_preview = false,
+        auto_preview = true,
+        wrap = true,
       },
     },
   },
@@ -189,9 +197,9 @@ return {
     "junegunn/fzf",
     build = "./install --bin",
     cmd = { "FZF" },
-    enabled = function()
-      return vim.fn.executable("fzf") ~= 1
-    end,
+    -- enabled = function()
+    --   return vim.fn.executable("fzf") ~= 1
+    -- end,
   },
 
   -- surrounding select text with given signs
@@ -288,11 +296,6 @@ return {
     "LunarVim/bigfile.nvim",
     event = "BufRead",
   },
-
-  -- {
-  --   "h-hg/fcitx.nvim",
-  --   event = "VeryLazy",
-  -- },
 
   {
     "echasnovski/mini.nvim",
