@@ -14,24 +14,6 @@ g.rooter_patterns = {
   "tsconfig.json",
 }
 
--- enable treesitter for what filetype?
-g.enable_treesitter_ft = {
-  "bash",
-  "vim",
-  "make",
-  "c",
-  "comment",
-  "cpp",
-  "go",
-  "javascript",
-  "json",
-  "rust",
-  "toml",
-  "python",
-  "markdown",
-  "julia",
-}
-
 -- enable lspconfig for what filetype?
 g.enable_lspconfig_ft = {
   "text",

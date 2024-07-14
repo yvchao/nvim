@@ -54,8 +54,6 @@ opt.wrap = true
 -- set text width to zero to use the wrap functionality
 opt.textwidth = 0
 
-opt.cindent = true
-
 -- set windows split at bottom-right by default
 opt.splitright = true
 opt.splitbelow = true
@@ -81,7 +79,6 @@ vim.opt.shortmess:append({ c = true, w = true, m = true })
 opt.inccommand = "split"
 opt.completeopt = { "menuone", "noselect", "menu" }
 opt.ttyfast = true
-opt.lazyredraw = true
 opt.visualbell = true
 opt.updatetime = 100
 opt.virtualedit = "block"
@@ -117,7 +114,7 @@ opt.concealcursor = ""
 -- enable global status line
 opt.laststatus = 3
 
--- hide cmdline when not used
+-- show cmdline
 opt.cmdheight = 1
 
 -- disable tabline
@@ -126,9 +123,6 @@ opt.showtabline = 0
 -- perfer latex ft.
 vim.g.tex_flavor = "latex"
 vim.g.tex_indent_items = ""
-
--- skip python provider checking
-vim.g.python3_host_skip_check = 1
 
 -- Changed home directory here
 local backup_dir = vim.fn.stdpath("cache") .. "/backup"
@@ -153,11 +147,13 @@ end
 
 local success, custom = pcall(require, "custom")
 vim.o.guifont = success and custom.guifont or nil
+
+-- skip python provider checking
+vim.g.python3_host_skip_check = 1
 vim.g.python3_host_prog = success and custom.pythonPath or nil
 
 if vim.g.neovide then
   -- neovide specific settings
-  -- vim.g.neovide_unlink_border_highlights = true -- hack to fix border and winbar scroll glitches
   vim.g.neovide_scroll_animation_length = 0.2 -- temporary fix for winbar glitch
   vim.g.neovide_cursor_vfx_mode = "railgun"
   vim.g.neovide_remember_window_size = true

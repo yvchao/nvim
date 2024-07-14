@@ -1,4 +1,5 @@
 local alias = require("lib.misc").alias
+local map = require("lib.keymap").map
 
 -- debug function
 alias("DapBreakpoint", [[lua require("dap").toggle_breakpoint()]])
@@ -14,13 +15,31 @@ alias("CrateReload", [[lua require("crates").reload()]])
 -- format
 alias("Format", [[lua require("conform").format({async = true})]])
 
+alias("LightToggle", function()
+  if vim.o.background == "dark" then
+    vim.o.background = "light"
+  else
+    vim.o.background = "dark"
+  end
+end)
+
+-- Capture command output in a temporary buffer
 alias("Nredir", function(args)
   require("lib.nredir").nredir(args.args)
 end, { nargs = 1, complete = "command" })
 
+-- Better grep
 alias("Grep", function(args)
-  require("lib.grep").rg(args.fargs)
-end, { nargs = "*", complete = "file_in_path", bar = true })
+  require("lib.grep").rg(args)
+end, { nargs = "*", complete = "file_in_path", bar = true, bang = true })
+-- cmdline abbreviation
+map("ca", "grep", function()
+  if vim.fn.getcmdtype() == ":" and vim.fn.getcmdline() == "grep" then
+    return "Grep"
+  else
+    return "grep"
+  end
+end, { expr = true, silent = false }) -- we need the option "silent=false" here to make sure that the change is instantly reflected
 
 -- check plugins that uses lots of memory
 alias("DebugMemory", function()

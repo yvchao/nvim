@@ -3,22 +3,7 @@ local nmap = require("lib.keymap").nmap
 local is_cmdline = require("lib.misc").is_cmdline
 local create_menu = require("lib.utility").create_menu
 
--- local wk = require("which-key")
--- wk.register({
---   ["<leader>"] = {
---     f = {
---       name = "Grep",
---     },
---     d = {
---       name = "Docstring",
---     },
---     w = {
---       name = "Workspace",
---     },
---   },
--- })
-
--- diagnostics
+-- filter diagnostics by severity levels
 local show_loclist = function()
   vim.ui.select(vim.diagnostic.severity, {
     prompt = "Select the severity",
@@ -30,6 +15,7 @@ local show_loclist = function()
     vim.diagnostic.setloclist({ severity = vim.diagnostic.severity[item] })
   end)
 end
+
 local lsp_methods = {
   ["Goto declaration"] = vim.lsp.buf.declaration,
   ["Goto definition"] = vim.lsp.buf.definition,
@@ -51,8 +37,10 @@ local lsp_methods = {
   ["View document symbols"] = [[lua require("fzf-lua").lsp_document_symbols()]],
 }
 
+-- lsp menus
 map("n", "<leader>l", create_menu(lsp_methods, "Select an LSP call"), { desc = "make LSP calls" })
 
+-- diagnostics
 map("n", "gd", show_loclist, { desc = "open diagnostic list" })
 map("n", "]d", vim.diagnostic.goto_next, { desc = "goto next diagnostic" })
 map("n", "[d", vim.diagnostic.goto_prev, { desc = "goto previous diagnostic" })
@@ -63,6 +51,7 @@ map("v", "<leader>e", "<cmd>EasyAlign<CR>")
 -- oil file management
 nmap(";t", "<cmd>Oil %:p:h<CR>")
 
+-- oil is easier to use compared to mini.files
 -- nmap(
 --   ";t",
 --   [[<cmd>lua MiniFiles.open(vim.fn.expand("%:p"), {use_latest = false})<CR>]],
@@ -71,13 +60,8 @@ nmap(";t", "<cmd>Oil %:p:h<CR>")
 
 -- fterm
 nmap("<C-\\>", [[<cmd>ToggleTerm direction=float<CR>]])
--- nmap("<M-`>", [[<cmd>ToggleTerm direction=horizontal<CR>]])
 map("t", "<C-\\>", [[<C-\><C-n><cmd>ToggleTerm<CR>]])
 map("t", "<C-n>", [[<C-\><C-n>]])
--- This for horizontal terminal
-map("t", ";k", [[<C-\><C-n><C-w>k]])
--- This for vertical terminal
-map("t", ";h", [[<C-\><C-n><C-w>h]])
 
 -- telescope
 -- nmap(
@@ -112,14 +96,16 @@ end, { desc = "prev buf" })
 -- kill buffer with ;q , quit window with :q . This make sense.
 nmap(";q", function()
   if is_cmdline() then
-    vim.notify(
-      "Cannot execute wincmd in commandline, close the window to exit.",
-      vim.log.levels.INFO
-    )
+    vim.cmd.close() -- wincmd cannot be executed in commandline window.
   else
     require("bufdel").delete_buffer_expr()
   end
 end, { desc = "delete current buf" })
+
+-- incremental selection based on treesitter
+nmap("v", [[<cmd>lua require("lib.treesitter_selection"):start_select()<CR>]])
+map("v", "v", [[<cmd>lua require("lib.treesitter_selection"):select_parent_node()<CR>]])
+map("v", "<BS>", [[<cmd>lua require("lib.treesitter_selection"):restore_last_selection()<CR>]])
 
 -- close window
 nmap(";c", [[<cmd>close<CR>]], { desc = "close current window" })
@@ -134,11 +120,11 @@ nmap("<leader>u", vim.cmd.UndotreeToggle, { desc = "toggle undo tree" })
 nmap("<leader>doc", [[<cmd>lua require("neogen").generate()<CR>]])
 
 -- Deal with vim surround: just the defaults copied here.
-vim.keymap.set("n", "xs", "<Plug>Dsurround")
-vim.keymap.set("n", "cs", "<Plug>Csurround")
-vim.keymap.set("n", "cS", "<Plug>CSurround")
-vim.keymap.set("n", "ys", "<Plug>Ysurround")
-vim.keymap.set("n", "yS", "<Plug>YSurround")
-vim.keymap.set("n", "yss", "<Plug>Yssurround")
-vim.keymap.set("n", "ySs", "<Plug>YSsurround")
-vim.keymap.set("n", "ySS", "<Plug>YSsurround")
+map("n", "xs", "<Plug>Dsurround")
+map("n", "cs", "<Plug>Csurround")
+map("n", "cS", "<Plug>CSurround")
+map("n", "ys", "<Plug>Ysurround")
+map("n", "yS", "<Plug>YSurround")
+map("n", "yss", "<Plug>Yssurround")
+map("n", "ySs", "<Plug>YSsurround")
+map("n", "ySS", "<Plug>YSsurround")

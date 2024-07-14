@@ -38,10 +38,10 @@ M.execute = function(cmd)
     result = vim.fn.split(vim.fn.execute(cmd), "\n")
   end
 
-  vim.api.nvim_buf_set_option(M.buf, "modifiable", true)
+  vim.api.nvim_set_option_value("modifiable", true, { buf = M.buf })
 
   vim.api.nvim_buf_set_lines(M.buf, 0, -1, false, result)
-  vim.api.nvim_buf_set_option(M.buf, "modifiable", false)
+  vim.api.nvim_set_option_value("modifiable", false, { buf = M.buf })
 end
 
 M.create_win = function()
@@ -49,12 +49,12 @@ M.create_win = function()
   M.win = vim.api.nvim_get_current_win()
   M.buf = vim.api.nvim_get_current_buf()
 
-  vim.api.nvim_buf_set_name(0, "result #" .. M.buf)
+  vim.api.nvim_buf_set_name(0, "Command Output")
 
-  vim.api.nvim_buf_set_option(0, "buftype", "nofile")
-  vim.api.nvim_buf_set_option(0, "swapfile", false)
-  vim.api.nvim_buf_set_option(0, "filetype", M.filetype)
-  vim.api.nvim_buf_set_option(0, "bufhidden", "wipe")
+  vim.api.nvim_set_option_value("buftype", "nofile", { buf = M.buf })
+  vim.api.nvim_set_option_value("swapfile", false, { buf = M.buf })
+  vim.api.nvim_set_option_value("filetype", M.filetype, { buf = M.buf })
+  vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = M.buf })
 
   vim.api.nvim_command("setlocal wrap")
   vim.api.nvim_command("setlocal cursorline")
@@ -63,11 +63,8 @@ M.create_win = function()
 end
 
 M.nredir = function(cmd)
-  -- This situation is impossible since we use the `-nargs = 1` option
-  -- if cmd == nil or cmd == "" then
-  --   vim.notify("Attempt to execute empty command!", vim.log.levels.WARN)
-  --   return
-  -- end
+  -- TODO: enable asynchronous execution and range evaluation
+  -- https://gist.github.com/Leenuus/7a2ea47b88bfe16430b42e4e48122718
 
   if starts_with(cmd, '"') or starts_with(cmd, '!"') then
     vim.notify("Attempt to execute string as a command!", vim.log.levels.WARN)

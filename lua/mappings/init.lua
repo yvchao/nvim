@@ -45,10 +45,10 @@ nmap(";l", "<C-w>l")
 nmap(";h", "<C-w>h")
 
 -- resize the window
-nmap("<C-S-up>", ":res +5<CR>")
-nmap("<C-S-down>", ":res -5<CR>")
-nmap("<C-S-right>", ":vertical resize+5<CR>")
-nmap("<C-S-left>", ":vertical resize-5<CR>")
+nmap("<C-S-up>", "<cmd>res +5<CR>")
+nmap("<C-S-down>", "<cmd>res -5<CR>")
+nmap("<C-S-right>", "<cmd>vertical resize+5<CR>")
+nmap("<C-S-left>", "<cmd>vertical resize-5<CR>")
 
 -- use very magic mode for searching
 -- nmap("/", [[/\v]], { silent = false })
