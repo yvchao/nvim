@@ -115,6 +115,22 @@ local function alias(cmd, repl, opts)
   vim.api.nvim_create_user_command(cmd, repl, options)
 end
 
+-- ---@return string|nil
+-- local function get_visual_text()
+--   local _, start_row, start_col, _ = vim.fn.getpos("'<")
+--   local _, end_row, end_col, _ = vim.fn.getpos("'>")
+--   if start_row ~= end_row then
+--     vim.notify("Only single line text is valid for grep!", vim.log.levels.INFO)
+--     return nil
+--   end
+--
+--   -- or use api.nvim_buf_get_lines
+--   ---@cast start_row integer
+--   local line = vim.fn.getline(start_row)
+--   ---@cast start_col integer
+--   return line:sub(start_col, end_col)
+-- end
+
 -- local function resolve()
 --   local current_file = vim.fn.expand("%:p")
 --   local current_dir

@@ -1,5 +1,20 @@
 require("nvim-treesitter.configs").setup({
-  ensure_installed = vim.g.enable_treesitter_ft,
+  ensure_installed = {
+    "bash",
+    "vim",
+    "make",
+    "c",
+    "comment",
+    "cpp",
+    "go",
+    "javascript",
+    "json",
+    "rust",
+    "toml",
+    "python",
+    "markdown",
+    "julia",
+  },
   highlight = {
     enable = true,
   },
@@ -8,6 +23,14 @@ require("nvim-treesitter.configs").setup({
   },
   matchup = {
     enable = true,
+  },
+  incremental_selection = {
+    enable = false, -- this may cause crashes
+    keymaps = {
+      init_selection = true,
+      node_incremental = "v",
+      node_decremental = "<BS>",
+    },
   },
   textobjects = {
     select = {
@@ -24,6 +47,8 @@ require("nvim-treesitter.configs").setup({
         ["ic"] = "@class.inner",
         ["ab"] = "@block.outer",
         ["ib"] = "@block.inner",
+        ["aa"] = "@parameter.outer",
+        ["ia"] = "@parameter.inner",
       },
     },
     move = {

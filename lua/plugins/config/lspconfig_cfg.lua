@@ -37,6 +37,12 @@ local function setup_capabilities()
   capabilities =
     vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
+  capabilities.workspace = {
+    didChangeWatchedFiles = {
+      dynamicRegistration = true,
+    },
+  }
+
   return capabilities
 end
 
@@ -50,7 +56,7 @@ local configured_lsp_list = {
   "ltex",
   "ruff_lsp",
   "clangd",
-  "marksman",
+  "markdown_oxide",
   "julials",
   "taplo",
   "jsonls",
@@ -99,9 +105,9 @@ settings["ltex"] = {
     },
     language = "en-GB",
     dictionary = {
-      -- en = {
-      --   vim.fn.expand("~") .. "/.local/share/ltex/ltex.dictionary.en-US.txt",
-      -- },
+      en = {
+        vim.fn.expand("~") .. "/.local/share/ltex/ltex.dictionary.en-US.txt",
+      },
     },
     disabledRules = {},
     hiddenFalsePositives = {},
@@ -297,17 +303,19 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }
-    opts["desc"] = "Goto definition [LSP]"
-    vim.keymap.set("n", "<C>-]", vim.lsp.tagfunc, opts)
+    -- the default keymap <C-]> for vim.lsp.tagfunc is already good enough
+    -- opts["desc"] = "Goto definition [LSP]"
+    -- map("n", "<gD>", vim.lsp.buf.definition, opts)
     opts["desc"] = "Hover documentation [LSP]"
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+    map("n", "K", vim.lsp.buf.hover, opts)
     opts["desc"] = "Show signature help [LSP]"
-    vim.keymap.set("n", "gh", vim.lsp.buf.signature_help, opts)
+    map("n", "gh", vim.lsp.buf.signature_help, opts)
+    map("i", "<C-s>", vim.lsp.buf.signature_help, opts)
     opts["desc"] = "Rename [LSP]"
-    vim.keymap.set("n", "gr", vim.lsp.buf.rename, opts)
+    map("n", "gr", vim.lsp.buf.rename, opts)
     opts["desc"] = "Code action [LSP]"
-    vim.keymap.set({ "n", "v" }, "ga", vim.lsp.buf.code_action, opts)
+    map({ "n", "v" }, "ga", vim.lsp.buf.code_action, opts)
     opts["desc"] = "Show references [LSP]"
-    vim.keymap.set("n", "gR", vim.lsp.buf.references, opts)
+    map("n", "gR", vim.lsp.buf.references, opts)
   end,
 })

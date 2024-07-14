@@ -2,7 +2,6 @@ local cmp = require("cmp")
 local compare = require("cmp.config.compare")
 local luasnip = require("luasnip")
 local cmp_autopairs = require("nvim-autopairs.completion.cmp")
--- local feedkey = require("lib.keymap").feedkeys
 
 -- to work with autopairs
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
@@ -16,14 +15,14 @@ cmp.event:on("menu_closed", function()
   vim.b.copilot_suggestion_hidden = false
 end)
 
-local has_words_before = function()
+local function has_words_before()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 1
     and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col - 1, col - 1):match("%s")
       == nil
 end
 
-local has_trigger_before = function()
+local function has_trigger_before()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 1
     and vim.api
@@ -155,7 +154,7 @@ cmp.setup({
       else
         fallback()
       end
-    end, { "i", "c" }),
+    end, { "i" }),
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
@@ -186,6 +185,11 @@ cmp.setup({
       entry_filter = function(entry)
         return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
       end,
+      option = {
+        markdown_oxide = {
+          keyword_pattern = [[\(\k\| \|\/\|#\)\+]],
+        },
+      },
     },
     { name = "luasnip", group_index = 2, priority = 3 },
     { name = "buffer", group_index = 3, priority = 1, max_item_count = 10 },
@@ -245,7 +249,6 @@ cmp.setup.cmdline(":", {
           cmp.select_next_item()
         else
           cmp.complete()
-          -- feedkey("<C-Tab>", "nt") -- fallback to nvim native completion
         end
       end,
     },
