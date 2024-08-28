@@ -252,15 +252,8 @@ insert_right({
 insert_right({
   function()
     local active_clients = vim.lsp.get_clients()
-    local client_names = {}
-
-    for _, client in pairs(active_clients) do
-      if client and client.name ~= "" then
-        table.insert(client_names, client.name)
-      end
-    end
-    if next(client_names) ~= nil then
-      return " [" .. table.concat(client_names, ", ") .. "] "
+    if next(active_clients) ~= nil then
+      return " "
     else
       return " "
     end
@@ -270,7 +263,14 @@ insert_right({
     fg = palette.get_color("fg_status"),
     bg = palette.get_color("bg_status"),
   },
-  -- padding = { left = 0, right = 1 },
+  on_click = function(clicknr, button, modifier)
+    if button == "l" then
+      vim.cmd("LspInfo")
+      -- elseif button == "r" then
+      --   vim.cmd("LspRestart")
+    end
+  end,
+  padding = { left = 0, right = 1 },
 })
 
 insert_right({
@@ -278,11 +278,12 @@ insert_right({
   -- icon = { "", color = { fg = palette.get_color("yellow"), gui = "bold" } },
   sources = { "nvim_diagnostic" },
   symbols = { error = " ", warn = " ", info = " ", hint = "󰌶 " },
+  colored = true,
   diagnostics_color = {
-    color_error = { fg = palette.get_color("red") },
-    color_warn = { fg = palette.get_color("yellow") },
-    color_info = { fg = palette.get_color("cyan") },
-    color_hint = { fg = palette.get_color("dimblue") },
+    error = { fg = palette.get_color("red") },
+    warn = { fg = palette.get_color("yellow") },
+    info = { fg = palette.get_color("cyan") },
+    hint = { fg = palette.get_color("dimblue") },
   },
   update_in_insert = false,
   cond = function()

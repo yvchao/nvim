@@ -34,6 +34,7 @@ return {
       next = "alternate",
       quit = true,
     },
+    enabled = false,
   },
 
   {
@@ -44,7 +45,7 @@ return {
     },
     opts = {
       preview = {
-        auto_preview = true,
+        auto_preview = false,
         wrap = true,
       },
     },
@@ -239,20 +240,15 @@ return {
       vim.keymap.set({ "n", "x", "o" }, "S", "<Plug>(leap-backward)")
     end,
     keys = {
-      { "s", mode = "n" },
-      { "s", mode = "v" },
-      { "S", mode = "n" },
-      { "S", mode = "v" },
+      { "s", mode = { "n", "v" } },
+      { "S", mode = { "n", "v" } },
     },
   },
 
   -- Enhanced the `%` keymap
   {
     "andymass/vim-matchup",
-    keys = {
-      { "%", mode = "n" },
-      { "%", mode = "v" },
-    },
+    event = "BufReadPost",
   },
 
   -- automatically pairs the bracket

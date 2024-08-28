@@ -60,6 +60,7 @@ nmap(";t", "<cmd>Oil %:p:h<CR>")
 
 -- fterm
 nmap("<C-\\>", [[<cmd>ToggleTerm direction=float<CR>]])
+nmap("<C-`>", [[<cmd>ToggleTerm direction=horizontal<CR>]])
 map("t", "<C-\\>", [[<C-\><C-n><cmd>ToggleTerm<CR>]])
 map("t", "<C-n>", [[<C-\><C-n>]])
 
@@ -95,10 +96,17 @@ end, { desc = "prev buf" })
 
 -- kill buffer with ;q , quit window with :q . This make sense.
 nmap(";q", function()
+  if #vim.fn.getbufinfo({ buflisted = 1 }) < 2 then
+    -- exit when there is only one buffer left
+    vim.cmd("confirm qall")
+    return
+  end
+
   if is_cmdline() then
     vim.cmd.close() -- wincmd cannot be executed in commandline window.
   else
-    require("bufdel").delete_buffer_expr()
+    -- delete current buffer and switch to next valid buffer
+    require("lib.misc").buffer_delete()
   end
 end, { desc = "delete current buf" })
 
@@ -118,6 +126,9 @@ nmap("<leader>u", vim.cmd.UndotreeToggle, { desc = "toggle undo tree" })
 
 -- neogen
 nmap("<leader>doc", [[<cmd>lua require("neogen").generate()<CR>]])
+
+-- aerial
+nmap("gO", [[<cmd>lua require("aerial").toggle()<CR>]])
 
 -- Deal with vim surround: just the defaults copied here.
 map("n", "xs", "<Plug>Dsurround")

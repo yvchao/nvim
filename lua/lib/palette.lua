@@ -10,8 +10,8 @@ local colors = {
   black = "#16161D",
   grey = "#303030",
   yellow = "#E5C07B",
-  cyan = "#70C0BA",
-  dimblue = "#83A598",
+  cyan = "#00DD88",
+  dimblue = "#112277",
   green = "#98C379",
   orange = "#FF8800",
   purple = "#8800DD",
@@ -47,7 +47,7 @@ M.update_palette = function()
   elseif M.current_scheme == "rose-pine" then
     M.colors.yellow = "#CC6600"
     M.colors.green = "#008800"
-    M.colors.cyan = "#00BBCC"
+    M.colors.cyan = "#11AACC"
     M.colors.blue = "#1289EF"
     if vim.o.background == "light" then
       M.colors.bg = "#DDDDDD"
@@ -55,7 +55,7 @@ M.update_palette = function()
       M.colors.fg_alt = "#7F7F7F"
       M.colors.bg_alt = "#faf4ed"
     else
-      M.colors.bg = "#16141f"
+      M.colors.bg = "#111122"
       M.colors.fg = "#F1F1F1"
       M.colors.fg_alt = "#A1A1A1"
       M.colors.bg_alt = "#191724"

@@ -36,6 +36,20 @@ M.load = function()
       enabled = false, -- disable change detection since there are bug reports about it causing memory leaking
       notify = false,
     },
+    performance = {
+      rtp = {
+        disabled_plugins = {
+          "gzip",
+          "matchit",
+          -- "matchparen",
+          -- "netrwPlugin",
+          "tarPlugin",
+          "tohtml",
+          "tutor",
+          "zipPlugin",
+        },
+      },
+    },
   })
 end
 

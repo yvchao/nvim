@@ -51,23 +51,22 @@ end
 M.notify_message = function(msg, level, opts) -- luacheck: no unused args
   opts = opts or {}
   local title = opts.title or "message"
-  title = "------ " .. title .. " ------\n"
-  local bottom = "\n" .. string.rep("-", 14 + vim.fn.strdisplaywidth(opts.title))
+  local top = "-------- " .. title .. " --------\n"
+  local bottom = "\n" .. string.rep("-", 18 + vim.fn.strdisplaywidth(title))
   if level == vim.log.levels.ERROR then
     vim.api.nvim_echo(
-      { { title, "ErrorMsg" }, { msg, "ErrorMsg" }, { bottom, "ErrorMsg" } },
+      { { top, "ErrorMsg" }, { msg, "ErrorMsg" }, { bottom, "ErrorMsg" } },
       true,
       {}
     )
-    -- vim.api.nvim_err_writeln(msg)
   elseif level == vim.log.levels.WARN then
     vim.api.nvim_echo(
-      { { title, "WarningMsg" }, { msg, "WarningMsg" }, { bottom, "WarningMsg" } },
+      { { top, "WarningMsg" }, { msg, "WarningMsg" }, { bottom, "WarningMsg" } },
       true,
       {}
     )
   else
-    vim.api.nvim_echo({ { title }, { msg }, { bottom } }, true, {})
+    vim.api.nvim_echo({ { top }, { msg }, { bottom } }, true, {})
   end
 end
 

@@ -1,5 +1,18 @@
+local M = {}
+
+local special_buffer_list = vim.g.special_buffer_list or {}
+
+-- speed up the lookup of special buffer type
+for _, v in ipairs(special_buffer_list) do
+  special_buffer_list[v] = true
+end
+
+M.is_special_buffer = function(ft)
+  return special_buffer_list[ft] ~= nil
+end
+
 -- scroll target buffer to end (set cursor to last line)
-local function scroll_to_end(bufnr)
+M.scroll_to_end = function(bufnr)
   local cur_win = vim.api.nvim_get_current_win()
 
   -- switch to buf and set cursor
@@ -25,18 +38,90 @@ local function is_floating_win(winid)
   end
 end
 
--- WARN: this function is deplicate with the one in status.lua
-local function not_special_buffer(ft)
-  local special_buffer_list = vim.g.special_buffer_list or {}
-  for _, v in ipairs(special_buffer_list) do
-    if v == ft then
-      return false
+local function get_next_buf(bufnr)
+  -- get all valid buffers
+  local buffers = vim.tbl_filter(function(buf)
+    return vim.api.nvim_get_option_value("buflisted", { buf = buf })
+  end, vim.api.nvim_list_bufs())
+  local idx_cur = 1
+  local buf_num = 0
+  for i, buf in ipairs(buffers) do
+    buf_num = buf_num + 1
+    if bufnr == buf then
+      idx_cur = i
     end
   end
-  return true
+
+  if buf_num < 2 then
+    -- no next buffer
+    return nil
+  end
+
+  local buf_next = nil
+  local idx_next = nil
+  for i = 0, buf_num - 2 do
+    idx_next = (idx_cur + i) % buf_num + 1
+    buf_next = buffers[idx_next]
+    local ft = vim.api.nvim_get_option_value("filetype", { buf = buf_next })
+    if ft and not M.is_special_buffer(ft) then
+      return buf_next
+    end
+  end
 end
 
-local function buffer_jump(direction)
+local function switch_buffer(windows, bufnr)
+  local cur_win = vim.fn.winnr()
+  for _, winid in ipairs(windows) do
+    vim.cmd(string.format("%d wincmd w", vim.fn.win_id2win(winid)))
+    vim.cmd(string.format("buffer %d", bufnr))
+  end
+  vim.cmd(string.format("%d wincmd w", cur_win))
+end
+
+M.buffer_delete = function(force)
+  -- save current buffer number
+  local bufnr = vim.fn.bufnr()
+  local next_buf = nil
+
+  -- ignore unlisted buffer and close the window
+  if vim.fn.buflisted(bufnr) == 0 then
+    vim.cmd.close()
+    return
+  end
+
+  -- check if buffer has special filetype
+  local ft = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
+  if M.is_special_buffer(ft) then
+    -- close window for special buffers
+    vim.cmd.close()
+  else
+    -- find next valid buffer
+    next_buf = get_next_buf(bufnr)
+  end
+
+  -- delete buffer while preserving window layout
+  local windows = vim.fn.getbufinfo(bufnr)[1].windows
+  if next_buf == nil then
+    -- create an empty buffer
+    next_buf = vim.api.nvim_create_buf(false, true)
+  end
+
+  switch_buffer(windows, next_buf)
+  if force or vim.fn.getbufvar(bufnr, "&buftype") == "terminal" then
+    -- force deletion of terminal buffers
+    vim.cmd(string.format("bd! %d", bufnr))
+  else
+    -- delete current buffer
+    vim.cmd(string.format("silent! confirm bd %d", bufnr))
+  end
+
+  -- revert buffer switches if deletion was cancelled
+  if vim.fn.buflisted(bufnr) == 1 then
+    switch_buffer(windows, bufnr)
+  end
+end
+
+M.buffer_jump = function(direction)
   -- default to forward jump
   if direction ~= -1 then
     direction = 1
@@ -44,13 +129,13 @@ local function buffer_jump(direction)
 
   if is_floating_win() then
     -- don't jump in floating windows
-    vim.notify("Cannot jump to other buffers from a floating window!", vim.log.levels.INFO)
+    vim.notify("Cannot switch to other buffers from a floating window!", vim.log.levels.INFO)
     return
   end
 
-  if not not_special_buffer(vim.bo.ft) then
+  if M.is_special_buffer(vim.bo.ft) then
     -- don't jump from special buffers
-    vim.notify("Cannot jump to other buffers from a special buffer!", vim.log.levels.INFO)
+    vim.notify("Cannot switch to other buffers from a special buffer!", vim.log.levels.INFO)
     return
   end
 
@@ -74,7 +159,7 @@ local function buffer_jump(direction)
     end
   end
   if idx_cur == nil then
-    vim.notify("Current buffer is invalid!", vim.log.levels.INFO)
+    -- vim.notify("Current buffer is invalid!", vim.log.levels.INFO)
     return
   end
 
@@ -89,14 +174,14 @@ local function buffer_jump(direction)
       buf_next = buffers[buf_idx]
     end
     local ft = vim.api.nvim_get_option_value("filetype", { buf = buf_next })
-    if ft and not_special_buffer(ft) then
+    if ft and not M.is_special_buffer(ft) then
       vim.api.nvim_set_current_buf(buf_next)
       return
     end
   end
 end
 
-local function is_cmdline()
+M.is_cmdline = function()
   local cmdwintype = vim.fn.getcmdwintype()
   return cmdwintype ~= ""
 end
@@ -105,7 +190,7 @@ end
 -- @param cmd The user command
 -- @param repl The actual command or function
 -- @param opts The table of options
-local function alias(cmd, repl, opts)
+M.alias = function(cmd, repl, opts)
   local options = {
     bang = false,
   }
@@ -144,9 +229,4 @@ end
 --   return current_dir
 -- end
 
-return {
-  scroll_to_end = scroll_to_end,
-  alias = alias,
-  is_cmdline = is_cmdline,
-  buffer_jump = buffer_jump,
-}
+return M

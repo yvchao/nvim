@@ -24,11 +24,7 @@ end
 
 local function texlab_running()
   local active_clients = vim.lsp.get_clients({ name = "texlab" })
-  if rawequal(next(active_clients), nil) then
-    return false
-  else
-    return true
-  end
+  return not rawequal(next(active_clients), nil)
 end
 
 -- Note that the function has to be public.
@@ -75,6 +71,7 @@ local function texlab_perform_inversesearch(filename, line, column)
   local last_line = vim.fn.line("$")
   if line <= last_line and column > 0 then
     vim.api.nvim_win_set_cursor(target_win, { line, column - 1 })
+    vim.cmd("normal! zz") -- center current line in the window
   end
 end
 

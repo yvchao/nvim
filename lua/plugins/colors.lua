@@ -71,7 +71,7 @@ end
 
 -- configure the rosepine theme
 M.rosepine_setup = function()
-  vim.o.background = "light"
+  vim.o.background = "dark"
   require("rose-pine").setup({
     highlight_groups = {
       TelescopeBorder = { fg = "overlay", bg = "overlay" },

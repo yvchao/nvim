@@ -6,8 +6,8 @@
 ██║ ╚████║ ╚████╔╝ ██║██║ ╚═╝ ██║
 ╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═╝     ╚═╝
 
-Author: Avimitin
-Source: https://github.com/Avimitin/nvim
+Author: Yuchao
+Source: https://github.com/yvchao/nvim
 License: MIT License
 --]]
 

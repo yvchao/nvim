@@ -1,6 +1,8 @@
 -- use relativenumber when editing
 vim.api.nvim_create_autocmd("InsertEnter", { pattern = "*", command = [[set norelativenumber]] })
 vim.api.nvim_create_autocmd("InsertLeave", { pattern = "*", command = [[set relativenumber]] })
+
+-- hide command line
 -- vim.api.nvim_create_autocmd("RecordingEnter", { pattern = "*", command = [[set cmdheight=1]] })
 -- vim.api.nvim_create_autocmd("RecordingLeave", { pattern = "*", command = [[set cmdheight=0]] })
 
@@ -16,10 +18,6 @@ vim.api.nvim_create_autocmd("UIEnter", {
         vim.o.guifont = custom.guifont or nil
       end
       vim.notify = require("lib.notify").notify_message
-      -- if vim.g.loaded_clipboard_provider then
-      --   vim.g.loaded_clipboard_provider = nil
-      --   vim.api.nvim_cmd({ cmd = "runtime", args = { "autoload/provider/clipboard.vim" } }, {})
-      -- end
     end
   end,
 })
@@ -28,4 +26,22 @@ vim.api.nvim_create_autocmd("UIEnter", {
 vim.api.nvim_create_autocmd("ColorScheme", {
   pattern = "*",
   callback = require("lib.palette").update_palette,
+})
+
+-- sync terminal background color
+-- https://www.reddit.com/r/neovim/comments/1ehidxy/you_can_remove_padding_around_neovim_instance/
+vim.api.nvim_create_autocmd({ "UIEnter", "ColorScheme" }, {
+  callback = function()
+    local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
+    if not normal.bg then
+      return
+    end
+    io.write(string.format("\027]11;#%06x\027\\", normal.bg))
+  end,
+})
+
+vim.api.nvim_create_autocmd("UILeave", {
+  callback = function()
+    io.write("\027]111\027\\")
+  end,
 })

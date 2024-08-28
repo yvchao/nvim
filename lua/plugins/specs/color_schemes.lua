@@ -2,9 +2,9 @@ return {
   -- dark purple color scheme
   {
     "rebelot/kanagawa.nvim",
-    cond = function()
-      return require("plugins.colors").theme == "kanagawa"
-    end,
+    -- cond = function()
+    --   return require("plugins.colors").theme == "kanagawa"
+    -- end,
     lazy = false,
     -- priority = 1000,
     config = function()
@@ -15,9 +15,9 @@ return {
   {
     "rose-pine/neovim",
     name = "rose-pine",
-    cond = function()
-      return require("plugins.colors").theme == "rose-pine"
-    end,
+    -- cond = function()
+    --   return require("plugins.colors").theme == "rose-pine"
+    -- end,
     lazy = false,
     -- priority = 1000,
     config = function()

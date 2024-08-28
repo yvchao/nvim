@@ -54,7 +54,7 @@ local configured_lsp_list = {
   "texlab",
   "pyright",
   "ltex",
-  "ruff_lsp",
+  "ruff",
   "clangd",
   "markdown_oxide",
   "julials",
@@ -98,15 +98,20 @@ settings["texlab"] = {
 
 local ltex_options = custom_lsp_options.ltex
 local modelPath = ltex_options and ltex_options.modelPath or nil
+local dictPath = ltex_options and ltex_options.dictPath or nil
 settings["ltex"] = {
   ltex = {
     ["ltex-ls"] = {
       logLevel = "severe",
     },
-    language = "en-GB",
+    -- language = "en-GB",
+    language = "en-US",
     dictionary = {
-      en = {
-        vim.fn.expand("~") .. "/.local/share/ltex/ltex.dictionary.en-US.txt",
+      ["en-US"] = {
+        dictPath,
+      },
+      ["en-GB"] = {
+        dictPath,
       },
     },
     disabledRules = {},
@@ -165,11 +170,11 @@ settings["pyright"] = {
       useLibraryCodeForTypes = true,
       stubPath = stubPath,
       diagnosticSeverityOverrides = {
+        reportIndexIssue = "none",
         reportGeneralTypeIssues = "none",
         reportOptionalMemberAccess = "none",
         reportOptionalSubscript = "none",
         reportPrivateImportUsage = "none",
-        reportIndexIssue = "none",
         reportRedeclaration = "none",
         reportArgumentType = "none",
         reportAssignmentType = "none",

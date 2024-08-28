@@ -1,13 +1,8 @@
 local colors = require("lib.palette").colors
 local has_devicons, devicons = pcall(require, "nvim-web-devicons")
+local is_special_buffer = require("lib.misc").is_special_buffer
 
-local special_buffer_list = vim.g.special_buffer_list or {}
--- speed up the lookup of special buffer type
-for _, v in ipairs(special_buffer_list) do
-  special_buffer_list[v] = true
-end
-
-local M = { special_buffer_list = special_buffer_list }
+local M = {}
 
 M.buffer_type_map = {
   ["oil"] = "  File Management",
@@ -17,6 +12,7 @@ M.buffer_type_map = {
   ["gitcommit"] = " Commit Message",
   ["fugitiveblame"] = " Fugitive Blame",
   ["minimap"] = "Minimap",
+  ["aerial"] = "Symbols",
   ["qf"] = "󰁨 Quick Fix",
   ["neoterm"] = " NeoTerm",
   ["toggleterm"] = " ToggleTerm",
@@ -58,7 +54,7 @@ M.conditions = {
     return gitdir and #gitdir > 0
   end,
   check_special_buffer = function()
-    return special_buffer_list[vim.bo.filetype] ~= nil
+    return is_special_buffer(vim.bo.filetype)
   end,
   check_multiple_win = function()
     local wins = vim.api.nvim_list_wins()
@@ -208,10 +204,10 @@ M.get_file_name = function()
   local filetype = vim.bo.filetype
   local file = vim.fn.expand("%:t")
   local fname = ""
-  if special_buffer_list[filetype] ~= nil then
+  if is_special_buffer(filetype) then
     fname = M.buffer_type_map[filetype]
     if filetype == "help" or filetype == "man" then
-      fname = fname .. "»" .. file
+      fname = fname .. " » " .. file
     end
     return fname
   end
