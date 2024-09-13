@@ -30,10 +30,10 @@ end
 
 -- load basic configuration
 for _, module_name in ipairs({
-  "core.autocmd",
   "core.filetypes",
   "core.options",
   "core.plugin_options",
+  "core.autocmd",
 }) do
   local success, err = pcall(require, module_name)
   if not success then

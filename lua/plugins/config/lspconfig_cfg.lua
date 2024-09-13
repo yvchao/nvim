@@ -35,7 +35,7 @@ local function setup_capabilities()
     },
   }
   capabilities =
-    vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+      vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
   capabilities.workspace = {
     didChangeWatchedFiles = {
@@ -52,7 +52,7 @@ local default_capabilities = vim.tbl_extend("keep", setup_capabilities() or {}, 
 local configured_lsp_list = {
   "lua_ls",
   "texlab",
-  "pyright",
+  "basedpyright",
   "ltex",
   "ruff",
   "clangd",
@@ -155,13 +155,10 @@ settings["lua_ls"] = {
 local python_options = custom_lsp_options.python
 local stubPath = python_options and python_options.stubPath or nil
 
-settings["pyright"] = {
-  pyright = {
+settings["basedpyright"] = {
+  basedpyright = {
     disableLanguageServices = false,
     disableOrganizeImports = true,
-  },
-  python = {
-    pythonPath = vim.g.python3_host_prog,
     analysis = {
       logLevel = "Error",
       autoSearchPath = false,
@@ -169,6 +166,7 @@ settings["pyright"] = {
       diagnosticMode = "openFilesOnly",
       useLibraryCodeForTypes = true,
       stubPath = stubPath,
+      typeCheckingMode = "standard",
       diagnosticSeverityOverrides = {
         reportIndexIssue = "none",
         reportGeneralTypeIssues = "none",
@@ -176,13 +174,17 @@ settings["pyright"] = {
         reportOptionalSubscript = "none",
         reportPrivateImportUsage = "none",
         reportRedeclaration = "none",
-        reportArgumentType = "none",
+        reportArgumentType = "yes",
         reportAssignmentType = "none",
         reportCallIssue = "none",
-        reportReturnType = "none",
+        reportReturnType = "yes",
         reportAttributeAccessIssue = "none",
+        reportAny = "none",
       },
     },
+  },
+  python = {
+    pythonPath = vim.g.python3_host_prog,
   },
 }
 

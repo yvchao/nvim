@@ -14,6 +14,15 @@ g.rooter_patterns = {
   "tsconfig.json",
 }
 
+-- filetypes to enable copilot
+vim.g.copilot_filetypes = {
+  ["*"] = false,
+  python = true,
+  c = true,
+  cpp = true,
+  cmake = true,
+}
+
 -- enable lspconfig for what filetype?
 g.enable_lspconfig_ft = {
   "text",

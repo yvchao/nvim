@@ -45,3 +45,25 @@ vim.api.nvim_create_autocmd("UILeave", {
     io.write("\027]111\027\\")
   end,
 })
+
+-- setup the copilot keymap
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(ev)
+    local filetype = vim.bo.filetype
+    local copilot_enabled = vim.g.copilot_filetypes[filetype] or false
+
+    if not copilot_enabled then
+      return
+    end
+
+    vim.keymap.set("i", "<C-/>", function()
+      return vim.fn["copilot#Accept"]("")
+    end, {
+      buffer = ev.buf,
+      noremap = true,
+      expr = true,
+      replace_keycodes = false,
+      nowait = true,
+    })
+  end,
+})

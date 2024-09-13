@@ -45,7 +45,7 @@ opt.ttimeoutlen = 0
 opt.timeout = false
 
 -- remember where to recover cursor
-opt.viewoptions = "cursor,folds,slash,unix"
+opt.viewoptions = "cursor,folds"
 
 -- lines longer than the width of the window will wrap and displaying continues
 -- on the next line.

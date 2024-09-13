@@ -1,9 +1,14 @@
 -- set defaul terminal shell
 local shell = vim.o.shell
-if vim.fn.executable("fish") == 1 then
-  shell = "/usr/bin/fish"
-elseif vim.fn.executable("zsh") == 1 then
-  shell = "/usr/bin/zsh"
+
+-- default to fish shell
+local shell_path = vim.fn.exepath("fish")
+if shell_path == "" then
+  shell_path = vim.fn.exepath("zsh")
+end
+
+if shell_path ~= "" then
+  shell = shell_path
 end
 
 require("toggleterm").setup({
@@ -26,12 +31,12 @@ require("toggleterm").setup({
   shade_terminals = true,
   -- shading_factor = '<number>', -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
   start_in_insert = true,
-  insert_mappings = true, -- whether or not the open mapping applies in insert mode
+  insert_mappings = true,   -- whether or not the open mapping applies in insert mode
   terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
   persist_size = true,
   direction = "horizontal", -- 'window' | 'float' | 'vertical' ,
-  close_on_exit = true, -- close the terminal window when the process exits
-  shell = shell, -- change the default shell
+  close_on_exit = true,     -- close the terminal window when the process exits
+  shell = shell,            -- change the default shell
 
   -- This field is only relevant if direction is set to 'float'
   float_opts = {

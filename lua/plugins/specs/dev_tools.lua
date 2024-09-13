@@ -253,6 +253,15 @@ return {
   },
 
   {
+    url = "git@git.woa.com:yuchaoqin/gongfeng-vim.sh.git",
+    build = "./install.sh",
+    init = function()
+      vim.g.copilot_no_tab_map = true
+    end,
+    enabled = false,
+  },
+
+  {
     "benlubas/molten-nvim",
     ft = "quarto",
     version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
