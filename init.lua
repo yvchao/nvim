@@ -18,15 +18,7 @@ end
 
 -- setup notification backend
 local notify = require("lib.notify")
-
-local ok, custom = pcall(require, "custom")
-if ok and custom then
-  if custom.notify ~= "neovim" and vim.fn.executable("notify-send") == 1 then
-    vim.notify = notify.notify_send
-  else
-    vim.notify = notify.notify_message
-  end
-end
+vim.notify = notify.notify_message
 
 -- load basic configuration
 for _, module_name in ipairs({
@@ -37,13 +29,13 @@ for _, module_name in ipairs({
 }) do
   local success, err = pcall(require, module_name)
   if not success then
-    local msg = "calling module: " .. module_name .. " fail: " .. err
+    local msg = "calling module: " .. module_name .. "\nfailure: " .. err
     notify.errorL(msg)
   end
 end
 
 -- load plugin settings
-require("plugins").load()
+require("plugins")
 
 -- setup mappings after plugins are loaded
 require("mappings")

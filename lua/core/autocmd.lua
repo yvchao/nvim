@@ -49,7 +49,7 @@ vim.api.nvim_create_autocmd("UILeave", {
 -- setup the copilot keymap
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(ev)
-    local filetype = vim.bo.filetype
+    local filetype = vim.api.nvim_get_option_value("filetype", { buf = ev.buf })
     local copilot_enabled = vim.g.copilot_filetypes[filetype] or false
 
     if not copilot_enabled then
@@ -65,5 +65,42 @@ vim.api.nvim_create_autocmd("LspAttach", {
       replace_keycodes = false,
       nowait = true,
     })
+  end,
+})
+
+-- Use LspAttach autocommand to only map the following keys
+-- after the language server attaches to the current buffer
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+  callback = function(ev)
+    local buftype = vim.bo.buftype
+    local filetype = vim.bo.filetype
+    -- Ignore special buffers and quarto files
+    -- TODO: directly use otter.nvim to setup lsp for quarto file
+    if buftype ~= "" or filetype == "quarto" then
+      return
+    end
+
+    -- Enable completion triggered by <c-x><c-o>
+    vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+
+    local map = require("lib.keymap").map
+    -- Buffer local mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    local opts = { buffer = ev.buf }
+    -- the default keymap <C-]> for vim.lsp.tagfunc is already good enough
+    -- opts["desc"] = "Goto definition [LSP]"
+    -- map("n", "<gD>", vim.lsp.buf.definition, opts)
+    opts["desc"] = "Hover documentation [LSP]"
+    map("n", "K", vim.lsp.buf.hover, opts)
+    opts["desc"] = "Show signature help [LSP]"
+    map("n", "gh", vim.lsp.buf.signature_help, opts)
+    map("i", "<C-s>", vim.lsp.buf.signature_help, opts)
+    opts["desc"] = "Rename [LSP]"
+    map("n", "gr", vim.lsp.buf.rename, opts)
+    opts["desc"] = "Code action [LSP]"
+    map({ "n", "v" }, "ga", vim.lsp.buf.code_action, opts)
+    opts["desc"] = "Show references [LSP]"
+    map("n", "gR", vim.lsp.buf.references, opts)
   end,
 })

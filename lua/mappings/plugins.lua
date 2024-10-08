@@ -65,20 +65,20 @@ map("t", "<C-\\>", [[<C-\><C-n><cmd>ToggleTerm<CR>]])
 map("t", "<C-n>", [[<C-\><C-n>]])
 
 -- telescope
--- nmap(
---   "<leader>ff",
---   [[<cmd>lua require("telescope.builtin").find_files({ previewer = false })<CR>]],
---   { desc = "find files" }
--- )
--- nmap(
---   "<leader>fg",
---   [[<cmd>lua require("telescope.builtin").live_grep({})<CR>]],
---   { desc = "live grep" }
--- )
+nmap(
+  "<leader>ff",
+  [[<cmd>lua require("telescope.builtin").find_files({ previewer = false })<CR>]],
+  { desc = "find files" }
+)
+nmap(
+  "<leader>fg",
+  [[<cmd>lua require("telescope.builtin").live_grep({})<CR>]],
+  { desc = "live grep" }
+)
 
 -- fzf
-nmap("<leader>ff", [[<cmd>lua require('fzf-lua').files()<CR>]], { desc = "File grep" })
-nmap("<leader>fg", [[<cmd>lua require('fzf-lua').live_grep()<CR>]], { desc = "Live grep" })
+-- nmap("<leader>ff", [[<cmd>lua require('fzf-lua').files()<CR>]], { desc = "File grep" })
+-- nmap("<leader>fg", [[<cmd>lua require('fzf-lua').live_grep()<CR>]], { desc = "Live grep" })
 
 -- pick buffers
 nmap("<A-p>", [[<cmd>lua MiniPick.builtin.buffers()<CR>]])

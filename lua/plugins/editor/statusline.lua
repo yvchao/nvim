@@ -1,4 +1,3 @@
-local lualine = require("lualine")
 local status_helper = require("lib.status")
 local palette = require("lib.palette")
 
@@ -360,5 +359,22 @@ insert_info_right({
   color = { fg = palette.get_color("blue") },
 })
 
--- Now don't forget to initialize lualine
-lualine.setup(config)
+return {
+  {
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    init = function()
+      -- lualine optimization
+      vim.g.lualine_laststatus = vim.o.laststatus
+      if vim.fn.argc(-1) > 0 then
+        -- set an empty statusline till lualine loads
+        vim.o.statusline = " "
+      else
+        -- hide the statusline on the starter page
+        vim.o.laststatus = 0
+      end
+    end,
+    opts = config,
+    event = "UIEnter",
+  },
+}
