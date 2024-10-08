@@ -272,7 +272,9 @@ end
 return {
   -- the completion core
   {
-    "hrsh7th/nvim-cmp",
+    "iguanacucumber/magazine.nvim",
+    name = "nvim-cmp", -- Otherwise highlighting gets messed up
+    -- "hrsh7th/nvim-cmp",
     dependencies = {
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-nvim-lsp",

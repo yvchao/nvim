@@ -1,3 +1,23 @@
+local enable_lspconfig_ft = {
+  "text",
+  "bash",
+  "c",
+  "cpp",
+  "go",
+  "html",
+  "javascript",
+  "json",
+  "jsonc",
+  "lua",
+  "python",
+  "sh",
+  "toml",
+  "tex",
+  "markdown",
+  "julia",
+  "cmake",
+}
+
 -- Gets a new ClientCapabilities object describing the LSP client
 -- capabilities.
 local function setup_capabilities()
@@ -68,7 +88,6 @@ settings["texlab"] = {
         "-silent",
         "-interaction=nonstopmode",
         "-synctex=1",
-        -- "-outdir=build",
         "%f",
       },
       onSave = true,
@@ -191,47 +210,52 @@ custom_opts["clangd"] = {
   },
 }
 
-custom_opts["marksman"] = {
-  filetypes = { "markdown", "quarto" },
-}
-
 custom_opts["ltex"] = {
   filetypes = { "markdown", "tex" },
 }
-
--- local lsp_publish_diagnostics_options = {
---   virtual_text = {
---     prefix = "󰎟",
---     spacing = 4,
---   },
---   signs = true,
---   underline = true,
---   update_in_insert = false, -- update diagnostics insert mode
--- }
-
--- vim.lsp.handlers["textDocument/publishDiagnostics"] =
---   vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, lsp_publish_diagnostics_options)
-
--- local border = "rounded"
--- local custom_hover = vim.lsp.with(vim.lsp.handlers.hover, { border = border })
--- vim.lsp.handlers["textDocument/hover"] = function(_, result, ctx, config)
---   config = config or {}
---   config.focus_id = ctx.method
---   if not (result and result.contents) then
---     return
---   end
---   return custom_hover(_, result, ctx, config)
--- end
---
--- vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
---   border = border,
--- })
---
 
 return {
   -- manage the lsp server
   {
     "neovim/nvim-lspconfig",
+    init = function()
+      -- Use LspAttach autocommand to only map the following keys
+      -- after the language server attaches to the current buffer
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+        callback = function(ev)
+          local buftype = vim.bo.buftype
+          local filetype = vim.bo.filetype
+          -- Ignore special buffers and quarto files
+          -- TODO: directly use otter.nvim to setup lsp for quarto file
+          if buftype ~= "" or filetype == "quarto" then
+            return
+          end
+
+          -- Enable completion triggered by <c-x><c-o>
+          vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+
+          local map = require("lib.keymap").map
+          -- Buffer local mappings.
+          -- See `:help vim.lsp.*` for documentation on any of the below functions
+          local opts = { buffer = ev.buf }
+          -- the default keymap <C-]> for vim.lsp.tagfunc is already good enough
+          -- opts["desc"] = "Goto definition [LSP]"
+          -- map("n", "<gD>", vim.lsp.buf.definition, opts)
+          opts["desc"] = "Hover documentation [LSP]"
+          map("n", "K", vim.lsp.buf.hover, opts)
+          opts["desc"] = "Show signature help [LSP]"
+          map("n", "gh", vim.lsp.buf.signature_help, opts)
+          map("i", "<C-s>", vim.lsp.buf.signature_help, opts)
+          opts["desc"] = "Rename [LSP]"
+          map("n", "gr", vim.lsp.buf.rename, opts)
+          opts["desc"] = "Code action [LSP]"
+          map({ "n", "v" }, "ga", vim.lsp.buf.code_action, opts)
+          opts["desc"] = "Show references [LSP]"
+          map("n", "gR", vim.lsp.buf.references, opts)
+        end,
+      })
+    end,
     config = function()
       local ok, lspconfig = pcall(require, "lspconfig")
 
@@ -251,7 +275,7 @@ return {
         lspconfig[server_name].setup(opts)
       end
     end,
-    ft = vim.g.enable_lspconfig_ft,
+    ft = enable_lspconfig_ft,
     lazy = true,
   },
 }

@@ -152,6 +152,46 @@ vim.o.guifont = success and custom.guifont or nil
 vim.g.python3_host_skip_check = 1
 vim.g.python3_host_prog = success and custom.pythonPath or nil
 
+vim.g.special_buffer_list = {
+  -- file manager
+  "oil",
+  "oil_preview",
+  "NvimTree",
+  "nerdtree",
+  "minifiles",
+  "undotree",
+  -- quick fix and terminal, etc.
+  "qf",
+  "nredir",
+  "toggleterm",
+  "term",
+  "terminal",
+  "Outline",
+  "aerial",
+  "spectre_panel",
+  "Trouble",
+  -- Telescope
+  "TelescopePrompt",
+  "TelescopeResults",
+  -- start screen
+  "startify",
+  "starter",
+  "alpha",
+  "dashboard",
+  -- man pages and help
+  "man",
+  "help",
+  -- git
+  "fugitive",
+  "fugitiveblame",
+  "git",
+  "gitcommit",
+  "neogitstatus",
+  "DiffviewFiles",
+  -- empty
+  "",
+}
+
 if vim.g.neovide then
   -- neovide specific settings
   vim.g.neovide_scroll_animation_length = 0.2 -- temporary fix for winbar glitch

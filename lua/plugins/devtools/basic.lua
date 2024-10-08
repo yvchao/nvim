@@ -3,7 +3,7 @@ return {
   {
     "williamboman/mason.nvim",
     opts = {},
-    cmd = { "Mason" },
+    event = { "FileType" },
   },
 
   -- {
@@ -156,20 +156,6 @@ return {
       act_as_tab = true,
     },
     event = "InsertEnter",
-  },
-
-  {
-    "github/copilot.vim",
-    enabled = false,
-  },
-
-  {
-    url = "git@git.woa.com:yuchaoqin/gongfeng-vim.sh.git",
-    build = "./install.sh",
-    init = function()
-      vim.g.copilot_no_tab_map = true
-    end,
-    enabled = false,
   },
 
   {

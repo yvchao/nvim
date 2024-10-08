@@ -35,7 +35,7 @@ return {
 
       -- This field is only relevant if direction is set to 'float'
       float_opts = {
-        border = "shadow", -- | 'double' | 'shadow' | 'curved' | ... other options supported by win open
+        border = "double", -- | 'double' | 'shadow' | 'curved' | ... other options supported by win open
         -- width = 300,
         -- height = 90,
         winblend = 3,

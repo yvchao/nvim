@@ -24,7 +24,6 @@ vim.notify = notify.notify_message
 for _, module_name in ipairs({
   "core.filetypes",
   "core.options",
-  "core.plugin_options",
   "core.autocmd",
 }) do
   local success, err = pcall(require, module_name)

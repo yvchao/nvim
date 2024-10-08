@@ -79,36 +79,28 @@ return {
   {
     "airblade/vim-rooter",
     event = "BufReadPost",
-  },
-
-  {
-    "ibhagwan/fzf-lua",
-    -- optional for icon support
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-    },
-    opts = {
-      fzf_colors = {
-        ["gutter"] = { "bg", "Normal" },
-      },
-    },
-    keys = {
-      { "<leader>f", mode = "n" },
-    },
-    cmd = { "FzfLua" },
-    enabled = false,
-  },
-
-  {
-    "junegunn/fzf",
-    build = "./install --bin",
-    cmd = { "FZF" },
+    init = function()
+      vim.g.rooter_manual_only = 0
+      -- WARN: this maybe a bad option.
+      vim.g.rooter_change_directory_for_non_project_files = "current"
+      vim.g.rooter_buftypes = { "" }
+      vim.g.rooter_patterns = {
+        ".git",
+        "Cargo.toml",
+        "package.json",
+        "tsconfig.json",
+      }
+    end,
   },
 
   -- surrounding select text with given signs
   {
     "tpope/vim-surround",
     event = "UIEnter",
+    init = function()
+      -- disable default mappings of vim surround
+      vim.g.surround_no_mappings = 1
+    end,
   },
 
   {
@@ -136,11 +128,11 @@ return {
   -- Move cursor by text search
   {
     "ggandor/leap.nvim",
-    init = function()
-      -- require("leap").create_default_mappings()
-      vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap-forward)")
-      vim.keymap.set({ "n", "x", "o" }, "S", "<Plug>(leap-backward)")
-    end,
+    config = true,
+    keys = {
+      { "s", "<Plug>(leap-forward)", mode = { "n", "x", "o" } },
+      { "S", "<Plug>(leap-backward)", mode = { "n", "x", "o" } },
+    },
     event = "UIEnter",
   },
 

@@ -56,7 +56,16 @@ return {
       },
     },
     keys = {
-      { "<leader>f", mode = "n" },
+      {
+        "<leader>ff",
+        [[<cmd>lua require("telescope.builtin").find_files({ previewer = false })<CR>]],
+        { desc = "find files" },
+      },
+      {
+        "<leader>fg",
+        [[<cmd>lua require("telescope.builtin").live_grep({})<CR>]],
+        { desc = "live grep" },
+      },
     },
     cmd = { "Telescope" },
     enabled = true,

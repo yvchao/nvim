@@ -51,34 +51,11 @@ map("v", "<leader>e", "<cmd>EasyAlign<CR>")
 -- oil file management
 nmap(";t", "<cmd>Oil %:p:h<CR>")
 
--- oil is easier to use compared to mini.files
--- nmap(
---   ";t",
---   [[<cmd>lua MiniFiles.open(vim.fn.expand("%:p"), {use_latest = false})<CR>]],
---   { desc = "MiniFiles" }
--- )
-
 -- fterm
 nmap("<C-\\>", [[<cmd>ToggleTerm direction=float<CR>]])
 nmap("<C-`>", [[<cmd>ToggleTerm direction=horizontal<CR>]])
 map("t", "<C-\\>", [[<C-\><C-n><cmd>ToggleTerm<CR>]])
 map("t", "<C-n>", [[<C-\><C-n>]])
-
--- telescope
-nmap(
-  "<leader>ff",
-  [[<cmd>lua require("telescope.builtin").find_files({ previewer = false })<CR>]],
-  { desc = "find files" }
-)
-nmap(
-  "<leader>fg",
-  [[<cmd>lua require("telescope.builtin").live_grep({})<CR>]],
-  { desc = "live grep" }
-)
-
--- fzf
--- nmap("<leader>ff", [[<cmd>lua require('fzf-lua').files()<CR>]], { desc = "File grep" })
--- nmap("<leader>fg", [[<cmd>lua require('fzf-lua').live_grep()<CR>]], { desc = "Live grep" })
 
 -- pick buffers
 nmap("<A-p>", [[<cmd>lua MiniPick.builtin.buffers()<CR>]])
