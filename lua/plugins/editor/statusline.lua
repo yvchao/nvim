@@ -201,7 +201,6 @@ insert_left({
     return not conditions.check_special_buffer() and conditions.has_file_name()
   end,
   color = {
-    -- fg = status_helper.get_file_icon_color(),
     fg = palette.get_color("blue"),
     bg = palette.get_color("bg_status"),
   },
@@ -263,10 +262,8 @@ insert_right({
     bg = palette.get_color("bg_status"),
   },
   on_click = function(clicknr, button, modifier)
-    if button == "l" then
+    if button == "l" and vim.fn.exists(":LspInfo") == 2 and vim.bo.filetype ~= "lspinfo" then
       vim.cmd("LspInfo")
-      -- elseif button == "r" then
-      --   vim.cmd("LspRestart")
     end
   end,
   padding = { left = 0, right = 1 },

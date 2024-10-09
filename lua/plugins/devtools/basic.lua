@@ -31,6 +31,7 @@ return {
         rust = { "rustfmt" },
         quarto = { "injected" },
         tex = { "latexindent" },
+        markdown = { "mdformat" },
         ["_"] = { "trim_whitespace" },
       },
       formatters = {

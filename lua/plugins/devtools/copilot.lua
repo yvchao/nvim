@@ -5,12 +5,13 @@ vim.g.copilot_filetypes = {
   c = true,
   cpp = true,
   cmake = true,
+  lua = true,
 }
 
 return {
   {
     "github/copilot.vim",
-    enabled = false,
+    enabled = true,
     init = function()
       vim.g.copilot_no_tab_map = true
 
@@ -41,7 +42,7 @@ return {
   {
     url = "git@git.woa.com:yuchaoqin/gongfeng-vim.sh.git",
     build = "./install.sh",
-    enabled = true,
+    enabled = false,
     init = function()
       vim.g.copilot_no_tab_map = true
 

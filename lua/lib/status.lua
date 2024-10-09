@@ -5,8 +5,9 @@ local is_special_buffer = require("lib.misc").is_special_buffer
 local M = {}
 
 M.buffer_type_map = {
-  ["oil"] = "  File Management",
-  ["minifiles"] = "  File Management",
+  [""] = "󰎔 New File",
+  ["oil"] = " File Management",
+  ["minifiles"] = " File Management",
   ["starter"] = "󰡃 Dashboard",
   ["fugitive"] = " Fugitive",
   ["gitcommit"] = " Commit Message",

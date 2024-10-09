@@ -24,6 +24,14 @@ nmap("<C-t>h", "<cmd>tabprevious<CR>")
 nmap("<C-t>l", "<cmd>tabnext<CR>")
 nmap("<C-t>n", "<cmd>tabnew<CR>")
 
+-- move between qf items
+nmap("]q", function()
+  return "<cmd>" .. vim.v.count .. "cnext<CR>"
+end, { expr = true })
+nmap("[q", function()
+  return "<cmd>" .. vim.v.count .. "cprev<CR>"
+end, { expr = true })
+
 -- save quickly
 nmap(";w", ":w<CR>", { desc = "save buffer" })
 

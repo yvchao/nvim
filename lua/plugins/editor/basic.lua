@@ -5,19 +5,6 @@ return {
     event = "BufRead",
   },
 
-  -- markdown editing enhancement
-  -- TODO: delete this plugin
-  {
-    "plasticboy/vim-markdown",
-    dependencies = {
-      "godlygeek/tabular", -- markdown table
-    },
-    ft = {
-      "markdown",
-      "quarto",
-    },
-  },
-
   {
     "sindrets/winshift.nvim",
     cmd = {

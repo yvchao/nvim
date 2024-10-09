@@ -15,7 +15,7 @@ local function update_visual_area(node)
   if end_row + 1 > last_line then
     end_col = vim.fn.col({ last_line, "$" }) - 1
   end
-  vim.fn.setpos(".", { 0, end_row + 1, end_col + 1, 0 })
+  vim.fn.setpos(".", { 0, end_row + 1, end_col, 0 })
 end
 
 local function find_expand_node(node)

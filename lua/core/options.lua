@@ -97,10 +97,10 @@ opt.mouse = "a"
 opt.mousemodel = "extend"
 
 -- use indent as the fold method
-opt.foldmethod = "marker"
+opt.foldmethod = "expr"
 opt.foldlevel = 99
 opt.foldenable = true
-opt.foldmarker = "{{{,}}}"
+-- opt.foldmarker = "{{{,}}}"
 
 opt.formatoptions = "qj"
 
