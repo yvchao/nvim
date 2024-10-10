@@ -1,3 +1,5 @@
+vim.lsp.log.set_level(vim.log.levels.OFF)
+
 local enable_lspconfig_ft = {
   "text",
   "bash",
@@ -16,6 +18,7 @@ local enable_lspconfig_ft = {
   "markdown",
   "julia",
   "cmake",
+  "typst",
 }
 
 -- Gets a new ClientCapabilities object describing the LSP client
@@ -44,8 +47,8 @@ local function setup_capabilities()
       },
     },
   }
-  capabilities =
-    vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+  -- capabilities =
+  --   vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
   capabilities.workspace = {
     didChangeWatchedFiles = {
@@ -67,14 +70,19 @@ local configured_lsp_list = {
   "ruff",
   "clangd",
   "markdown_oxide",
-  "julials",
   "taplo",
+  "tinymist",
   "jsonls",
 }
 local settings = {}
 
 local success, custom = pcall(require, "custom")
 local custom_lsp_options = success and custom.lsp_options or {}
+
+settings["tinymist"] = {
+  formatterMode = "typstfmt",
+  semanticTokens = "disable",
+}
 
 settings["texlab"] = {
   texlab = {
@@ -214,6 +222,16 @@ custom_opts["ltex"] = {
   filetypes = { "markdown", "tex" },
 }
 
+custom_opts["tinymist"] = {
+  offset_encoding = "utf-8",
+  cmd = { "tinymist" },
+  filetypes = { "typst" },
+  root_dir = function(filename, bufnr)
+    return vim.fn.getcwd()
+  end,
+  single_file_support = true,
+}
+
 return {
   -- manage the lsp server
   {
@@ -230,6 +248,13 @@ return {
           -- TODO: directly use otter.nvim to setup lsp for quarto file
           if buftype ~= "" or filetype == "quarto" then
             return
+          end
+
+          if filetype == "typst" then
+            local client = vim.lsp.get_client_by_id(ev.data.client_id)
+            if client ~= nil then
+              client.server_capabilities.semanticTokensProvider = nil
+            end
           end
 
           -- Enable completion triggered by <c-x><c-o>

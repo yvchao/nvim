@@ -2,7 +2,18 @@ return {
   -- manage the lsp server
   {
     "williamboman/mason.nvim",
-    opts = {},
+    opts = {
+      ensure_installed = {
+        "tinymist",
+        "typstfmt",
+        "mdformat",
+        "taplo",
+        "json-lsp",
+        "lua-language-server",
+        "markdown-oxide",
+        "basedpyright",
+      },
+    },
     event = { "FileType" },
   },
 
@@ -32,6 +43,7 @@ return {
         quarto = { "injected" },
         tex = { "latexindent" },
         markdown = { "mdformat" },
+        typst = { "typstfmt" },
         ["_"] = { "trim_whitespace" },
       },
       formatters = {

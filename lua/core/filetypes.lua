@@ -1,5 +1,8 @@
 vim.filetype.add({
-  extension = {},
+  extension = {
+    typst = "typst",
+    typ = "typst",
+  },
   pattern = {
     [".*/waybar/config"] = "jsonc",
     [".*/mako/config"] = "dosini",

@@ -95,6 +95,7 @@ map("v", "<BS>", [[<cmd>lua require("lib.treesitter_selection"):restore_last_sel
 
 -- close window
 nmap(";c", function()
+  -- close floating window directly
   local winid = vim.api.nvim_get_current_win()
   if vim.api.nvim_win_get_config(winid).zindex ~= nil then
     vim.cmd.close()
@@ -102,7 +103,14 @@ nmap(";c", function()
   end
 
   local bufnr = vim.api.nvim_get_current_buf()
-  if get_next_buf(bufnr) ~= nil then
+  -- close window if there are more than one tab
+  local close = vim.fn.tabpagenr("$") > 1
+  -- close window if the buffer is not listed
+  close = close or not vim.api.nvim_get_option_value("buflisted", { buf = bufnr })
+  -- close window if the next buf exists
+  close = close or get_next_buf(bufnr) ~= nil
+
+  if close then
     vim.cmd.close()
   else
     vim.notify("Cannot close the last window of normal buffer!", vim.log.levels.WARN)
