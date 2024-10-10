@@ -13,10 +13,7 @@ return {
     "github/copilot.vim",
     enabled = function()
       local ok, custom = pcall(require, "custom")
-      if not ok then
-        return false
-      end
-      return custom.copilot.github
+      return ok and custom.copilot == "github"
     end,
     init = function()
       vim.g.copilot_no_tab_map = true
@@ -50,10 +47,7 @@ return {
     build = "./install.sh",
     enabled = function()
       local ok, custom = pcall(require, "custom")
-      if not ok then
-        return false
-      end
-      return custom.copilot.gongfeng
+      return ok and custom.copilot == "gongfeng"
     end,
     init = function()
       vim.g.copilot_no_tab_map = true

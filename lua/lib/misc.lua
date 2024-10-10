@@ -38,7 +38,7 @@ local function is_floating_win(winid)
   end
 end
 
-local function get_next_buf(bufnr)
+M.get_next_buf = function(bufnr)
   -- get all valid buffers
   local buffers = vim.tbl_filter(function(buf)
     return vim.api.nvim_get_option_value("buflisted", { buf = buf })
@@ -96,7 +96,7 @@ M.buffer_delete = function(force)
     vim.cmd.close()
   else
     -- find next valid buffer
-    next_buf = get_next_buf(bufnr)
+    next_buf = M.get_next_buf(bufnr)
   end
 
   -- delete buffer while preserving window layout
@@ -187,9 +187,9 @@ M.is_cmdline = function()
 end
 
 -- alias can help create new vim command.
--- @param cmd The user command
--- @param repl The actual command or function
--- @param opts The table of options
+--- @param cmd string The user command
+--- @param repl string The actual command or function
+--- @param opts table The table of options
 M.alias = function(cmd, repl, opts)
   local options = {
     bang = false,

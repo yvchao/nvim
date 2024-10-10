@@ -188,8 +188,6 @@ vim.g.special_buffer_list = {
   "gitcommit",
   "neogitstatus",
   "DiffviewFiles",
-  -- empty
-  "",
 }
 
 if vim.g.neovide then

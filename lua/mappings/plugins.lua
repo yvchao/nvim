@@ -1,6 +1,7 @@
 local map = require("lib.keymap").map
 local nmap = require("lib.keymap").nmap
 local is_cmdline = require("lib.misc").is_cmdline
+local get_next_buf = require("lib.misc").get_next_buf
 local create_menu = require("lib.utility").create_menu
 
 -- filter diagnostics by severity levels
@@ -93,7 +94,20 @@ map("v", "v", [[<cmd>lua require("lib.treesitter_selection"):select_parent_node(
 map("v", "<BS>", [[<cmd>lua require("lib.treesitter_selection"):restore_last_selection()<CR>]])
 
 -- close window
-nmap(";c", [[<cmd>close<CR>]], { desc = "close current window" })
+nmap(";c", function()
+  local winid = vim.api.nvim_get_current_win()
+  if vim.api.nvim_win_get_config(winid).zindex ~= nil then
+    vim.cmd.close()
+    return
+  end
+
+  local bufnr = vim.api.nvim_get_current_buf()
+  if get_next_buf(bufnr) ~= nil then
+    vim.cmd.close()
+  else
+    vim.notify("Cannot close the last window of normal buffer!", vim.log.levels.WARN)
+  end
+end, { desc = "close current window" })
 
 -- dispatch
 nmap(";d", "<cmd>Dispatch ", { noremap = true, silent = false })
