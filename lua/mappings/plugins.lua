@@ -74,10 +74,7 @@ end, { desc = "prev buf" })
 
 -- kill buffer with ;q , quit window with :q . This make sense.
 nmap(";q", function()
-  local listed_buf = vim.fn.getbufinfo({ buflisted = 1 })
-  local single_buf = next(listed_buf, 1) == nil
-  local single_tab = vim.fn.tabpagenr("$") == 1
-  if single_tab and single_buf then
+  if (vim.fn.tabpagenr("$") == 1) and (#vim.fn.getbufinfo({ buflisted = 1 }) < 2) then
     -- exit when there is only one buffer left
     vim.cmd("confirm qall")
     return

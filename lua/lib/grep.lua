@@ -2,6 +2,9 @@ local M = {}
 
 M.rg = function(args)
   local cmd = vim.fn.split(vim.o.grepprg)
+  -- let us ignore the .git dir
+  table.insert(cmd, "--glob")
+  table.insert(cmd, "!.git/")
   local empty_args = true
   for _, arg in ipairs(args.fargs) do
     table.insert(cmd, vim.fn.expand(arg))

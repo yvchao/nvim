@@ -104,10 +104,16 @@ settings["texlab"] = {
     -- rootDirectory = ".",
     -- auxDirectory = "build",
     forwardSearch = {
-      executable = "okular",
+      -- executable = "okular",
+      -- args = {
+      --   "--unique",
+      --   "%p#src:%l%f",
+      -- },
+      executable = "zathura",
       args = {
-        "--unique",
-        "%p#src:%l%f",
+        "--synctex-forward",
+        "%l:1:%f",
+        "%p",
       },
     },
   },
@@ -232,6 +238,25 @@ custom_opts["tinymist"] = {
   single_file_support = true,
 }
 
+local hooks = {
+  typst = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client ~= nil then
+      client.server_capabilities.semanticTokensProvider = nil
+    end
+  end,
+  python = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client ~= nil and client.name == "ruff" then
+      client.server_capabilities.hoverProvider = false
+    end
+  end,
+  tex = function(ev)
+    local map = require("lib.keymap").map
+    map("n", "<C-LeftMouse>", "<cmd>TexlabForward<CR>", { buffer = ev.buf })
+  end,
+}
+
 return {
   -- manage the lsp server
   {
@@ -250,11 +275,9 @@ return {
             return
           end
 
-          if filetype == "typst" then
-            local client = vim.lsp.get_client_by_id(ev.data.client_id)
-            if client ~= nil then
-              client.server_capabilities.semanticTokensProvider = nil
-            end
+          local hook = hooks[filetype]
+          if hook ~= nil then
+            hook(ev)
           end
 
           -- Enable completion triggered by <c-x><c-o>

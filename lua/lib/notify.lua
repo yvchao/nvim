@@ -48,6 +48,7 @@ M.notify_send = function(msg, log_level, opts)
   vim.fn.system(command)
 end
 
+-- TODO: popup message for warning and error, silent for info
 M.notify_message = function(msg, level, opts) -- luacheck: no unused args
   opts = opts or {}
   local title = opts.title or "message"
@@ -66,7 +67,8 @@ M.notify_message = function(msg, level, opts) -- luacheck: no unused args
       {}
     )
   else
-    vim.api.nvim_echo({ { top }, { msg }, { bottom } }, true, {})
+    -- vim.api.nvim_echo({ { top }, { msg }, { bottom } }, true, {})
+    vim.api.nvim_echo({ { msg } }, true, {})
   end
 end
 

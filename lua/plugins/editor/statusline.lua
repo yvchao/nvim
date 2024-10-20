@@ -164,7 +164,7 @@ insert_mode({
 
 insert_info_left({
   function()
-    return "󰻀"
+    return "󰻀 "
   end,
   cond = function()
     return not conditions.check_git_workspace()
@@ -175,7 +175,7 @@ insert_info_left({
 
 insert_info_left({
   "branch",
-  icon = { "", color = { fg = palette.get_color("orange") } },
+  icon = { " ", color = { fg = palette.get_color("orange") } },
   cond = conditions.check_git_workspace,
   -- color = { fg = palette.fg(), bg = palette.bg() },
   padding = { left = 0, right = 1 },
@@ -196,7 +196,9 @@ insert_info_left({
 })
 
 insert_left({
-  status_helper.get_file_icon,
+  function()
+    return status_helper.get_file_icon() .. " "
+  end,
   cond = function()
     return not conditions.check_special_buffer() and conditions.has_file_name()
   end,
@@ -278,7 +280,7 @@ insert_right({
   diagnostics_color = {
     error = { fg = palette.get_color("red") },
     warn = { fg = palette.get_color("yellow") },
-    info = { fg = palette.get_color("cyan") },
+    info = { fg = palette.get_color("dimblue") },
     hint = { fg = palette.get_color("dimblue") },
   },
   update_in_insert = false,
@@ -298,8 +300,6 @@ insert_info_right({
     if tabpagenr > 1 then
       local curr_tab = vim.api.nvim_tabpage_get_number(0)
       return "Tab " .. curr_tab .. "/" .. tabpagenr
-    else
-      return ""
     end
   end,
   icon = { "󰠵", color = { fg = palette.get_color("purple") } },
